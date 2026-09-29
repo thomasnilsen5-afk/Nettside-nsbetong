@@ -9,16 +9,19 @@ Målingen er gjort **uten demomodus**. Med demomodus på gir `noindex` SEO-poeng
 | Side | Performance | Accessibility | Best Practices | SEO | LCP | CLS | TBT |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `/` | 99 | 100 | 100 | 100 | 2,2 s | 0 | 0 ms |
-| `/betongarbeid/` | 100 | 100 | 100 | 100 | 1,7 s | 0 | 0 ms |
+| `/betongarbeid/` | 100 | 100 | 100 | 100 | 1,8 s | 0 | 0 ms |
 | `/gulvstop-og-flytavretting/` | 100 | 100 | 100 | 100 | 1,7 s | 0 | 0 ms |
-| `/vei-og-kantstop/` | 100 | 100 | 100 | 100 | 1,8 s | 0 | 0 ms |
+| `/vei-og-kantstop/` | 100 | 100 | 100 | 100 | 1,9 s | 0 | 0 ms |
 | `/nybygg/` | 100 | 100 | 100 | 100 | 1,7 s | 0 | 0 ms |
-| `/flis-og-murarbeid/` | 100 | 100 | 100 | 100 | 1,4 s | 0 | 0 ms |
-| `/referanser/` | 99 | 100 | 100 | 100 | 2,0 s | 0 | 0 ms |
-| `/prosjekt/saedalen-kirke/` | 100 | 100 | 100 | 100 | 1,4 s | 0 | 0 ms |
-| `/om-oss/` | 100 | 100 | 100 | 100 | 1,4 s | 0 | 0 ms |
-| `/ledige-stillinger/` | 100 | 100 | 100 | 100 | 1,4 s | 0 | 0 ms |
-| `/kontakt-oss/` | 100 | 100 | 100 | 100 | 1,4 s | 0 | 0 ms |
+| `/flis-og-murarbeid/` | 100 | 100 | 100 | 100 | 1,7 s | 0 | 0 ms |
+| `/referanser/` | 99 | 100 | 100 | 100 | 2,2 s | 0 | 0 ms |
+| `/prosjekt/saedalen-kirke/` | 100 | 100 | 100 | 100 | 1,6 s | 0 | 0 ms |
+| `/prosjekt/bergen-verksted/` | 99 | 100 | 100 | 100 | 2,0 s | 0 | 0 ms |
+| `/om-oss/` | 100 | 100 | 100 | 100 | 1,8 s | 0 | 0 ms |
+| `/kontakt-oss/` | 100 | 100 | 100 | 100 | 1,6 s | 0 | 0 ms |
+| `/ledige-stillinger/` | 100 | 100 | 100 | 100 | 1,6 s | 0 | 0 ms |
+
+Målt på den nye designen (fullbredde toppbilder, bildefremvisning, animasjoner og kontaktpersoner).
 
 Fullstendige rapporter i denne mappen: `mobil_.report.html` (forsiden), `mobil_betongarbeid_.report.html` og
 `mobil_prosjekt_saedalen-kirke_.report.html`.
@@ -26,9 +29,11 @@ Fullstendige rapporter i denne mappen: `mobil_.report.html` (forsiden), `mobil_b
 ## Tiltak som ga resultatet
 
 - Alle bilder serveres som AVIF/WebP i flere størrelser (`srcset`), med `width`/`height` og lazy loading under første skjerm.
-- Heltebildet på forsiden lastes med `fetchpriority="high"` og lavere kvalitet (det ligger under et mørkt overlegg).
-- På `/referanser/` er ingressteksten LCP-elementet. Derfor lastes alle referansebildene lazy, slik at de ikke tar båndbredde fra teksten.
-- `font-display: optional`, og bare to fontfiler forhåndslastes (Oswald 600 og Work Sans 400). Det ga CLS 0.
+- Toppbildene lastes med `fetchpriority="high"`, egne mobilstørrelser (480/768 px) og kvalitet 45, siden de ligger under et mørkt overlegg.
+- Bildefremvisningen på forsiden laster de tre neste bildene først etter at siden er ferdig lastet (`<template>` + JS).
+- Animasjoner bruker bare `transform`/`opacity` (ingen repaint på hovedtråden). Pulsringen og den løpende byggherre-raden ga tidligere 250 ms TBT.
+- Bare toppbildet lastes ivrig. Alle kort- og gallerbilder lastes lazy, slik at de ikke tar båndbredde fra LCP-bildet.
+- `font-display: optional` med forhåndslasting av tre fontfiler: Oswald som variabel font (alle vekter i én fil på 28 KB) og Work Sans 400/600. Det gir CLS 0 og riktig font ved første besøk.
 - CSS ligger inline, og det er ingen skript som blokkerer visningen.
 
 ## Forbehold

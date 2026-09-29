@@ -36,6 +36,7 @@ Krever Node 20 eller nyere.
 | --- | --- |
 | Firmanavn, adresse, telefon, e-post, org.nr., Facebook, tillitsmerker, meny | `src/data/site.ts` |
 | Tekst, FAQ og bilder for de fem tjenestesidene | `src/data/tjenester.ts` |
+| Kontaktpersoner på `/kontakt-oss/` | `src/data/kontaktpersoner.ts` (bilder i `src/assets/bilder/ansatte/`) |
 | Referanseprosjekter og prosjektsidene `/prosjekt/<slug>/` | `src/data/referanser.ts` (tekst og fakta), `src/data/prosjektbilder.ts` (bilder) |
 | Forsiden | `src/pages/index.astro` |
 | Om oss, ledige stillinger, åpenhetsloven, kontakt, personvern | `src/pages/<side>/index.astro` |
@@ -91,11 +92,13 @@ Alle miljøvariabler er beskrevet i [`.env.example`](.env.example) og [OVERLEVER
 
 ```
 src/
-  components/   Header, Footer, skjema, samtykkebanner, CTA, FAQ ...
+  components/   Header (meny/nedtrekksmeny), Footer, Sidehero, Faktaband, Tjenestekort, Prosjektkort,
+                Galleri + Lysboks, Kontaktseksjon/-skjema, Byggherrer, Samtykke, FAQ ...
   data/         site.ts (fakta), tjenester.ts, referanser.ts, jsonld.ts, miljo.ts
   layouts/      Base.astro (head, SEO, JSON-LD), Tjenesteside.astro
   pages/        én mappe per URL – identisk med dagens URL-struktur
-  scripts/      nsb.ts – samtykke, GTM/GA4-lasting og dataLayer-hendelser
+  scripts/      nsb.ts – samtykke, GTM/GA4 og dataLayer-hendelser
+                ui.ts  – meny ved scrolling, innglidning, bildefremvisning, lysboks, filter
   styles/       global.css
 public/         fonter (selvhostet), favicon, OG-bilde, robots.txt
 scripts/        hjelpeskript (bilder, ikoner, SEO-sjekk, henting av gammel side)

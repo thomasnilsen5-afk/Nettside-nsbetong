@@ -1,11 +1,11 @@
 ---
 import { firma } from '../data/site';
-// Bedriftens egen logo (NS.svg hentet fra dagens side) + firmanavnet som tekst ved siden av.
-interface Props { lys?: boolean }
-const { lys = false } = Astro.props;
+// Bedriftens egen logo (NS.svg, hentet uendret fra dagens side) + firmanavnet som tekst.
+interface Props { lys?: boolean; stor?: boolean }
+const { lys = false, stor = false } = Astro.props;
 ---
-<a href="/" class:list={['logo', { 'logo--lys': lys }]} aria-label={`${firma.navn} – til forsiden`}>
-  {firma.logoTilgjengelig && <img src={firma.logo} alt="" width="52" height="52" />}
+<a href="/" class:list={['logo', { 'logo--lys': lys, 'logo--stor': stor }]} aria-label={`${firma.navn} – til forsiden`}>
+  <img src={firma.logo} alt="" width="54" height="54" />
   <span class="logo__tekst" aria-hidden="true">
     <span class="logo__navn">Nilsen &amp; Sture</span>
     <span class="logo__sub">Betong AS</span>
@@ -15,15 +15,17 @@ const { lys = false } = Astro.props;
   .logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.75rem;
     text-decoration: none;
     color: var(--farge-mork);
     min-height: 48px;
+    flex: none;
   }
   .logo img {
-    width: 52px;
-    height: 52px;
+    width: 3.1rem;
+    height: 3.1rem;
     flex: none;
+    filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.25));
   }
   .logo__tekst {
     display: flex;
@@ -35,19 +37,27 @@ const { lys = false } = Astro.props;
   .logo__navn {
     font-weight: 600;
     font-size: 1.3rem;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
   }
   .logo__sub {
     font-weight: 500;
-    font-size: 0.8rem;
-    letter-spacing: 0.24em;
+    font-size: 0.78rem;
+    letter-spacing: 0.34em;
+    margin-top: 0.3rem;
     color: var(--farge-aksent);
-    margin-top: 0.25rem;
   }
-  .logo--lys {
+  .logo--lys,
+  .logo--lys:hover {
     color: #fff;
   }
   .logo--lys .logo__sub {
     color: var(--farge-lys);
+  }
+  .logo--stor img {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  .logo--stor .logo__navn {
+    font-size: 1.7rem;
   }
 </style>

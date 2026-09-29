@@ -7,16 +7,14 @@ plassholdere: `grep -rn "MANGLER" src`
 
 | # | Hva | Hvor | Merknad |
 | --- | --- | --- | --- |
-| 1 | **Kontaktpersoner.** Dagens `/kontakt-oss/` viser 12 ansatte med portrett, direktenummer og e-post. | `/kontakt-oss/` | **Ikke tatt med i forslaget**, fordi det er personopplysninger om ansatte. Hvis bedriften ønsker det og de ansatte er informert, kan listen legges inn. Portrettene og koblingen navn–bilde er kartlagt i `innhold-gammel/`. |
-| 2 | **Kontaktperson for stillingene** | `/ledige-stillinger/` | Dagens side oppgir en navngitt ansatt med direktenummer. Plassholder står på siden. |
-| 3 | **Lenke til siste redegjørelse etter åpenhetsloven** | `/apenhetsloven/` | Dagens side sier at den publiseres innen 30. juni hvert år, men har ingen lenke. |
-| 4 | **Lagringstid for henvendelser** | `/personvern/` | – |
-| 5 | **NAP i Google-bedriftsprofilen.** Nøyaktig skrivemåte på navn, adresse og telefon. | JSON-LD, bunntekst | Nettsiden bruker «Nilsen & Sture Betong AS, Storebotn 40, 5309 Kleppestø, 56 15 96 70». |
-| 6 | **Åpningstider** (hvis de står i Google-profilen) | JSON-LD `openingHours` | Ikke lagt inn |
-| 7 | **Eierskap til GTM-KKRWNT4.** Skal containeren gjenbrukes? | Rapportering | – |
-| 8 | **Tilgang til Microsoft 365** (app-registrering for skjemaet) | Kontaktskjema | Se OVERLEVERING.md |
-| 9 | **Logoer for godkjent lærebedrift og godkjent våtromsbedrift** | Tillitsmerker | Dagens side har ingen logoer for disse, så de vises som tekstmerker. |
-| 10 | **Leverandørens navn** i demobanneret | Demobanner | Valgfritt |
+| 1 | **Lenke til siste redegjørelse etter åpenhetsloven** | `/apenhetsloven/` | Dagens side sier at den publiseres innen 30. juni hvert år, men har ingen lenke. |
+| 2 | **Lagringstid for henvendelser** | `/personvern/` | – |
+| 3 | **NAP i Google-bedriftsprofilen.** Nøyaktig skrivemåte på navn, adresse og telefon. | JSON-LD, bunntekst | Nettsiden bruker «Nilsen & Sture Betong AS, Storebotn 40, 5309 Kleppestø, 56 15 96 70». |
+| 4 | **Åpningstider** (hvis de står i Google-profilen) | JSON-LD `openingHours` | Ikke lagt inn |
+| 5 | **Eierskap til GTM-KKRWNT4.** Skal containeren gjenbrukes? | Rapportering | – |
+| 6 | **Tilgang til Microsoft 365** (app-registrering for skjemaet) | Kontaktskjema | Se OVERLEVERING.md |
+| 7 | **Logoer for godkjent lærebedrift og godkjent våtromsbedrift** | Tillitsmerker | Dagens side har ingen logoer for disse, så de vises som tekstmerker. |
+| 8 | **Leverandørens navn** i demobanneret | Demobanner | Valgfritt |
 
 ## B. Hentet fra dagens side (tidligere plassholdere som nå er løst)
 
@@ -30,6 +28,8 @@ plassholdere: `grep -rn "MANGLER" src`
 - Tekst om åpenhetsloven med svarfrister
 - Fakturainformasjon (EHF og faktura-e-post)
 - Tillitsmerker: DiBK «Godkjent for ansvarsrett», StartBANK, tariffmerket (Fellesforbundet 2024–2026)
+- 12 kontaktpersoner med portrett, direktenummer og e-post (dagens /kontakt-oss/), brukt etter avklaring med oppdragsgiver
+- Kontaktperson for stillingen som bas/formann (Mathis Nils Eira), slik dagens side oppgir
 - Facebook-lenken er bekreftet. Den er identisk med lenken på dagens side.
 - Alle bilder fra dagens side er bekreftet som lov å bruke (29.09.2026).
 

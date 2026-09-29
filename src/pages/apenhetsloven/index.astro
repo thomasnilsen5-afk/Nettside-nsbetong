@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Sidetopp from '../../components/Sidetopp.astro';
+import Sidehero from '../../components/Sidehero.astro';
 import { firma, epostLenke } from '../../data/site';
 ---
 <Base
@@ -8,12 +8,12 @@ import { firma, epostLenke } from '../../data/site';
   beskrivelse="Slik arbeider Nilsen & Sture Betong med åpenhetsloven og aktsomhetsvurderinger av leverandører, og slik ber du om informasjon."
   smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Åpenhetsloven', sti: '/apenhetsloven/' }]}
 >
-  <Sidetopp
+  <Sidehero smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Åpenhetsloven', sti: '/apenhetsloven/' }]} storrelse="liten"
     tittel="Åpenhetsloven"
     ingress="Åpenhetslovens hovedformål er å fremme virksomheters respekt for grunnleggende menneskerettigheter og anstendige arbeidsforhold i forbindelse med produksjon av varer og levering av tjenester."
   />
   <div class="seksjon">
-    <div class="beholder prosa">
+    <div class="beholder beholder--smal prosa">
       <h2>Vi jobber bevisst med aktsomhetsvurdering av leverandørene våre</h2>
       <p>
         Åpenhetsloven trådte i kraft 1. juli 2022. Formålet er å fremme virksomheters respekt for menneskerettigheter og

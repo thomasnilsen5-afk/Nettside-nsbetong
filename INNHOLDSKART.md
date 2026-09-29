@@ -24,7 +24,7 @@ Alle innholdssider beholder nøyaktig samme URL, med avsluttende skråstrek.
 | `/om-oss/` | `/om-oss/` | Stiftet 2004, rundt 50 ansatte, arbeidsområder, visjon | Samme tekst, avdelingsoversikt, godkjenninger, firmaopplysninger med org.nr. |
 | `/ledige-stillinger/` | `/ledige-stillinger/` | 5 utlysninger (bas/formann, bas kantstøp, betongarbeider, gulvstøper, 2 flisleggere), felles «vi tilbyr», søknadsskjema | 5 utlysninger som utvidbare blokker, «vi tilbyr», søknad på e-post/telefon |
 | `/apenhetsloven/` | `/apenhetsloven/` | Formål, aktsomhetsvurdering, redegjørelse innen 30. juni, svarfrister 3 uker / 2 måneder | Samme innhold, strukturert. Lenke til redegjørelsen mangler. |
-| `/kontakt-oss/` | `/kontakt-oss/` | Adresse, telefon, e-post, skjema, fakturainfo (EHF, org.nr.), 12 ansatte med bilde, direktenummer og e-post | Skjema, telefon, e-post, adresse, kartlenke, fakturainfo. **Ansattlisten er ikke tatt med** (se MANGLER.md). |
+| `/kontakt-oss/` | `/kontakt-oss/` | Adresse, telefon, e-post, skjema, fakturainfo (EHF, org.nr.), 12 ansatte med bilde, direktenummer og e-post | Skjema, telefon, e-post, adresse, kartlenke, fakturainfo og alle 12 kontaktpersoner med portrett, direktenummer og e-post |
 | `/personvernerklaering/` | `/personvern/` | Personvernerklæring | Ny personvernside med informasjonskapsler og samtykke. **301** |
 | – | `/takk/` | – | Takkeside etter skjema (noindex), utløser `form_submit` |
 | – | 404 | – | Egen 404-side |
@@ -44,7 +44,7 @@ De har fått beskrivende norske filnavn og alt-tekster, og ligger i `src/assets/
 | `merker/` | Ansvarsrett (DiBK), StartBANK, tariffmerket (Fellesforbundet) | 3 |
 
 Bildene fra Sædalen kirke ser ut som arkitektillustrasjoner og har alt-tekst som begynner med «Illustrasjon av».
-Portrettene av de ansatte er ikke brukt.
+Portrettene av de 12 ansatte brukes på `/kontakt-oss/` (beskåret til 3:4, `src/assets/bilder/ansatte/`).
 
 ## Tillitsmerker
 

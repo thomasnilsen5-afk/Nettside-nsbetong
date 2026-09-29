@@ -18,8 +18,8 @@ Kontrollert med `npm run build && npm run check`, Lighthouse (mobil) og manuell 
 - [x] ✅ Farger som CSS-variabler (`src/styles/global.css`): #232F36, #B22424, #ED2224, #7B1A1A, #3E3E3E, #333333, #7F7F7F, #C8D2D7, #FFFFFF
 - [x] ✅ #ED2224 brukes bare til dekor (streker og kanter), aldri til tekst. Tekst og knapper på lys bakgrunn bruker #B22424 (6,6:1). #7F7F7F brukes ikke til tekst.
 - [x] ✅ Kontrast WCAG AA. Lighthouse Accessibility 100 på alle målte sider.
-- [x] ✅ Work Sans (brødtekst) og Oswald (overskrifter), **selvhostet** i `/public/fonts`, ingen Google Fonts-kall. Lisens (OFL) ligger ved.
-- [x] ✅ Mobil først. Fast «Ring oss / Be om tilbud»-felt nederst på mobil. Telefonknapp i toppmenyen på desktop.
+- [x] ✅ Work Sans (brødtekst) og Oswald (overskrifter, variabel font), **selvhostet** i `/public/fonts`, ingen Google Fonts-kall. Lisens (OFL) ligger ved.
+- [x] ✅ Mobil først. Fast «Ring oss / Gratis befaring»-felt nederst på mobil, fullskjermsmeny (virker uten JS). Telefonknapp og nedtrekksmeny med bilder i toppmenyen på desktop.
 - [x] ✅ Tydelig CTA (ring / be om tilbud) på hver side: hero, sidekolonne og CTA-bånd nederst.
 
 ## Teknisk
@@ -59,8 +59,8 @@ Kontrollert med `npm run build && npm run check`, Lighthouse (mobil) og manuell 
 - [x] ✅ Egen 404-side
 - [x] ✅ HTTPS (Vercel) + HSTS-header
 - [x] ✅ Bilder: AVIF/WebP, width/height, lazy loading under første skjerm, `fetchpriority="high"` på heltebildet, norske filnavn og beskrivende alt-tekst. Illustrasjoner er merket som illustrasjoner.
-- [x] ✅ Ytelse med alle bilder: LCP 1,4–2,2 s, CLS 0 (se lighthouse/RESULTATER.md)
-- [x] ✅ Lighthouse mobil ≥ 95 på Performance, SEO, Accessibility og Best Practices. Resultatet er **99–100** i alle kategorier på 11 sider, målt med bilder og uten demomodus.
+- [x] ✅ Ytelse med alle bilder: LCP 1,6–2,2 s, CLS 0, TBT 0 ms (se lighthouse/RESULTATER.md)
+- [x] ✅ Lighthouse mobil ≥ 95 på Performance, SEO, Accessibility og Best Practices. Resultatet er **99–100** i alle kategorier på 12 sider, målt på den nye designen med bilder og uten demomodus.
 - [ ] ⏳ Måle med PageSpeed Insights på den endelige adressen etter lansering
 
 ## Rapportering

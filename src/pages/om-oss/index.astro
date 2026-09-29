@@ -1,102 +1,343 @@
 ---
 import { Picture } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import Sidetopp from '../../components/Sidetopp.astro';
+import Sidehero from '../../components/Sidehero.astro';
+import Faktaband from '../../components/Faktaband.astro';
 import Tillitsmerker from '../../components/Tillitsmerker.astro';
+import Ikon from '../../components/Ikon.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { firma, telLenke, epostLenke } from '../../data/site';
+import { referanser } from '../../data/referanser';
+import heroBilde from '../../assets/bilder/nybygg/betongarbeidere-pa-byggeplass.jpg';
 import kontorBilde from '../../assets/bilder/omoss/kontoret-i-storebotn.jpg';
-import byggeplassBilde from '../../assets/bilder/nybygg/betongarbeidere-pa-byggeplass.jpg';
+import planBilde from '../../assets/bilder/felles/prosjektmote-over-tegninger.jpg';
+
+const smuler = [{ navn: 'Forside', sti: '/' }, { navn: 'Om oss', sti: '/om-oss/' }];
 
 const avdelinger = [
-  { navn: 'Nybygg', tekst: '35 håndverkere og 4 lærlinger', href: '/nybygg/' },
-  { navn: 'Gulvstøp og flytavretting', tekst: '8 gulvarbeidere med til sammen ca. 60 års erfaring', href: '/gulvstop-og-flytavretting/' },
-  { navn: 'Flis- og murarbeid', tekst: '6 håndverkere, godkjent våtromsbedrift', href: '/flis-og-murarbeid/' },
-  { navn: 'Vei og kantstøp', tekst: '4 arbeidere og egen kantstøpemaskin', href: '/vei-og-kantstop/' },
+  { tall: '35', tekst: 'håndverkere og 4 lærlinger', navn: 'Nybygg', href: '/nybygg/' },
+  { tall: '8', tekst: 'gulvarbeidere, ca. 60 års samlet erfaring', navn: 'Gulvstøp og flytavretting', href: '/gulvstop-og-flytavretting/' },
+  { tall: '6', tekst: 'håndverkere, godkjent våtromsbedrift', navn: 'Flis- og murarbeid', href: '/flis-og-murarbeid/' },
+  { tall: '4', tekst: 'arbeidere og egen kantstøpemaskin', navn: 'Vei og kantstøp', href: '/vei-og-kantstop/' },
+];
+
+// Tidslinje: stiftelsesår + oppstart for referanseprosjektene (fra prosjektfaktaene).
+const startAar = (r: (typeof referanser)[number]) => parseInt(r.byggeperiode.match(/\d{4}/)?.[0] ?? '0', 10);
+const tidslinje = [
+  { aar: firma.stiftet, tittel: 'Nilsen & Sture Betong stiftes', tekst: 'Selskapet etableres, og holder i dag til i Storebotn på Askøy.', href: undefined as string | undefined },
+  ...[...referanser]
+    .sort((a, b) => startAar(a) - startAar(b))
+    .map((r) => ({ aar: startAar(r), tittel: r.tittel, tekst: `${r.sted} · ${r.byggeperiode}`, href: `/prosjekt/${r.slug}/` })),
 ];
 ---
 <Base
   tittel="Om oss – betongentreprenør på Askøy | Nilsen & Sture Betong"
-  beskrivelse="Nilsen & Sture Betong ble stiftet i 2004 og holder til på Askøy. Rundt 50 ansatte: forskalingssnekkere, gulvstøpere, murere og flisleggere."
-  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Om oss', sti: '/om-oss/' }]}
-  ogBilde={kontorBilde}
+  beskrivelse="Nilsen & Sture Betong ble stiftet i 2004 og holder til på Askøy. Rundt 50 ansatte med egne avdelinger for nybygg, gulv, kantstøp og flis/mur."
+  smuler={smuler}
+  ogBilde={heroBilde}
 >
-  <Sidetopp overtittel="Om oss" tittel="Om Nilsen & Sture Betong" ingress={`Betongentreprenør i Bergen og omegn med ${firma.erfaring}.`} />
-  <div class="seksjon">
-    <div class="beholder to-spalter">
+  <Sidehero
+    tittel="Om Nilsen & Sture Betong"
+    overtittel="Om oss"
+    ingress={`Betongentreprenør i Bergen og omegn siden ${firma.stiftet}. I dag er vi ${firma.ansatte} med egne fagavdelinger.`}
+    bilde={heroBilde}
+    smuler={smuler}
+  />
+
+  <section class="seksjon">
+    <div class="beholder to-spalter to-spalter--midt">
       <div class="prosa">
+        <p class="overtittel">Historien</p>
+        <p class="stort-utsagn">Stiftet i {firma.stiftet} – i dag <em>en av de ledende betongentreprenørene</em> i Bergen og omegn.</p>
         <p>
-          Nilsen &amp; Sture Betong AS ble stiftet i {firma.stiftet} og har etablert seg som en av de ledende
-          betongentreprenørene i Bergen og omegn. I dag er vi {firma.ansatte}, med meget erfarne forskalingssnekkere,
-          gulvstøpere og murere.
+          Nilsen &amp; Sture Betong AS har {firma.ansatte} og meget erfarne forskalingssnekkere, gulvstøpere og murere.
+          Arbeidsområdene våre omfatter alt fra private boliger til nye industribygg. Vi driver også med betongarbeid innenfor
+          forstøtningsmurer, vei og kai, og har bred erfaring med utbygging.
         </p>
         <p>
-          Arbeidsområdene våre omfatter alt fra private boliger til nye industribygg. Vi driver også med betongarbeid
-          innenfor forstøtningsmurer, vei og kai, og har bred erfaring med utbygging.
+          Forskalingssnekkerne våre har stolthet i yrket og holder alltid en god standard og kvalitet i arbeidet. Målet vårt er
+          at Nilsen &amp; Sture Betong skal være kjent for fornøyde kunder og et godt renommé. Derfor prioriterer vi tid og kvalitet
+          høyt, og det er viktig for oss å være punktlige og holde tidsskjemaet fra oppstart til slutt.
         </p>
-        <p>
-          Forskalingssnekkerne våre har stolthet i yrket og holder alltid en god standard og kvalitet i arbeidet. Målet vårt
-          er at Nilsen &amp; Sture Betong skal være kjent for fornøyde kunder og et godt renommé. Derfor prioriterer vi tid
-          og kvalitet høyt, og det er viktig for oss å være punktlige og holde tidsskjemaet fra oppstart til slutt.
-        </p>
-
-        <h2>Visjon</h2>
-        <blockquote class="visjon">{firma.visjon}</blockquote>
-
-        <h2>Avdelingene våre</h2>
-        <ul class="avdelinger">
-          {avdelinger.map((a) => (
-            <li><a href={a.href}><strong>{a.navn}</strong></a><span>{a.tekst}</span></li>
-          ))}
-        </ul>
-
-        <h2>Godkjenninger og avtaler</h2>
-        <p>
-          Vi er godkjent for ansvarsrett av Direktoratet for byggkvalitet, godkjent lærebedrift og godkjent
-          våtromsbedrift. Vi har tariffavtale og er registrert i StartBANK.
-        </p>
-        <Tillitsmerker visTekst />
-
-        <h2>Jobbe hos oss</h2>
-        <p>Vi er alltid på jakt etter dyktige håndverkere. Se <a href="/ledige-stillinger/">ledige stillinger</a>.</p>
       </div>
-      <aside class="sidekol" aria-label="Firmaopplysninger">
-        <Picture src={kontorBilde} alt="Kontoret til Nilsen & Sture Betong i Storebotn på Askøy" formats={['avif', 'webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 26rem, 100vw" loading="eager" />
-        <div class="kort">
-          <h2 class="h3">Firmaopplysninger</h2>
-          <dl class="fakta">
-            <dt>Firmanavn</dt><dd>{firma.navn}</dd>
-            <dt>Stiftet</dt><dd>{firma.stiftet}</dd>
-            <dt>Adresse</dt><dd>{firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}</dd>
-            <dt>Telefon</dt><dd><a href={telLenke}>{firma.telefon}</a></dd>
-            <dt>E-post</dt><dd><a href={epostLenke}>{firma.epost}</a></dd>
-            <dt>Org.nr.</dt><dd>{firma.orgnr}</dd>
-          </dl>
-          <p><a href="/apenhetsloven/">Åpenhetsloven</a></p>
-        </div>
-        <Picture src={byggeplassBilde} alt="Betongarbeidere fra Nilsen & Sture Betong på en byggeplass" formats={['avif', 'webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 26rem, 100vw" loading="lazy" />
-      </aside>
+      <div class="bildepar" data-vis>
+        <Picture src={kontorBilde} alt="Kontoret til Nilsen & Sture Betong i Storebotn på Askøy" formats={['avif', 'webp']} widths={[480, 720, 960]} sizes="(min-width: 62rem) 35vw, 90vw" loading="lazy" />
+        <Picture src={planBilde} alt="Prosjektmøte der byggetegninger gjennomgås" formats={['avif', 'webp']} widths={[360, 540]} sizes="(min-width: 62rem) 18vw, 45vw" loading="lazy" />
+      </div>
     </div>
-  </div>
-  <CtaBand kilde="om_oss" />
+  </section>
+
+  <Faktaband
+    fakta={[
+      { verdi: String(firma.stiftet), etikett: 'Stiftet', ikon: 'kalender' },
+      { verdi: 'ca. 50', etikett: 'Ansatte', ikon: 'team' },
+      { verdi: '4', etikett: 'Lærlinger', ikon: 'laerling' },
+      { verdi: '20+', etikett: 'Års erfaring', ikon: 'hjelm' },
+    ]}
+  />
+
+  <section class="seksjon seksjon--morkest visjon" aria-labelledby="visjon-tittel">
+    <div class="beholder beholder--smal">
+      <p class="overtittel" id="visjon-tittel">Visjon</p>
+      <blockquote>
+        <p>{firma.visjon}</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="seksjon" aria-labelledby="avd-tittel">
+    <div class="beholder">
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Organisasjon</p>
+          <h2 id="avd-tittel">Egne fagavdelinger</h2>
+        </div>
+        <p>I tillegg har vi en betongavdeling som kan trå til ved behov.</p>
+      </div>
+      <ul class="avd rutenett rutenett--4">
+        {avdelinger.map((a, i) => (
+          <li data-vis style={`--i: ${i}`}>
+            <a href={a.href}>
+              <strong>{a.tall}</strong>
+              <span>{a.tekst}</span>
+              <em>{a.navn} <Ikon navn="pil" /></em>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="seksjon seksjon--betong" aria-labelledby="tidslinje-tittel">
+    <div class="beholder">
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Tidslinje</p>
+          <h2 id="tidslinje-tittel">Fra 2004 til i dag</h2>
+        </div>
+        <p>Et utvalg prosjekter fra de siste årene. Klikk for å lese mer.</p>
+      </div>
+      <ol class="tidslinje">
+        {tidslinje.map((t, i) => (
+          <li data-vis style={`--i: ${i % 3}`}>
+            <span class="tidslinje__aar">{t.aar}</span>
+            <div class="tidslinje__kort">
+              <h3>{t.href ? <a href={t.href}>{t.tittel}</a> : t.tittel}</h3>
+              <p>{t.tekst}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="seksjon" aria-labelledby="godkj-tittel">
+    <div class="beholder to-spalter">
+      <div>
+        <p class="overtittel">Godkjenninger</p>
+        <h2 id="godkj-tittel">Godkjenninger og avtaler</h2>
+        <p>
+          Vi er godkjent for ansvarsrett av Direktoratet for byggkvalitet, godkjent lærebedrift og godkjent våtromsbedrift.
+          Vi har tariffavtale gjennom Fellesforbundet og er registrert i StartBANK, som mange offentlige og større
+          oppdragsgivere bruker for å kvalifisere leverandører.
+        </p>
+        <p><a class="tekstlenke" href="/apenhetsloven/">Åpenhetsloven <Ikon navn="pil" /></a></p>
+      </div>
+      <div class="firmakort">
+        <p class="firmakort__tittel">Firmaopplysninger</p>
+        <dl>
+          <div><dt>Firmanavn</dt><dd>{firma.navn}</dd></div>
+          <div><dt>Org.nr.</dt><dd>{firma.orgnr}</dd></div>
+          <div><dt>Stiftet</dt><dd>{firma.stiftet}</dd></div>
+          <div><dt>Adresse</dt><dd>{firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}</dd></div>
+          <div><dt>Telefon</dt><dd><a href={telLenke}>{firma.telefon}</a></dd></div>
+          <div><dt>E-post</dt><dd><a href={epostLenke}>{firma.epost}</a></dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="beholder" style="margin-top: 2.5rem">
+      <Tillitsmerker visTekst />
+    </div>
+  </section>
+
+  <CtaBand kilde="om_oss" tittel="Vil du jobbe hos oss?" tekst="Vi er alltid på jakt etter dyktige håndverkere – og tar inn lærlinger." />
 </Base>
+
 <style>
-  .h3 { font-size: 1.35rem; }
-  .fakta { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; margin: 0 0 1rem; }
-  .fakta dt { font-weight: 600; color: var(--farge-mork); }
-  .fakta dd { margin: 0; }
-  .sidekol { display: grid; gap: 1.25rem; align-content: start; }
-  .sidekol :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); }
-  .visjon {
-    margin: 0 0 1.5rem;
-    padding: 1.25rem 1.5rem;
-    background: var(--farge-flate);
-    border-left: 5px solid var(--farge-logo-rod);
-    font-size: 1.15rem;
-    color: var(--farge-tekst-2);
+  .bildepar {
+    position: relative;
+    padding-bottom: 4rem;
   }
-  .avdelinger { list-style: none; padding: 0; display: grid; gap: 0.6rem; }
-  .avdelinger li { display: flex; flex-direction: column; padding: 0.8rem 1rem; border: 1px solid #dfe5e8; border-left: 4px solid var(--farge-aksent); border-radius: var(--radius); }
-  .avdelinger strong { font-family: var(--font-overskrift); font-weight: 500; font-size: 1.15rem; }
-  .avdelinger span { color: var(--farge-tekst-dempet); }
+  .bildepar :global(img) {
+    border-radius: var(--radius);
+    box-shadow: var(--skygge-stor);
+    object-fit: cover;
+  }
+  .bildepar :global(picture:first-child img) {
+    width: 85%;
+    aspect-ratio: 4 / 3;
+  }
+  .bildepar :global(picture:last-child img) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 48%;
+    aspect-ratio: 1;
+    border: 6px solid #fff;
+  }
+  .visjon blockquote {
+    margin: 0;
+    padding-left: clamp(1.25rem, 3vw, 2.5rem);
+    border-left: 6px solid var(--farge-logo-rod);
+  }
+  .visjon blockquote p {
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    font-size: clamp(1.7rem, 3.6vw, 2.8rem);
+    line-height: 1.25;
+    color: #fff;
+    margin: 0;
+  }
+  .avd {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .avd a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2rem 1.75rem;
+    background: var(--farge-flate);
+    border-top: 4px solid var(--farge-aksent);
+    text-decoration: none;
+    color: var(--farge-tekst);
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .avd a:hover {
+    background: var(--farge-mork);
+    color: var(--farge-tekst-lys);
+  }
+  .avd strong {
+    font-family: var(--font-overskrift);
+    font-size: 4.5rem;
+    line-height: 1;
+    color: var(--farge-aksent);
+  }
+  .avd a:hover strong,
+  .avd a:hover em {
+    color: #fff;
+  }
+  .avd span {
+    margin: 0.5rem 0 1.5rem;
+  }
+  .avd em {
+    margin-top: auto;
+    font-style: normal;
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--farge-mork);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .tidslinje {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: grid;
+    gap: 1rem;
+  }
+  .tidslinje::before {
+    content: '';
+    position: absolute;
+    left: 3.25rem;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 2px;
+    background: var(--farge-lys);
+  }
+  .tidslinje li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    align-items: center;
+    position: relative;
+  }
+  .tidslinje li::before {
+    content: '';
+    position: absolute;
+    left: calc(3.25rem - 6px);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--farge-aksent);
+    box-shadow: 0 0 0 4px var(--farge-flate);
+  }
+  .tidslinje__aar {
+    font-family: var(--font-overskrift);
+    font-size: 1.1rem;
+    color: var(--farge-mork);
+    background: var(--farge-flate);
+    padding: 0.1rem 0;
+    position: relative;
+    width: 3rem;
+  }
+  .tidslinje__kort {
+    background: #fff;
+    border: 1px solid var(--farge-linje);
+    padding: 1rem 1.25rem;
+    box-shadow: var(--skygge);
+  }
+  .tidslinje__kort h3 {
+    margin: 0 0 0.2rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+  }
+  .tidslinje__kort h3 a {
+    color: var(--farge-mork);
+    text-decoration: none;
+  }
+  .tidslinje__kort h3 a:hover {
+    color: var(--farge-aksent);
+  }
+  .tidslinje__kort p {
+    margin: 0;
+    color: var(--farge-tekst-dempet);
+    font-size: 0.95rem;
+  }
+  .firmakort {
+    align-self: start;
+    background: var(--farge-mork);
+    color: var(--farge-tekst-lys);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-top: 5px solid var(--farge-logo-rod);
+  }
+  .firmakort__tittel {
+    font-family: var(--font-overskrift);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .firmakort dl {
+    margin: 0;
+    display: grid;
+    gap: 0.85rem;
+  }
+  .firmakort dt {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .firmakort dd {
+    margin: 0;
+    color: #fff;
+    font-weight: 600;
+  }
+  .firmakort a {
+    color: #fff;
+  }
 </style>

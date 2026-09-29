@@ -1,10 +1,15 @@
 ---
+import { Picture } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import Sidetopp from '../../components/Sidetopp.astro';
+import Sidehero from '../../components/Sidehero.astro';
 import Kontaktskjema from '../../components/Kontaktskjema.astro';
 import Ikon from '../../components/Ikon.astro';
 import { firma, telLenke, epostLenke, kartLenke } from '../../data/site';
+import { kontaktpersoner, telTilLenke } from '../../data/kontaktpersoner';
 import { organisasjonLd } from '../../data/jsonld';
+import heroBilde from '../../assets/bilder/omoss/kontoret-i-storebotn.jpg';
+
+const smuler = [{ navn: 'Forside', sti: '/' }, { navn: 'Kontakt oss', sti: '/kontakt-oss/' }];
 const kontaktLd = {
   '@context': 'https://schema.org',
   '@type': 'ContactPage',
@@ -14,51 +19,228 @@ const kontaktLd = {
 };
 ---
 <Base
-  tittel="Kontakt oss – be om tilbud | Nilsen & Sture Betong"
-  beskrivelse="Ring 56 15 96 70 eller send en forespørsel til Nilsen & Sture Betong. Storebotn 40, 5309 Kleppestø. Vi tar oppdrag i Bergen og omegn."
+  tittel="Kontakt oss – gratis befaring | Nilsen & Sture Betong"
+  beskrivelse="Ring 56 15 96 70 eller send en forespørsel til Nilsen & Sture Betong. Storebotn 40, 5309 Kleppestø. Gratis befaring i Bergen og Vestland."
   jsonLd={[kontaktLd]}
-  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Kontakt oss', sti: '/kontakt-oss/' }]}
+  smuler={smuler}
+  ogBilde={heroBilde}
 >
-  <Sidetopp overtittel="Kontakt" tittel="Kontakt oss" ingress="Vi vil gjerne høre om ditt neste prosjekt, eller svare på spørsmål om tjenestene våre. Ring oss eller fyll ut skjemaet – befaringen er gratis." />
-  <div class="seksjon">
+  <Sidehero
+    tittel="Kontakt oss"
+    overtittel="Gratis befaring"
+    ingress="Vi vil gjerne høre om ditt neste prosjekt, eller svare på spørsmål om tjenestene våre."
+    bilde={heroBilde}
+    smuler={smuler}
+    storrelse="liten"
+  />
+
+  <section class="kanaler" aria-label="Kontaktinformasjon">
+    <div class="beholder kanaler__rad">
+      <a class="kanal kanal--hoved" href={telLenke} data-cta="ring_kontaktside">
+        <Ikon navn="telefon" />
+        <span><small>Ring oss</small><strong>{firma.telefon}</strong></span>
+      </a>
+      <a class="kanal" href={epostLenke}>
+        <Ikon navn="epost" />
+        <span><small>E-post</small><strong>{firma.epost}</strong></span>
+      </a>
+      <a class="kanal" href={kartLenke} rel="noopener" target="_blank" data-cta="veibeskrivelse">
+        <Ikon navn="kart" />
+        <span><small>Besøksadresse</small><strong>{firma.adresse.gate}, {firma.adresse.sted}</strong></span>
+      </a>
+    </div>
+  </section>
+
+  <section class="seksjon">
     <div class="beholder to-spalter">
-      <section aria-labelledby="skjema-tittel">
+      <div>
+        <p class="overtittel">Forespørsel</p>
         <h2 id="skjema-tittel">Be om tilbud</h2>
+        <p>Beskriv kort hva du skal ha gjort, så tar vi kontakt for å avtale gratis befaring.</p>
         <Kontaktskjema />
-      </section>
-      <aside aria-label="Kontaktinformasjon" class="kontaktinfo">
-        <div class="kort">
-          <h2 class="h3">Ring eller send e-post</h2>
-          <p><a class="stor" href={telLenke}><Ikon navn="telefon" />{firma.telefon}</a></p>
-          <p><a class="stor" href={epostLenke}><Ikon navn="epost" />{firma.epost}</a></p>
-        </div>
-        <div class="kort">
-          <h2 class="h3">Finn oss</h2>
+      </div>
+      <aside class="info" aria-label="Adresse og fakturering">
+        <div class="info__kort">
+          <p class="info__tittel">Finn oss</p>
           <address>
             {firma.navn}<br />
             {firma.adresse.gate}<br />
             {firma.adresse.postnr} {firma.adresse.sted}
           </address>
           <!-- Kart som lenke: ingen tredjepartskapsler før brukeren selv klikker seg videre. -->
-          <p><a href={kartLenke} rel="noopener" target="_blank" data-cta="veibeskrivelse"><Ikon navn="kart" />Vis i Google Maps (åpnes i ny fane)</a></p>
-          <p><a href={firma.facebook} rel="noopener" target="_blank"><Ikon navn="facebook" />Følg oss på Facebook</a></p>
+          <a class="tekstlenke" href={kartLenke} rel="noopener" target="_blank">Vis i Google Maps <Ikon navn="pilOpp" /></a>
         </div>
-        <div class="kort">
-          <h2 class="h3">Fakturering</h2>
+        <div class="info__kort">
+          <p class="info__tittel">Fakturering</p>
           <p>
             Vi ønsker at alle sender faktura som EHF til {firma.navn}, org.nr. {firma.orgnr}. Har du ikke mulighet til å
-            sende EHF, kan fakturaen sendes på e-post til <a href={`mailto:${firma.fakturaEpost}`}>{firma.fakturaEpost}</a>.
+            sende EHF, kan fakturaen sendes til <a href={`mailto:${firma.fakturaEpost}`}>{firma.fakturaEpost}</a>.
           </p>
+        </div>
+        <div class="info__kort">
+          <p class="info__tittel">Følg oss</p>
+          <a class="tekstlenke" href={firma.facebook} rel="noopener" target="_blank"><Ikon navn="facebook" /> Facebook</a>
         </div>
       </aside>
     </div>
-  </div>
+  </section>
+
+  <section class="seksjon seksjon--flate" aria-labelledby="personer-tittel">
+    <div class="beholder">
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Kontaktpersoner</p>
+          <h2 id="personer-tittel">Snakk med oss direkte</h2>
+        </div>
+        <p>Usikker på hvem du skal ringe? Bruk sentralbordet på {firma.telefon}, så setter vi deg over.</p>
+      </div>
+      <ul class="personer">
+        {kontaktpersoner.map((p, i) => (
+          <li data-vis style={`--i: ${i % 4}`}>
+            <Picture src={p.bilde} alt={`Portrett av ${p.navn}`} formats={['avif', 'webp']} widths={[300, 450]} sizes="(min-width: 62rem) 18vw, (min-width: 40rem) 30vw, 45vw" loading="lazy" />
+            <div class="personer__tekst">
+              <h3>{p.navn}</h3>
+              <a href={telTilLenke(p.telefon)}><Ikon navn="telefon" />{p.telefon}</a>
+              <a href={`mailto:${p.epost}`}><Ikon navn="epost" />{p.epost}</a>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
 </Base>
+
 <style>
-  .kontaktinfo { display: grid; gap: 1.25rem; align-content: start; }
-  .h3 { font-size: 1.35rem; }
-  address { font-style: normal; margin-bottom: 1rem; }
-  .kontaktinfo a { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; }
-  .kontaktinfo :global(svg) { width: 1.2rem; height: 1.2rem; flex: none; }
-  .stor { font-size: 1.2rem; font-weight: 600; }
+  .kanaler {
+    background: var(--farge-mork);
+  }
+  .kanaler__rad {
+    display: grid;
+    gap: 1px;
+  }
+  @media (min-width: 56rem) {
+    .kanaler__rad {
+      grid-template-columns: 1.2fr 1fr 1fr;
+    }
+  }
+  .kanal {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.6rem 1.25rem;
+    color: #fff;
+    text-decoration: none;
+    background: var(--farge-mork);
+    transition: background-color 0.2s;
+  }
+  .kanal:hover {
+    background: var(--farge-mork-3);
+    color: #fff;
+  }
+  .kanal--hoved {
+    background: var(--farge-aksent);
+  }
+  .kanal--hoved:hover {
+    background: var(--farge-mork-rod);
+  }
+  .kanal :global(.ikon) {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+  .kanal span {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .kanal small {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    opacity: 0.9;
+  }
+  .kanal strong {
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    overflow-wrap: anywhere;
+  }
+  .kanal--hoved strong {
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+  }
+  .info {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .info__kort {
+    background: var(--farge-flate);
+    border-left: 4px solid var(--farge-aksent);
+    padding: 1.5rem;
+  }
+  .info__tittel {
+    font-family: var(--font-overskrift);
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: var(--farge-mork);
+    margin-bottom: 0.5rem;
+  }
+  .info address {
+    font-style: normal;
+    margin-bottom: 0.75rem;
+  }
+  .info p:last-child {
+    margin: 0;
+  }
+  .personer {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (min-width: 48rem) {
+    .personer {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 72rem) {
+    .personer {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .personer li {
+    background: #fff;
+    border: 1px solid var(--farge-linje);
+    overflow: hidden;
+  }
+  .personer :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    background: var(--farge-flate);
+  }
+  .personer__tekst {
+    padding: 1rem 1.1rem 1.2rem;
+    border-top: 3px solid var(--farge-aksent);
+  }
+  .personer h3 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .personer a {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 32px;
+    font-size: 0.92rem;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .personer a :global(.ikon) {
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+  }
 </style>

@@ -1,112 +1,114 @@
 ---
-import { Picture } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import Sidetopp from '../../components/Sidetopp.astro';
-import Tjenestekort from '../../components/Tjenestekort.astro';
+import Sidehero from '../../components/Sidehero.astro';
+import Faktaband from '../../components/Faktaband.astro';
+import Prosjektkort from '../../components/Prosjektkort.astro';
+import Byggherrer from '../../components/Byggherrer.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { referanser, referanseIngress, formatM3 } from '../../data/referanser';
+import { referanser, referanseIngress, referanseEtterSlug, totalt } from '../../data/referanser';
+import { tjenester } from '../../data/tjenester';
+
+const smuler = [{ navn: 'Forside', sti: '/' }, { navn: 'Referanser', sti: '/referanser/' }];
+const heroBilde = referanseEtterSlug('utvidelse-av-fortoyningsanlegg-co2-anlegg-kollsnes').bilde.src;
+const filtre = tjenester.filter((t) => referanser.some((r) => r.tjenester.includes(t.slug)));
 ---
 <Base
-  tittel="Referanser – betongarbeid i Bergen | Nilsen & Sture Betong"
-  beskrivelse="Referanser fra Nilsen & Sture Betong: Skostredet Hotel, Bergen Verksted, Sædalen kirke, Carl Konows gate, Kollsnes og flere prosjekter på Vestlandet."
-  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Referanser', sti: '/referanser/' }]}
-  ogBilde={referanser[3].bilde.src}
+  tittel="Referanser – betongarbeid i Vestland | Nilsen & Sture Betong"
+  beskrivelse="Referanser fra Nilsen & Sture Betong: Kollsnes for Equinor, Bergen Verksted, Skostredet Hotel, Sædalen kirke og flere prosjekter i Vestland."
+  smuler={smuler}
+  ogBilde={heroBilde}
 >
-  <Sidetopp overtittel="Referanser" tittel="Referanser" ingress={referanseIngress} />
-  <div class="seksjon">
+  <Sidehero tittel="Referanser" overtittel="Prosjekter" ingress={referanseIngress} bilde={heroBilde} smuler={smuler} />
+
+  <Faktaband
+    fakta={[
+      { verdi: String(totalt.prosjekter), etikett: 'Utvalgte prosjekter', ikon: 'bygg' },
+      { verdi: `${totalt.betongM3.toLocaleString('nb-NO')} m³`, etikett: 'Levert betong', ikon: 'betong' },
+      { verdi: `${totalt.kontraktMill} mill. kr`, etikett: 'Samlet kontraktsverdi', ikon: 'kontrakt' },
+      { verdi: '2019–2024', etikett: 'Byggeperioder', ikon: 'kalender' },
+    ]}
+  />
+
+  <section class="seksjon" aria-labelledby="alle-tittel">
     <div class="beholder">
-      <ul class="refliste rutenett rutenett--3">
-        {referanser.map((r) => (
-          <li class="kort refliste__kort">
-            <Picture
-              src={r.bilde.src}
-              alt={r.bilde.alt}
-              formats={['avif', 'webp']}
-              widths={[360, 560, 720, 960]}
-              sizes="(min-width: 60rem) 22rem, (min-width: 40rem) 45vw, 100vw"
-              loading="lazy"
-            />
-            <div class="refliste__tekst">
-              <h2 class="reftittel"><a href={`/prosjekt/${r.slug}/`}>{r.tittel}</a></h2>
-              <dl class="reffakta">
-                <dt>Sted</dt><dd>{r.sted}</dd>
-                {r.avdeling && <><dt>Avdeling</dt><dd>{r.avdeling}</dd></>}
-                {r.betongM3 && <><dt>Levert betong</dt><dd>{formatM3(r.betongM3)}</dd></>}
-                <dt>Byggeperiode</dt><dd>{r.byggeperiode}</dd>
-              </dl>
-              <span class="refliste__mer" aria-hidden="true">Les om prosjektet →</span>
-            </div>
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Referanseprosjekter</p>
+          <h2 id="alle-tittel">Alle prosjekter</h2>
+        </div>
+        <div class="filter" data-filter role="group" aria-label="Filtrer etter tjeneste" hidden>
+          <button type="button" data-verdi="alle" aria-pressed="true">Alle</button>
+          {filtre.map((t) => <button type="button" data-verdi={t.slug} aria-pressed="false">{t.kortnavn}</button>)}
+        </div>
+      </div>
+      <p class="visuelt-skjult" aria-live="polite" data-filter-antall></p>
+      <ul class="prosjektliste" data-filter-mal>
+        {referanser.map((r, i) => (
+          <li class:list={{ bred: i % 5 === 0 }} data-vis style={`--i: ${i % 3}`}>
+            <Prosjektkort r={r} overskrift="h3" storrelse={i % 5 === 0 ? 'stor' : 'normal'} />
           </li>
         ))}
       </ul>
     </div>
-  </div>
-  <section class="seksjon seksjon--flate" aria-labelledby="ref-tjenester">
-    <div class="beholder">
-      <h2 id="ref-tjenester">Tjenestene våre</h2>
-      <Tjenestekort />
-    </div>
   </section>
-  <CtaBand
-    kilde="referanser"
-    tittel="Nytt prosjekt?"
-    tekst="Vi holder til på Askøy og hjelper både privatpersoner og profesjonelle aktører i hele Vestland. Kontakt oss for gratis befaring."
-  />
+
+  <Byggherrer />
+
+  <CtaBand kilde="referanser" tittel="Nytt prosjekt?" tekst="Vi holder til på Askøy og hjelper både privatpersoner og profesjonelle aktører i hele Vestland. Kontakt oss for gratis befaring." />
 </Base>
+
 <style>
-  .refliste {
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .filter button {
+    font-family: var(--font-overskrift);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    min-height: 44px;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--farge-linje);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--farge-mork);
+    cursor: pointer;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      border-color 0.15s;
+  }
+  .filter button:hover {
+    border-color: var(--farge-mork);
+  }
+  .filter button[aria-pressed='true'] {
+    background: var(--farge-aksent);
+    border-color: var(--farge-aksent);
+    color: #fff;
+  }
+  .prosjektliste {
     list-style: none;
-    padding: 0;
     margin: 0;
-  }
-  .refliste__kort {
     padding: 0;
-    overflow: hidden;
-    position: relative;
-  }
-  .reftittel a {
-    color: var(--farge-mork);
-    text-decoration: none;
-  }
-  .reftittel a::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-  }
-  .refliste__kort:hover .reftittel a,
-  .reftittel a:focus-visible {
-    color: var(--farge-aksent);
-  }
-  .refliste__mer {
-    display: inline-block;
-    margin-top: 0.75rem;
-    font-weight: 600;
-    color: var(--farge-aksent);
-  }
-  .refliste__kort :global(img) {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-  }
-  .refliste__tekst {
-    padding: 1.1rem 1.25rem 1.25rem;
-    border-top: 4px solid var(--farge-mork);
-  }
-  .reftittel {
-    font-size: 1.3rem;
-  }
-  .reffakta {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 0.25rem 1rem;
-    margin: 0;
-    font-size: 0.98rem;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
   }
-  .reffakta dt {
-    font-weight: 600;
-    color: var(--farge-mork);
+  @media (min-width: 40rem) {
+    .prosjektliste {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .prosjektliste .bred {
+      grid-column: span 2;
+    }
   }
-  .reffakta dd {
-    margin: 0;
+  @media (min-width: 62rem) {
+    .prosjektliste {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .prosjektliste li :global(.pkort) {
+    height: 100%;
   }
 </style>

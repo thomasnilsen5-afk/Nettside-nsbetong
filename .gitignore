@@ -13,3 +13,4 @@ lighthouse/*.html
 !lighthouse/mobil_.report.html
 !lighthouse/mobil_betongarbeid_.report.html
 !lighthouse/mobil_prosjekt_saedalen-kirke_.report.html
+dist.lh/

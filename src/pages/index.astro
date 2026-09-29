@@ -4,15 +4,24 @@ import Base from '../layouts/Base.astro';
 import Ikon from '../components/Ikon.astro';
 import Tjenestekort from '../components/Tjenestekort.astro';
 import Tillitsmerker from '../components/Tillitsmerker.astro';
-import CtaBand from '../components/CtaBand.astro';
-import { firma, telLenke, epostLenke } from '../data/site';
+import Faktaband from '../components/Faktaband.astro';
+import Prosjektkort from '../components/Prosjektkort.astro';
+import Byggherrer from '../components/Byggherrer.astro';
+import Kontaktseksjon from '../components/Kontaktseksjon.astro';
+import { firma, telLenke } from '../data/site';
 import { organisasjonLd } from '../data/jsonld';
-import { referanser, formatM3 } from '../data/referanser';
-import heroBilde from '../assets/bilder/forside/armering-av-betongdekke-bergen.jpg';
-import omOssBilde from '../assets/bilder/felles/prosjektmote-over-tegninger.jpg';
-import karriereBilde from '../assets/bilder/felles/nilsen-sture-betong-ansatt-ved-firmabil.jpg';
+import { referanser, referanseEtterSlug, totalt } from '../data/referanser';
 
-const ldBilde = await getImage({ src: heroBilde, width: 1200, format: 'jpg' });
+import hero1 from '../assets/bilder/forside/armering-av-betongdekke-bergen.jpg';
+import hero2 from '../assets/bilder/kantstop/etterarbeid-pa-stopt-kant.jpg';
+import hero3 from '../assets/bilder/betongarbeid/betongpumpe-og-forskaling-byggeplass.jpg';
+import hero4 from '../assets/bilder/referanser/fortoyningsanlegg-kollsnes.jpg';
+import kollasj1 from '../assets/bilder/nybygg/betongarbeidere-pa-byggeplass.jpg';
+import kollasj2 from '../assets/bilder/felles/betongarbeider-i-arbeidsjakke.jpg';
+import karriereBilde from '../assets/bilder/felles/nilsen-sture-betong-ansatt-ved-firmabil.jpg';
+import avdelingBilde from '../assets/bilder/gulvstop/gulvstop-pa-armering.jpg';
+
+const ldBilde = await getImage({ src: hero1, width: 1200, format: 'jpg' });
 const websiteLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
@@ -22,155 +31,530 @@ const websiteLd = {
   inLanguage: 'nb-NO',
   publisher: { '@id': `${firma.url}/#firma` },
 };
-const utvalgteReferanser = referanser.filter((r) =>
-  ['Domkirkegaten 6, Skostredet Hotel', 'Sædalen kirke', 'Ny sykkelveg, Carl Konows gate'].includes(r.tittel),
-);
-const nokkeltall = [
-  { tall: '20+', tekst: 'års erfaring' },
-  { tall: 'ca. 50', tekst: 'ansatte' },
-  { tall: String(firma.stiftet), tekst: 'stiftet' },
-  { tall: '4', tekst: 'lærlinger i nybygg' },
+
+const slides = [
+  { src: hero1, sted: 'Armering av betongdekke, Bergen' },
+  { src: hero2, sted: 'Kantstøp med egen kantstøpemaskin' },
+  { src: hero3, sted: 'Betongarbeid med pumpe og forskaling' },
+  { src: hero4, sted: 'Fortøyningsanlegg, Kollsnes' },
 ];
+
+const utvalgt = referanseEtterSlug('utvidelse-av-fortoyningsanlegg-co2-anlegg-kollsnes');
+const andre = ['domkirkegaten-6-skostredet-hotel', 'bergen-verksted', 'saedalen-kirke', 'contiga-hulldekkefabrikk', 'ny-sykkelveg-og-fortau-gyldenpriskrysset-carl-konows-gate'].map(referanseEtterSlug);
+
+const hvorfor = [
+  { ikon: 'pris', tittel: 'Konkurransedyktige priser', tekst: 'Egen bemanning og maskinpark gir gode priser og full kontroll.' },
+  { ikon: 'levering', tittel: 'Leveringsdyktighet', tekst: 'Rundt 50 fagfolk gjør at vi kan stille opp når prosjektet trenger det.' },
+  { ikon: 'team', tittel: 'Korte beslutningsveier', tekst: 'En liten organisasjon der du snakker direkte med dem som tar avgjørelsene.' },
+  { ikon: 'arbeider', tittel: 'Norsktalende formenn', tekst: 'Formenn som snakker norsk, og arbeidere med lang erfaring i Norge.' },
+  { ikon: 'samarbeid', tittel: 'Tett samarbeid', tekst: 'Nært samarbeid med leverandører, entreprenører og byggherrer.' },
+  { ikon: 'kvalitet', tittel: 'HMS og kvalitet', tekst: 'Fokus på HMS, kvalitet og kvalitetskontroll i alle ledd.' },
+] as const;
+
+const avdelinger = [
+  { tall: '35', enhet: 'håndverkere', tillegg: '+ 4 lærlinger', navn: 'Nybygg', href: '/nybygg/' },
+  { tall: '8', enhet: 'gulvarbeidere', tillegg: 'ca. 60 års samlet erfaring', navn: 'Gulvstøp og flytavretting', href: '/gulvstop-og-flytavretting/' },
+  { tall: '6', enhet: 'håndverkere', tillegg: 'godkjent våtromsbedrift', navn: 'Flis- og murarbeid', href: '/flis-og-murarbeid/' },
+  { tall: '4', enhet: 'kantstøpere', tillegg: 'egen kantstøpemaskin', navn: 'Vei og kantstøp', href: '/vei-og-kantstop/' },
+];
+
+const prosess = [
+  { ikon: 'telefon', tittel: 'Ta kontakt', tekst: 'Ring 56 15 96 70 eller send en kort beskrivelse av oppdraget.' },
+  { ikon: 'befaring', tittel: 'Gratis befaring', tekst: 'Vi ser på forholdene på stedet og avklarer omfang og løsninger.' },
+  { ikon: 'dokument', tittel: 'Tilbud', tekst: 'Du får et tydelig tilbud med konkurransedyktig pris.' },
+  { ikon: 'hjelm', tittel: 'Utførelse', tekst: 'Fagfolk med fokus på HMS og kvalitet, levert til avtalt tid.' },
+] as const;
 ---
 <Base
   tittel="Betongentreprenør i Bergen | Nilsen & Sture Betong AS"
-  beskrivelse="Nilsen & Sture Betong – din betongentreprenør i Bergen og omegn. Betongarbeid, gulvstøp, kantstøp, nybygg og flis/mur. Over 20 års erfaring."
+  beskrivelse="Nilsen & Sture Betong – betongentreprenør i Bergen, på Askøy og i Vestland. Betongarbeid, gulvstøp, kantstøp, nybygg og flis/mur. Gratis befaring."
   jsonLd={[{ ...organisasjonLd, image: new URL(ldBilde.src, firma.url).href }, websiteLd]}
 >
-  <section class="hero">
-    <Picture
-      src={heroBilde}
-      alt=""
-      formats={['avif', 'webp']}
-      widths={[640, 960, 1280, 1920]}
-      sizes="100vw"
-      quality={50}
-      loading="eager"
-      fetchpriority="high"
-      class="hero__bilde"
-    />
+  <!-- ============ HERO ============ -->
+  <section class="hero" data-hero>
+    <div class="hero__bilder" data-hero-bilder>
+      <Picture
+        src={slides[0].src}
+        alt=""
+        formats={['avif', 'webp']}
+        widths={[480, 768, 1024, 1440, 1920]}
+        sizes="100vw"
+        quality={45}
+        loading="eager"
+        fetchpriority="high"
+        class="hero__bilde aktiv"
+        data-sted={slides[0].sted}
+      />
+    </div>
+    <template data-hero-flere>
+      {slides.slice(1).map((s) => (
+        <Picture src={s.src} alt="" formats={['avif', 'webp']} widths={[640, 960, 1280, 1920]} sizes="100vw" quality={55} class="hero__bilde" data-sted={s.sted} />
+      ))}
+    </template>
+
     <div class="beholder hero__innhold">
-      <p class="overtittel">Over 20 års erfaring</p>
-      <h1>Betongentreprenør i Bergen og omegn</h1>
+      <p class="overtittel">Siden {firma.stiftet} · Askøy · Bergen · Vestland</p>
+      <h1>Betongentreprenør <span>i Bergen og omegn</span></h1>
       <p class="hero__ingress">
-        Din totalleverandør av betongarbeid i Vestland. Vi utfører betongarbeid, gulvstøp, kantstøp, nybygg og flis- og
-        murarbeid for privatpersoner, næringsdrivende og kommunale aktører.
+        Totalleverandør av betongarbeid i Vestland – fra fundament og gulv til kantstøp, nybygg og bad. For private,
+        næringsliv og det offentlige.
       </p>
       <div class="knapperad">
-        <a class="knapp knapp--lys" href={telLenke} data-cta="ring_hero_forside"><Ikon navn="telefon" />Ring {firma.telefon}</a>
-        <a class="knapp knapp--omriss-lys" href="/kontakt-oss/#skjema" data-cta="tilbud_hero_forside">Gratis befaring</a>
+        <a class="knapp knapp--pil" href="/kontakt-oss/#skjema" data-cta="tilbud_hero_forside">Gratis befaring<Ikon navn="pil" /></a>
+        <a class="knapp knapp--omriss-lys" href="/referanser/" data-cta="referanser_hero_forside">Se prosjektene</a>
       </div>
+    </div>
+
+    <div class="hero__bunn beholder">
+      <a class="hero__ring" href={telLenke} data-cta="ring_hero_forside">
+        <span class="hero__ringikon"><Ikon navn="telefon" /></span>
+        <span><small>Ring oss</small>{firma.telefon}</span>
+      </a>
+      <p class="hero__sted" data-hero-sted aria-live="polite">{slides[0].sted}</p>
     </div>
   </section>
 
-  <section class="merkestripe" aria-label="Godkjenninger">
-    <div class="beholder"><Tillitsmerker /></div>
-  </section>
+  <Faktaband
+    fakta={[
+      { verdi: String(firma.stiftet), etikett: 'Stiftet', ikon: 'kalender' },
+      { verdi: 'ca. 50', etikett: 'Ansatte', ikon: 'team' },
+      { verdi: `${totalt.betongM3.toLocaleString('nb-NO')} m³`, etikett: 'Betong i utvalgte prosjekter', ikon: 'betong' },
+      { verdi: `${totalt.kontraktMill} mill. kr`, etikett: 'Kontraktsverdi i utvalgte prosjekter', ikon: 'kontrakt' },
+    ]}
+  />
 
+  <Byggherrer />
+
+  <!-- ============ TJENESTER ============ -->
   <section class="seksjon" id="tjenester" aria-labelledby="tjenester-tittel">
     <div class="beholder">
-      <p class="overtittel">Tjenester</p>
-      <h2 id="tjenester-tittel">Vi dekker alle områder innen betongarbeid</h2>
-      <p class="ingress">
-        Ingen jobb er for liten eller for stor. Velg tjenesten du trenger for å lese mer.
-      </p>
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Tjenester</p>
+          <h2 id="tjenester-tittel">Alt innen betongarbeid</h2>
+        </div>
+        <p>Ingen jobb er for liten eller for stor. Vi har egne fagavdelinger for betong, gulv, kantstøp, nybygg og flis og mur.</p>
+      </div>
       <Tjenestekort />
     </div>
   </section>
 
-  <section class="seksjon seksjon--flate" aria-labelledby="hvorfor-tittel">
-    <div class="beholder to-spalter">
-      <div>
+  <!-- ============ OM OSS ============ -->
+  <section class="seksjon seksjon--betong omoss" aria-labelledby="omoss-tittel">
+    <div class="beholder to-spalter to-spalter--lik to-spalter--midt">
+      <div data-vis>
         <p class="overtittel">Om oss</p>
-        <h2 id="hvorfor-tittel">En av Bergens ledende aktører innen betongarbeid</h2>
+        <h2 id="omoss-tittel">En av Bergens ledende betongentreprenører</h2>
+        <p class="stort-utsagn">Siden {firma.stiftet} har vi bygget alt fra <em>garasjer og grunnmurer</em> til <em>togverksted, hotell og kaianlegg</em>.</p>
         <p>
-          Nilsen &amp; Sture Betong ble stiftet i {firma.stiftet} og holder til i Storebotn på Askøy. Vi er {firma.ansatte}
-          – erfarne forskalingssnekkere, gulvstøpere, kantstøpere, murere og flisleggere – og tar oppdrag i Bergen og omegn
-          og ellers i Vestland.
+          Nilsen &amp; Sture Betong holder til i Storebotn på Askøy og er i dag {firma.ansatte} – erfarne forskalingssnekkere,
+          gulvstøpere, kantstøpere, murere og flisleggere. Vi prioriterer tid og kvalitet, og holder tidsskjemaet fra oppstart til
+          ferdigstillelse.
         </p>
-        <p>
-          Vi har bred kunnskap om betong og betongarbeid, og liker en utfordring der vi finner gode løsninger sammen med
-          kundene våre. Vi prioriterer tid og kvalitet, og er opptatt av å holde tidsskjemaet fra oppstart til slutt.
-        </p>
-        <ul class="tall">
-          {nokkeltall.map((n) => <li><strong>{n.tall}</strong><span>{n.tekst}</span></li>)}
-        </ul>
-        <p><a href="/om-oss/">Les mer om oss</a> · <a href="/referanser/">Se referanser</a></p>
+        <a class="tekstlenke" href="/om-oss/">Mer om oss <Ikon navn="pil" /></a>
       </div>
-      <div class="bildeboks">
-        <Picture src={omOssBilde} alt="Prosjektmøte der tre personer går gjennom byggetegninger" formats={['avif', 'webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 28rem, 100vw" loading="lazy" />
-        <ul class="kundeliste">
-          <li><strong>Private</strong> – garasje, grunnmur, gulv, bad og mur.</li>
-          <li><strong>Næringsdrivende</strong> – nybygg, industri og gulv.</li>
-          <li><strong>Kommuner og offentlige</strong> – vei, fortau, skoler og bygg.</li>
-        </ul>
+      <div class="kollasj" data-vis style="--i: 1">
+        <Picture src={kollasj1} alt="Betongarbeidere fra Nilsen & Sture Betong på en byggeplass" formats={['avif', 'webp']} widths={[480, 720, 960]} sizes="(min-width: 62rem) 40vw, 90vw" loading="lazy" class="kollasj__stor" />
+        <Picture src={kollasj2} alt="Betongarbeider i arbeidsjakke med Nilsen & Sture Betong-logo på ryggen" formats={['avif', 'webp']} widths={[320, 480]} sizes="(min-width: 62rem) 16vw, 40vw" loading="lazy" class="kollasj__liten" />
+        <div class="kollasj__merke"><strong>20+</strong><span>års erfaring med betong</span></div>
       </div>
     </div>
   </section>
 
-  <section class="seksjon" aria-labelledby="ref-tittel">
+  <!-- ============ HVORFOR ============ -->
+  <section class="seksjon seksjon--tett" aria-labelledby="hvorfor-tittel">
     <div class="beholder">
-      <p class="overtittel">Referanser</p>
-      <h2 id="ref-tittel">Et utvalg av prosjektene våre</h2>
-      <ul class="refkort rutenett rutenett--3">
-        {utvalgteReferanser.map((r) => (
-          <li class="kort refkort__kort">
-            <Picture src={r.bilde.src} alt={r.bilde.alt} formats={['avif', 'webp']} widths={[360, 560, 720]} sizes="(min-width: 60rem) 22rem, (min-width: 40rem) 45vw, 100vw" loading="lazy" />
-            <h3><a href={`/prosjekt/${r.slug}/`}>{r.tittel}</a></h3>
-            <p>{r.sted}{r.betongM3 && ` · ${formatM3(r.betongM3)} betong`}</p>
+      <h2 id="hvorfor-tittel" class="visuelt-skjult">Hvorfor velge Nilsen &amp; Sture Betong</h2>
+      <ul class="hvorfor">
+        {hvorfor.map((h, i) => (
+          <li data-vis style={`--i: ${i % 3}`}>
+            <Ikon navn={h.ikon} klasse="hvorfor__ikon" />
+            <h3>{h.tittel}</h3>
+            <p>{h.tekst}</p>
           </li>
         ))}
       </ul>
-      <p><a class="knapp knapp--omriss" href="/referanser/" data-cta="referanser_forside">Se alle referanser</a></p>
     </div>
   </section>
 
-  <section class="seksjon seksjon--mork karriere" aria-labelledby="karriere-tittel">
-    <div class="beholder to-spalter">
-      <div>
-        <p class="overtittel">Karriere</p>
-        <h2 id="karriere-tittel">Vil du jobbe hos oss?</h2>
-        <p>
-          For å sikre høy kvalitet i alle leveranser er vi alltid på jakt etter dyktige håndverkere. Som godkjent lærebedrift
-          er vi også med på å utdanne morgendagens betongarbeidere.
-        </p>
-        <a class="knapp knapp--lys" href="/ledige-stillinger/" data-cta="stillinger_forside">Se ledige stillinger</a>
+  <!-- ============ PROSJEKTER ============ -->
+  <section class="seksjon seksjon--morkest" aria-labelledby="prosjekter-tittel">
+    <div class="beholder">
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Referanser</p>
+          <h2 id="prosjekter-tittel">Utvalgte prosjekter</h2>
+        </div>
+        <a class="tekstlenke" href="/referanser/">Alle {referanser.length} referanser <Ikon navn="pil" /></a>
       </div>
-      <Picture src={karriereBilde} alt="Ansatt i arbeidsklær foran en firmabil fra Nilsen & Sture Betong" formats={['avif', 'webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 28rem, 100vw" loading="lazy" class="karriere__bilde" />
+      <div class="prosjektmosaikk">
+        <div class="prosjektmosaikk__stor" data-vis><Prosjektkort r={utvalgt} storrelse="stor" /></div>
+        {andre.map((r, i) => <div data-vis style={`--i: ${(i + 1) % 3}`}><Prosjektkort r={r} /></div>)}
+      </div>
     </div>
   </section>
 
-  <section class="seksjon" aria-labelledby="kontakt-tittel">
-    <div class="beholder kontaktrad">
-      <div>
-        <p class="overtittel">Kontakt</p>
-        <h2 id="kontakt-tittel">Fortell oss hva du skal ha gjort</h2>
-        <p>
-          Den raskeste veien er å ringe. Du kan også sende en e-post eller bruke skjemaet, så tar vi kontakt og avtaler
-          gratis befaring.
-        </p>
+  <!-- ============ AVDELINGER ============ -->
+  <section class="avdelinger" aria-labelledby="avdelinger-tittel">
+    <Picture src={avdelingBilde} alt="" formats={['avif', 'webp']} widths={[640, 1280, 1920]} sizes="100vw" loading="lazy" class="avdelinger__bilde" />
+    <div class="beholder seksjon">
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Egne fagavdelinger</p>
+          <h2 id="avdelinger-tittel">Fagfolk i eget hus</h2>
+        </div>
+        <p>Vi har egne folk på hvert fagområde – det gir kontroll på kvalitet og fremdrift, og én kontakt for hele betongjobben.</p>
       </div>
-      <ul class="kontaktvalg">
-        <li><a href={telLenke} data-cta="ring_kontakt_forside"><Ikon navn="telefon" /><span><strong>Ring</strong>{firma.telefon}</span></a></li>
-        <li><a href={epostLenke} data-cta="epost_kontakt_forside"><Ikon navn="epost" /><span><strong>E-post</strong>{firma.epost}</span></a></li>
-        <li><a href="/kontakt-oss/#skjema" data-cta="skjema_kontakt_forside"><Ikon navn="pil" /><span><strong>Skjema</strong>Be om tilbud</span></a></li>
+      <ul class="avdelinger__liste">
+        {avdelinger.map((a, i) => (
+          <li data-vis style={`--i: ${i}`}>
+            <a href={a.href}>
+              <span class="avdelinger__tall">{a.tall}</span>
+              <span class="avdelinger__enhet">{a.enhet}</span>
+              <span class="avdelinger__tillegg">{a.tillegg}</span>
+              <span class="avdelinger__navn">{a.navn}<Ikon navn="pil" /></span>
+            </a>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
 
-  <CtaBand kilde="forside" />
+  <!-- ============ PROSESS ============ -->
+  <section class="seksjon" aria-labelledby="prosess-tittel">
+    <div class="beholder">
+      <div class="seksjonstopp">
+        <div>
+          <p class="overtittel">Slik jobber vi</p>
+          <h2 id="prosess-tittel">Fra første samtale til ferdig støp</h2>
+        </div>
+      </div>
+      <ol class="prosess">
+        {prosess.map((p, i) => (
+          <li data-vis style={`--i: ${i}`}>
+            <span class="prosess__nr">{String(i + 1).padStart(2, '0')}</span>
+            <Ikon navn={p.ikon} klasse="prosess__ikon" />
+            <h3>{p.tittel}</h3>
+            <p>{p.tekst}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ KARRIERE ============ -->
+  <section class="karriere" aria-labelledby="karriere-tittel">
+    <Picture src={karriereBilde} alt="" formats={['avif', 'webp']} widths={[640, 1280, 1920]} sizes="100vw" loading="lazy" class="karriere__bilde" />
+    <div class="beholder karriere__innhold" data-vis>
+      <p class="overtittel">Karriere</p>
+      <h2 id="karriere-tittel">Bli en av oss</h2>
+      <p>
+        For å sikre høy kvalitet i alle leveranser er vi alltid på jakt etter dyktige håndverkere. Som godkjent lærebedrift
+        med tariffavtale utdanner vi også morgendagens betongarbeidere.
+      </p>
+      <div class="knapperad">
+        <a class="knapp knapp--pil" href="/ledige-stillinger/" data-cta="stillinger_forside">Ledige stillinger<Ikon navn="pil" /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GODKJENNINGER ============ -->
+  <section class="seksjon seksjon--tett" aria-labelledby="merker-tittel">
+    <div class="beholder merkerad">
+      <h2 id="merker-tittel" class="merkerad__tittel">Godkjenninger og avtaler</h2>
+      <Tillitsmerker />
+    </div>
+  </section>
+
+  <Kontaktseksjon />
 </Base>
 
 <style>
+  /* ---------- Hero ---------- */
   .hero {
     position: relative;
-    color: #fff;
-    background: var(--farge-mork);
-    border-bottom: 6px solid var(--farge-logo-rod);
-    overflow: hidden;
     isolation: isolate;
+    min-height: min(100svh, 62rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: #fff;
+    background: var(--farge-mork-2);
+    overflow: hidden;
   }
-  .hero :global(.hero__bilde) {
+  .hero__bilder {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .hero__bilder :global(.hero__bilde) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+  }
+  .hero__bilder :global(.hero__bilde.aktiv) {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__bilder :global(.hero__bilde.aktiv) {
+      animation: zoom 14s ease-out both;
+    }
+  }
+  @keyframes zoom {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgb(12 17 20 / 0.88) 0%, rgb(12 17 20 / 0.55) 48%, rgb(12 17 20 / 0.15) 100%),
+      linear-gradient(0deg, rgb(12 17 20 / 0.75) 0%, rgb(12 17 20 / 0) 45%);
+  }
+  .hero__innhold {
+    padding-top: calc(var(--topp-hoyde) + 3rem);
+  }
+  .hero h1 {
+    color: #fff;
+    font-size: clamp(2.1rem, 9.4vw, 6.5rem);
+    max-width: 14ch;
+    margin-bottom: 0.3em;
+  }
+  .hero h1 span {
+    display: block;
+    color: var(--farge-lys);
+  }
+  .hero__ingress {
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    line-height: 1.55;
+    color: #eef3f5;
+    max-width: 38rem;
+    margin-bottom: 2rem;
+  }
+  .hero__bunn {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    padding-top: clamp(2.5rem, 6vw, 4.5rem);
+    padding-bottom: 5rem;
+  }
+  .hero__ring {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-overskrift);
+    font-size: 1.6rem;
+    letter-spacing: 0.04em;
+  }
+  .hero__ringikon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3.1rem;
+    height: 3.1rem;
+    border-radius: 50%;
+    background: var(--farge-aksent);
+  }
+  .hero__ringikon :global(.ikon) {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  /* Pulsring med bare transform/opacity (ingen repaint på hovedtråden) */
+  .hero__ringikon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--farge-logo-rod);
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__ringikon::after {
+      animation: puls 2.6s ease-out infinite;
+    }
+  }
+  @keyframes puls {
+    0% {
+      transform: scale(1);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1.7);
+      opacity: 0;
+    }
+  }
+  .hero__ring > span:last-child {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  .hero__ring small {
+    font-family: var(--font-brod);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--farge-tekst-lys);
+  }
+  .hero__ring:hover {
+    color: #fff;
+  }
+  .hero__sted {
+    display: none;
+    margin: 0;
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.85);
+    border-left: 3px solid var(--farge-logo-rod);
+    padding-left: 0.75rem;
+  }
+  @media (min-width: 48rem) {
+    .hero__sted {
+      display: block;
+    }
+  }
+
+  /* ---------- Om oss / kollasj ---------- */
+  .omoss .stort-utsagn {
+    margin-bottom: 1.25rem;
+  }
+  .kollasj {
+    position: relative;
+    padding: 0 0 3.5rem 0;
+  }
+  .kollasj :global(.kollasj__stor) {
+    width: 88%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: var(--skygge-stor);
+  }
+  .kollasj :global(.kollasj__liten) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 40%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border: 6px solid #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--skygge-stor);
+  }
+  .kollasj__merke {
+    position: absolute;
+    left: -0.5rem;
+    bottom: 0.5rem;
+    background: var(--farge-aksent);
+    color: #fff;
+    padding: 1.1rem 1.4rem;
+    box-shadow: var(--skygge-stor);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    max-width: 15rem;
+  }
+  .kollasj__merke strong {
+    font-family: var(--font-overskrift);
+    font-size: 2.8rem;
+    line-height: 1;
+  }
+  .kollasj__merke span {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  /* ---------- Hvorfor ---------- */
+  .hvorfor {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--farge-linje);
+    border: 1px solid var(--farge-linje);
+  }
+  @media (min-width: 40rem) {
+    .hvorfor {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 62rem) {
+    .hvorfor {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .hvorfor li {
+    background: #fff;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    transition: background-color 0.2s;
+  }
+  .hvorfor li:hover {
+    background: var(--farge-flate);
+  }
+  .hvorfor :global(.hvorfor__ikon) {
+    width: 2.6rem;
+    height: 2.6rem;
+    color: var(--farge-aksent);
+    margin-bottom: 1rem;
+  }
+  .hvorfor h3 {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.4rem;
+  }
+  .hvorfor p {
+    margin: 0;
+    color: var(--farge-tekst-dempet);
+  }
+
+  /* ---------- Prosjekter ---------- */
+  .prosjektmosaikk {
+    display: grid;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+  }
+  @media (min-width: 40rem) {
+    .prosjektmosaikk {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .prosjektmosaikk__stor {
+      grid-column: span 2;
+    }
+  }
+  @media (min-width: 62rem) {
+    .prosjektmosaikk {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .prosjektmosaikk__stor {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .prosjektmosaikk__stor :global(.pkort) {
+      height: 100%;
+    }
+  }
+
+  /* ---------- Avdelinger ---------- */
+  .avdelinger {
+    position: relative;
+    isolation: isolate;
+    color: var(--farge-tekst-lys);
+    overflow: hidden;
+  }
+  .avdelinger :global(.avdelinger__bilde) {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -178,183 +562,189 @@ const nokkeltall = [
     object-fit: cover;
     z-index: -2;
   }
-  .hero::before {
+  .avdelinger::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(100deg, rgb(35 47 54 / 0.94) 0%, rgb(35 47 54 / 0.82) 50%, rgb(35 47 54 / 0.45) 100%);
+    background: linear-gradient(rgb(26 35 40 / 0.9), rgb(26 35 40 / 0.95));
   }
-  .hero__innhold {
-    padding-block: clamp(3.5rem, 11vw, 8rem);
-  }
-  .hero h1 {
+  .avdelinger h2,
+  .avdelinger .overtittel {
     color: #fff;
-    font-size: clamp(2.3rem, 7vw, 4rem);
-    max-width: 44rem;
   }
-  .hero .overtittel {
-    color: var(--farge-lys);
-  }
-  .hero__ingress {
-    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
-    max-width: 40rem;
-    color: #eef3f5;
-    margin-bottom: 2rem;
-  }
-  .merkestripe {
-    background: var(--farge-flate);
-    padding: 1.25rem 0;
-    border-bottom: 1px solid #e3e8eb;
-  }
-  .tall {
+  .avdelinger__liste {
     list-style: none;
+    margin: 0;
     padding: 0;
-    margin: 1.5rem 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: 1px;
+    background: rgb(255 255 255 / 0.12);
+    border: 1px solid rgb(255 255 255 / 0.12);
   }
   @media (min-width: 40rem) {
-    .tall {
+    .avdelinger__liste {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 62rem) {
+    .avdelinger__liste {
       grid-template-columns: repeat(4, 1fr);
     }
   }
-  .tall li {
-    background: #fff;
-    border-top: 4px solid var(--farge-logo-rod);
-    padding: 0.8rem 1rem;
-    box-shadow: var(--skygge);
+  .avdelinger__liste a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    background: rgb(26 35 40 / 0.65);
+    color: var(--farge-tekst-lys);
+    text-decoration: none;
+    transition: background-color 0.25s;
   }
-  .tall strong {
-    display: block;
+  .avdelinger__liste a:hover {
+    background: var(--farge-aksent);
+    color: #fff;
+  }
+  .avdelinger__tall {
     font-family: var(--font-overskrift);
-    font-size: 1.9rem;
-    color: var(--farge-mork);
-    line-height: 1.1;
+    font-weight: 600;
+    font-size: clamp(3.5rem, 6vw, 5rem);
+    line-height: 1;
+    color: #fff;
   }
-  .tall span {
-    font-size: 0.95rem;
-    color: var(--farge-tekst-dempet);
-  }
-  .bildeboks {
-    display: grid;
-    gap: 1.25rem;
-    align-content: start;
-  }
-  .bildeboks :global(img) {
-    width: 100%;
-    aspect-ratio: 3 / 2;
-    object-fit: cover;
-    border-radius: var(--radius);
-  }
-  .kundeliste {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.75rem;
-  }
-  .kundeliste li {
-    background: #fff;
-    padding: 1rem 1.2rem;
-    border-left: 5px solid var(--farge-aksent);
-    box-shadow: var(--skygge);
-  }
-  .kundeliste strong {
+  .avdelinger__enhet {
     font-family: var(--font-overskrift);
-    font-weight: 500;
     text-transform: uppercase;
-    color: var(--farge-mork);
+    letter-spacing: 0.12em;
+    color: #fff;
+    margin-top: 0.25rem;
   }
-  .refkort {
+  .avdelinger__tillegg {
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
+  }
+  .avdelinger__navn {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgb(255 255 255 / 0.2);
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #fff;
+  }
+
+  /* ---------- Prosess ---------- */
+  .prosess {
     list-style: none;
+    margin: 0;
     padding: 0;
-    margin: 0 0 1.5rem;
+    display: grid;
+    gap: 2rem;
+    counter-reset: steg;
   }
-  .refkort__kort {
-    padding: 0;
-    overflow: hidden;
+  @media (min-width: 40rem) {
+    .prosess {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 62rem) {
+    .prosess {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .prosess li {
+    position: relative;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--farge-linje);
+  }
+  .prosess li::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 3.5rem;
+    height: 2px;
+    background: var(--farge-logo-rod);
+  }
+  .prosess__nr {
+    position: absolute;
+    top: 1.1rem;
+    right: 0;
+    font-family: var(--font-overskrift);
+    font-size: 3.5rem;
+    line-height: 1;
+    color: var(--farge-flate);
+    -webkit-text-stroke: 1px var(--farge-linje);
+  }
+  .prosess :global(.prosess__ikon) {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--farge-aksent);
+    margin-bottom: 1rem;
     position: relative;
   }
-  .refkort__kort h3 a {
-    color: var(--farge-mork);
-    text-decoration: none;
+  .prosess h3 {
+    text-transform: uppercase;
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
   }
-  .refkort__kort h3 a::after {
+  .prosess p {
+    color: var(--farge-tekst-dempet);
+    margin: 0;
+  }
+
+  /* ---------- Karriere ---------- */
+  .karriere {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: #e6ecef;
+    min-height: 34rem;
+    display: flex;
+    align-items: center;
+  }
+  .karriere :global(.karriere__bilde) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 70% center;
+    z-index: -2;
+  }
+  .karriere::before {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, rgb(12 17 20 / 0.94) 0%, rgb(12 17 20 / 0.75) 45%, rgb(12 17 20 / 0.1) 100%);
   }
-  .refkort__kort:hover h3 a {
-    color: var(--farge-aksent);
+  .karriere__innhold {
+    padding-block: var(--seksjon);
   }
-  .refkort__kort :global(img) {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
+  .karriere__innhold > * {
+    max-width: 34rem;
   }
-  .refkort__kort h3,
-  .refkort__kort p {
-    padding-inline: 1.25rem;
+  .karriere h2,
+  .karriere .overtittel {
+    color: #fff;
   }
-  .refkort__kort h3 {
-    margin-top: 1rem;
-  }
-  .refkort__kort p {
-    color: var(--farge-tekst-dempet);
-  }
-  .karriere :global(.karriere__bilde) {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: var(--radius);
-    align-self: center;
-  }
-  .kontaktrad {
-    display: grid;
-    gap: 2rem;
-  }
-  @media (min-width: 60rem) {
-    .kontaktrad {
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-    }
-  }
-  .kontaktvalg {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.75rem;
-  }
-  .kontaktvalg a {
+
+  /* ---------- Merker ---------- */
+  .merkerad {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    border: 2px solid var(--farge-lys);
-    border-radius: var(--radius);
-    text-decoration: none;
-    color: var(--farge-tekst-2);
+    gap: 1.5rem 3rem;
   }
-  .kontaktvalg a:hover {
-    border-color: var(--farge-aksent);
-  }
-  .kontaktvalg :global(svg) {
-    width: 1.6rem;
-    height: 1.6rem;
-    color: var(--farge-aksent);
-    flex: none;
-  }
-  .kontaktvalg span {
-    display: flex;
-    flex-direction: column;
-  }
-  .kontaktvalg strong {
-    font-family: var(--font-overskrift);
-    font-weight: 500;
-    text-transform: uppercase;
-    color: var(--farge-mork);
+  .merkerad__tittel {
+    font-size: 1.2rem;
+    letter-spacing: 0.14em;
+    margin: 0;
+    max-width: 12rem;
   }
 </style>

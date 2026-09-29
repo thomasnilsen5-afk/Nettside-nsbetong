@@ -1,0 +1,142 @@
+---
+// Kontaktseksjon: mørkt panel med foto og kontaktinfo + skjema i hvitt kort.
+import { Picture } from 'astro:assets';
+import Ikon from './Ikon.astro';
+import Kontaktskjema from './Kontaktskjema.astro';
+import { firma, telLenke, epostLenke, kartLenke } from '../data/site';
+import bakgrunn from '../assets/bilder/felles/nilsen-sture-betong-ansatt-ved-firmabil.jpg';
+
+interface Props { tittel?: string; forvalgtTjeneste?: string; id?: string }
+const { tittel = 'Fortell oss om prosjektet', forvalgtTjeneste, id = 'kontakt' } = Astro.props;
+---
+<section class="kseksjon" id={id} aria-labelledby={`${id}-tittel`}>
+  <div class="beholder kseksjon__rad">
+    <div class="kseksjon__info">
+      <Picture src={bakgrunn} alt="" formats={['avif', 'webp']} widths={[600, 900, 1200]} sizes="(min-width: 62rem) 40vw, 100vw" loading="lazy" class="kseksjon__bilde" />
+      <p class="overtittel">Kontakt</p>
+      <h2 id={`${id}-tittel`}>{tittel}</h2>
+      <p>Vi tilbyr gratis befaring. Ring oss for en rask prat, eller send en forespørsel, så tar vi kontakt.</p>
+      <ul class="kseksjon__liste">
+        <li>
+          <Ikon navn="telefon" />
+          <span><small>Telefon</small><a href={telLenke} data-cta={`ring_${id}`}>{firma.telefon}</a></span>
+        </li>
+        <li>
+          <Ikon navn="epost" />
+          <span><small>E-post</small><a href={epostLenke}>{firma.epost}</a></span>
+        </li>
+        <li>
+          <Ikon navn="kart" />
+          <span><small>Besøksadresse</small><a href={kartLenke} rel="noopener" target="_blank">{firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}</a></span>
+        </li>
+      </ul>
+    </div>
+    <div class="kseksjon__skjema">
+      <p class="kseksjon__skjematittel">Be om tilbud</p>
+      <Kontaktskjema forvalgtTjeneste={forvalgtTjeneste} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .kseksjon {
+    padding-block: var(--seksjon);
+    background:
+      linear-gradient(rgb(243 245 246 / 0.9), rgb(243 245 246 / 0.9)),
+      var(--betong, none) center / cover;
+  }
+  .kseksjon__rad {
+    display: grid;
+    box-shadow: var(--skygge-stor);
+  }
+  @media (min-width: 62rem) {
+    .kseksjon__rad {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+  }
+  .kseksjon__info {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--farge-mork);
+    color: var(--farge-tekst-lys);
+    padding: clamp(2rem, 4vw, 3.5rem);
+  }
+  .kseksjon__info :global(.kseksjon__bilde) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    opacity: 0.35;
+  }
+  .kseksjon__info::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(160deg, rgb(26 35 40 / 0.75), rgb(26 35 40 / 0.97) 65%);
+  }
+  .kseksjon__info h2 {
+    color: #fff;
+    font-size: clamp(2rem, 3.6vw, 2.8rem);
+  }
+  .kseksjon__info .overtittel {
+    color: #fff;
+  }
+  .kseksjon__liste {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .kseksjon__liste li {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .kseksjon__liste :global(.ikon) {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0.65rem;
+    background: var(--farge-aksent);
+    color: #fff;
+    border-radius: 50%;
+  }
+  .kseksjon__liste span {
+    display: flex;
+    flex-direction: column;
+  }
+  .kseksjon__liste small {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .kseksjon__liste a {
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-overskrift);
+    font-size: 1.3rem;
+    letter-spacing: 0.02em;
+  }
+  .kseksjon__liste li:first-child a {
+    font-size: 1.9rem;
+  }
+  .kseksjon__liste a:hover {
+    text-decoration: underline;
+  }
+  .kseksjon__skjema {
+    background: #fff;
+    padding: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .kseksjon__skjematittel {
+    font-family: var(--font-overskrift);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 1.6rem;
+    color: var(--farge-mork);
+    margin-bottom: 1.25rem;
+  }
+</style>

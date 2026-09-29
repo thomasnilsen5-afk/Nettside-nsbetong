@@ -221,3 +221,30 @@ export const referanseEtterSlug = (slug: string) => {
 
 export const formatM3 = (n: number) => `${n.toLocaleString('nb-NO')} m³`;
 export const formatM2 = (n: number) => `${n.toLocaleString('nb-NO')} m²`;
+
+// Summer fra referanseprosjektene (bedriftens egne tall).
+export const totalt = {
+  prosjekter: referanser.length,
+  betongM3: referanser.reduce((sum, r) => sum + (r.betongM3 ?? 0), 0),
+  kontraktMill: referanser.reduce((sum, r) => sum + (parseInt(r.kontrakt, 10) || 0), 0),
+};
+
+// Byggherrer og oppdragsgivere slik de står i referanseprosjektene over.
+export const byggherrer = [
+  'Equinor',
+  'Bane NOR',
+  'Statens vegvesen',
+  'Vestland fylkeskommune',
+  'Bergen kommune',
+  'Skanska',
+  'PEAB',
+  'Betonmast',
+  'Backe Bergen',
+  'Heidelberg Materials',
+  'Semco Maritime',
+  'Pallas Eiendom',
+  'Gravdal Bygg',
+  'Baneservice',
+  'Bergen kirkelige fellesråd',
+  'Norscrap West',
+];

@@ -1,0 +1,85 @@
+---
+// Felles lysboks for gallerier. Styres av src/scripts/nsb.ts.
+import Ikon from './Ikon.astro';
+---
+<dialog class="lysboks" data-lysboks-dialog aria-label="Bildevisning">
+  <figure>
+    <img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" width="1600" height="1067" data-lysboks-bilde />
+    <figcaption data-lysboks-tekst></figcaption>
+  </figure>
+  <button type="button" class="lysboks__knapp lysboks__lukk" data-lysboks-lukk aria-label="Lukk"><Ikon navn="lukk" /></button>
+  <button type="button" class="lysboks__knapp lysboks__forrige" data-lysboks-forrige aria-label="Forrige bilde"><Ikon navn="venstre" /></button>
+  <button type="button" class="lysboks__knapp lysboks__neste" data-lysboks-neste aria-label="Neste bilde"><Ikon navn="hoyre" /></button>
+</dialog>
+<style>
+  .lysboks {
+    width: 100vw;
+    height: 100svh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(10 14 16 / 0.96);
+    color: #fff;
+  }
+  .lysboks::backdrop {
+    background: rgb(10 14 16 / 0.8);
+  }
+  .lysboks figure {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4.5rem 1rem 1.5rem;
+    gap: 1rem;
+  }
+  .lysboks img {
+    max-width: min(100%, 1600px);
+    max-height: calc(100svh - 9rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  .lysboks figcaption {
+    font-size: 0.95rem;
+    color: var(--farge-tekst-lys);
+    text-align: center;
+  }
+  .lysboks__knapp {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.1);
+    color: #fff;
+    cursor: pointer;
+  }
+  .lysboks__knapp:hover {
+    background: var(--farge-aksent);
+  }
+  .lysboks__knapp :global(.ikon) {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  .lysboks__lukk {
+    top: 1rem;
+    right: 1rem;
+  }
+  .lysboks__forrige,
+  .lysboks__neste {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lysboks__forrige {
+    left: 1rem;
+  }
+  .lysboks__neste {
+    right: 1rem;
+  }
+</style>
