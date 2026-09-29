@@ -8,7 +8,7 @@
     "preview": "astro preview",
     "check": "node scripts/sjekk-bygg.mjs",
     "bilder": "node scripts/optimaliser-bilder.mjs",
-    "hent-gammel-side": "node scripts/hent-gammel-side.mjs"
+    "hent-gammel-side": "NODE_USE_ENV_PROXY=1 node --no-warnings scripts/hent-gammel-side.mjs"
   },
   "repository": {
     "type": "git",

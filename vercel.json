@@ -18,6 +18,41 @@
       "permanent": true
     },
     {
+      "source": "/personvernerklaering{/}?",
+      "destination": "/personvern/",
+      "permanent": true
+    },
+    {
+      "source": "/prosjekt{/}?",
+      "destination": "/referanser/",
+      "permanent": true
+    },
+    {
+      "source": "/prosjektside-ny{/}?",
+      "destination": "/referanser/",
+      "permanent": true
+    },
+    {
+      "source": "/ansatte/:slug*",
+      "destination": "/kontakt-oss/",
+      "permanent": true
+    },
+    {
+      "source": "/page-sitemap.xml",
+      "destination": "/sitemap-index.xml",
+      "permanent": true
+    },
+    {
+      "source": "/prosjekt-sitemap.xml",
+      "destination": "/sitemap-index.xml",
+      "permanent": true
+    },
+    {
+      "source": "/ansatte-sitemap.xml",
+      "destination": "/sitemap-index.xml",
+      "permanent": true
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true
@@ -50,11 +85,6 @@
     {
       "source": "/kontakt",
       "destination": "/kontakt-oss/",
-      "permanent": true
-    },
-    {
-      "source": "/personvernerklaering",
-      "destination": "/personvern/",
       "permanent": true
     }
   ],

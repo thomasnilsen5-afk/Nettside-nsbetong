@@ -6,11 +6,11 @@ Kontrollert med `npm run build && npm run check`, Lighthouse (mobil) og manuell 
 
 ## Kartlegging og innhold
 
-- [ ] ⏳ Hente alle 11 sider fra nsbetong.no. Blokkert av nettverket i byggemiljøet. Skriptet `npm run hent-gammel-side` er klart.
-- [ ] ⏳ Innholdsoversikt (tekst, bilder, tillitsmerker) over dagens side. Mal i INNHOLDSKART.md, fylles ut etter henting.
-- [ ] ⏳ Last ned og optimaliser bedriftens egne bilder. Pipeline klar (`npm run bilder` + Astro `<Picture>` AVIF/WebP).
-- [ ] ⏳ Bruk logoen `NS.svg`. Plass og bryter klar (`logoTilgjengelig`). Firmanavnet vises som tekst til logoen er lagt inn, og logoen er ikke tegnet på nytt.
-- [x] ✅ Bare oppgitte bedriftsfakta brukt. Det som mangler er merket `[MANGLER: …]` (se MANGLER.md).
+- [x] ✅ Hentet alle 11 sidene fra nsbetong.no, i tillegg til 9 prosjektsider og WordPress-sitemapene (`npm run hent-gammel-side`, `scripts/hent-prosjekter.mjs`)
+- [x] ✅ Innholdsoversikt (tekst, bilder, tillitsmerker) i INNHOLDSKART.md
+- [x] ✅ 88 av bedriftens egne bilder er lastet ned og optimalisert: EXIF/GPS fjernet, maks 2000 px, AVIF/WebP i flere størrelser via Astro `<Picture>`
+- [x] ✅ Logoen `NS.svg` er hentet fra dagens side og brukt uendret i topp, bunn, favicon og JSON-LD
+- [x] ✅ Bare oppgitte fakta og fakta fra bedriftens egen nettside er brukt. Det som mangler er merket `[MANGLER: …]` (se MANGLER.md).
 - [x] ✅ Ingen oppdiktede tall, kundeuttalelser, sertifiseringer eller referanser.
 
 ## Design
@@ -28,8 +28,9 @@ Kontrollert med `npm run build && npm run check`, Lighthouse (mobil) og manuell 
 - [x] ✅ Klar for Vercel (`@astrojs/vercel`, `vercel.json`, funksjonsregion `arn1` Stockholm).
 - [x] ✅ Deployet uten domene. **Merk:** Vercel-API-et behandlet grenen som produksjon (den er repoets eneste gren), så deployen ble lagt på *staging*-målet i stedet. Den første, feilaktige produksjonsdeployen ble avbrutt før den ble ferdig. Ingen DNS eller produksjonsdomene er endret.
 - [x] ✅ Samme URL-struktur som i dag, med avsluttende skråstrek (`trailingSlash: 'always'` + `"trailingSlash": true`).
-- [x] ✅ 301/308-redirects i `vercel.json`: www → apex, gamle sitemap-adresser og vanlige WordPress-adresser.
-- [ ] ⏳ Redirects for eventuelle andre gamle URL-er (innlegg, vedlegg, bilder). Krever WordPress-sitemap og Search Console.
+- [x] ✅ De 9 prosjektsidene beholder sine URL-er (`/prosjekt/<slug>/`)
+- [x] ✅ 301/308-redirects i `vercel.json` for alle URL-er i dagens sitemaps som ikke videreføres: `/personvernerklaering/`, `/prosjekt/`, `/prosjektside-ny/`, `/ansatte/*` og sitemaps. I tillegg www → apex.
+- [ ] ⏳ Sjekke Search Console for andre adresser med trafikk eller lenker (f.eks. bilde-URL-er) før lansering
 - [x] ✅ Kontaktskjema via serverless-funksjon til post@nsbetong.no (Graph/Resend), honeypot, tidssjekk, rate limiting og validering. Testet lokalt.
 - [x] ✅ Hemmeligheter i miljøvariabler, dokumentert i `.env.example` og OVERLEVERING.md.
 - [x] ✅ Takkeside `/takk/` med `noindex`, som utløser `form_submit`. Testet.
@@ -39,29 +40,28 @@ Kontrollert med `npm run build && npm run check`, Lighthouse (mobil) og manuell 
 ## SEO
 
 - [x] ✅ `lang="nb"` på alle sider
-- [x] ✅ Unik `<title>` (maks 59 tegn) og meta description (maks 147 tegn) per side. Kontrollert av `npm run check`.
+- [x] ✅ Unik `<title>` (maks 60 tegn) og meta description (maks 157 tegn) på alle 23 sider. Kontrollert av `npm run check`.
 - [x] ✅ Én H1 per side, logisk H2/H3
 - [x] ✅ Målsøkeord i title/H1/tekst: betongentreprenør Bergen (forside, nybygg), betongarbeid Bergen, gulvstøp/flytavretting Bergen, kantstøp/profilstøp vei og fortau, nybygg entreprenør Bergen, flis- og murarbeid/våtrom Bergen
 - [ ] ⏳ Validere søkeordene mot Search Console-data etter 4–8 uker
-- [x] ✅ Bare geografi bedriften selv oppgir (Bergen, omegn, Vestland, Kleppestø). Ingen andre kommuner er nevnt.
-- [x] ✅ Hver tjenesteside har unik tekst (400–505 ord i hovedinnholdet), hva som inngår, typiske oppdrag, hvem det passer for, FAQ og CTA
-- [ ] ⏳ Bilder og referanser på tjenestesidene. Plassen er klar, men venter på bedriftens bilder og referanser.
+- [x] ✅ Bare geografi bedriften selv oppgir på dagens side: Bergen og omegn, Askøy, Øygarden, Vestland og adressen på Kleppestø
+- [x] ✅ Hver tjenesteside har unik tekst (420–530 ord i hovedinnholdet), hva som inngår, typiske oppdrag, hvem det passer for, «hvorfor oss», FAQ og CTA
+- [x] ✅ Bilder på alle tjenestesider (hero + galleri), lenke til referanser, og prosjektsidene lenker tilbake til tjenestene
 - [x] ✅ Ingen tynne «by-sider» og ingen duplisert tekst
-- [x] ✅ Intern lenking: tjenestekort («Andre tjenester»), lenker til referanser, om oss og kontakt, meny og bunntekst
+- [x] ✅ Intern lenking: tjenestekort («Andre tjenester»), referanser ↔ prosjektsider ↔ tjenester, om oss, kontakt, meny og bunntekst
 - [x] ✅ Brødsmuler (synlige + BreadcrumbList JSON-LD) på alle undersider
-- [x] ✅ JSON-LD `GeneralContractor` (LocalBusiness) på forsiden: navn, adresse, telefon, e-post, sameAs Facebook, areaServed. Også `WebSite`.
+- [x] ✅ JSON-LD `GeneralContractor` (LocalBusiness) på forsiden: navn, adresse, telefon, e-post, logo, bilde, stiftelsesår, org.nr., sameAs Facebook og areaServed (Bergen, Askøy, Øygarden, Vestland). Også `WebSite`.
 - [x] ✅ JSON-LD `Service` på alle fem tjenestesider, koblet til firmaet via `@id`
 - [ ] ⏳ NAP identisk med Google-bedriftsprofilen. Nettsiden bruker de oppgitte verdiene, men profilen må kontrolleres.
 - [x] ✅ `sitemap-index.xml` (uten /takk/ og 404), `robots.txt` med sitemap
 - [x] ✅ Canonical til `https://nsbetong.no/...` på alle sider
-- [x] ✅ Open Graph og Twitter-kort med eget OG-bilde (1200×630)
-- [ ] ⏳ Bytte OG-bildet til et ekte prosjektbilde når bildene er hentet
+- [x] ✅ Open Graph og Twitter-kort. OG-bildet (1200×630) lages automatisk fra hver sides eget prosjektbilde.
 - [x] ✅ Egen 404-side
 - [x] ✅ HTTPS (Vercel) + HSTS-header
-- [x] ✅ Bilder: AVIF/WebP, width/height, lazy loading under første skjerm, norske filnavn og alt-tekst. Pipeline og komponent er klare, men det er ingen bilder ennå.
-- [x] ✅ Ytelse: LCP 1,4–1,5 s, CLS 0 (se lighthouse/RESULTATER.md)
-- [x] ✅ Lighthouse mobil ≥ 95 på Performance, SEO, Accessibility og Best Practices. Resultatet er **100/100/100/100** på 9 sider, målt uten demomodus.
-- [ ] ⏳ Måle Lighthouse på nytt når bildene er lagt inn, og på den endelige Vercel-URL-en
+- [x] ✅ Bilder: AVIF/WebP, width/height, lazy loading under første skjerm, `fetchpriority="high"` på heltebildet, norske filnavn og beskrivende alt-tekst. Illustrasjoner er merket som illustrasjoner.
+- [x] ✅ Ytelse med alle bilder: LCP 1,4–2,2 s, CLS 0 (se lighthouse/RESULTATER.md)
+- [x] ✅ Lighthouse mobil ≥ 95 på Performance, SEO, Accessibility og Best Practices. Resultatet er **99–100** i alle kategorier på 11 sider, målt med bilder og uten demomodus.
+- [ ] ⏳ Måle med PageSpeed Insights på den endelige adressen etter lansering
 
 ## Rapportering
 
@@ -77,7 +77,7 @@ Kontrollert med `npm run build && npm run check`, Lighthouse (mobil) og manuell 
 ## Leveranser
 
 - [x] ✅ Kode i GitHub + Vercel-deploy (staging, ikke produksjon)
-- [x] ✅ INNHOLDSKART.md (mal, fylles ut når den gamle siden kan hentes)
+- [x] ✅ INNHOLDSKART.md (gammel side → ny side, bilder, tillitsmerker, redirects)
 - [x] ✅ SEO-SJEKKLISTE.md (denne)
 - [x] ✅ RAPPORTERING.md
 - [x] ✅ OVERLEVERING.md (DNS-plan og rollback. Bare A/CNAME for web endres, og MX/SPF/DKIM/TXT røres ikke.)

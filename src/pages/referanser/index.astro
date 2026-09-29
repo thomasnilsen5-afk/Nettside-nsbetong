@@ -1,36 +1,44 @@
 ---
+import { Picture } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Sidetopp from '../../components/Sidetopp.astro';
 import Tjenestekort from '../../components/Tjenestekort.astro';
 import CtaBand from '../../components/CtaBand.astro';
-// Referanser legges inn i src/data/referanser.ts. Ikke publiser referanser uten kundens samtykke.
-import { referanser } from '../../data/referanser';
-import { Picture } from 'astro:assets';
+import { referanser, referanseIngress, formatM3 } from '../../data/referanser';
 ---
 <Base
   tittel="Referanser – betongarbeid i Bergen | Nilsen & Sture Betong"
-  beskrivelse="Et utvalg oppdrag Nilsen & Sture Betong har utført i Bergen og omegn: betongarbeid, gulvstøp, kantstøp, nybygg og våtrom."
+  beskrivelse="Referanser fra Nilsen & Sture Betong: Skostredet Hotel, Bergen Verksted, Sædalen kirke, Carl Konows gate, Kollsnes og flere prosjekter på Vestlandet."
   smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Referanser', sti: '/referanser/' }]}
+  ogBilde={referanser[3].bilde.src}
 >
-  <Sidetopp overtittel="Referanser" tittel="Referanser" ingress="Et utvalg oppdrag vi har utført for private, næringsdrivende og offentlige oppdragsgivere." />
+  <Sidetopp overtittel="Referanser" tittel="Referanser" ingress={referanseIngress} />
   <div class="seksjon">
     <div class="beholder">
-      {referanser.length === 0 ? (
-        <p class="prosa">
-          <span class="plassholder">[MANGLER: referanseprosjekter med tittel, sted, tjeneste, kort beskrivelse og bilder fra dagens side /referanser/]</span>
-        </p>
-      ) : (
-        <ul class="refliste rutenett rutenett--3">
-          {referanser.map((r) => (
-            <li class="kort">
-              {r.bilde && <Picture src={r.bilde.src} alt={r.bilde.alt} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 60rem) 22rem, 100vw" loading="lazy" />}
-              <h2 class="reftittel">{r.tittel}</h2>
-              <p class="refmeta">{r.sted} · <a href={`/${r.tjeneste}/`}>{r.tjenesteNavn}</a></p>
-              <p>{r.beskrivelse}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul class="refliste rutenett rutenett--3">
+        {referanser.map((r) => (
+          <li class="kort refliste__kort">
+            <Picture
+              src={r.bilde.src}
+              alt={r.bilde.alt}
+              formats={['avif', 'webp']}
+              widths={[360, 560, 720, 960]}
+              sizes="(min-width: 60rem) 22rem, (min-width: 40rem) 45vw, 100vw"
+              loading="lazy"
+            />
+            <div class="refliste__tekst">
+              <h2 class="reftittel"><a href={`/prosjekt/${r.slug}/`}>{r.tittel}</a></h2>
+              <dl class="reffakta">
+                <dt>Sted</dt><dd>{r.sted}</dd>
+                {r.avdeling && <><dt>Avdeling</dt><dd>{r.avdeling}</dd></>}
+                {r.betongM3 && <><dt>Levert betong</dt><dd>{formatM3(r.betongM3)}</dd></>}
+                <dt>Byggeperiode</dt><dd>{r.byggeperiode}</dd>
+              </dl>
+              <span class="refliste__mer" aria-hidden="true">Les om prosjektet →</span>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   </div>
   <section class="seksjon seksjon--flate" aria-labelledby="ref-tjenester">
@@ -39,10 +47,66 @@ import { Picture } from 'astro:assets';
       <Tjenestekort />
     </div>
   </section>
-  <CtaBand kilde="referanser" tittel="Har du et lignende prosjekt?" />
+  <CtaBand
+    kilde="referanser"
+    tittel="Nytt prosjekt?"
+    tekst="Vi holder til på Askøy og hjelper både privatpersoner og profesjonelle aktører i hele Vestland. Kontakt oss for gratis befaring."
+  />
 </Base>
 <style>
-  .refliste { list-style: none; padding: 0; }
-  .reftittel { font-size: 1.3rem; margin-top: 1rem; }
-  .refmeta { color: var(--farge-tekst-dempet); font-size: 0.95rem; }
+  .refliste {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .refliste__kort {
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .reftittel a {
+    color: var(--farge-mork);
+    text-decoration: none;
+  }
+  .reftittel a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .refliste__kort:hover .reftittel a,
+  .reftittel a:focus-visible {
+    color: var(--farge-aksent);
+  }
+  .refliste__mer {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-weight: 600;
+    color: var(--farge-aksent);
+  }
+  .refliste__kort :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .refliste__tekst {
+    padding: 1.1rem 1.25rem 1.25rem;
+    border-top: 4px solid var(--farge-mork);
+  }
+  .reftittel {
+    font-size: 1.3rem;
+  }
+  .reffakta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.25rem 1rem;
+    margin: 0;
+    font-size: 0.98rem;
+  }
+  .reffakta dt {
+    font-weight: 600;
+    color: var(--farge-mork);
+  }
+  .reffakta dd {
+    margin: 0;
+  }
 </style>

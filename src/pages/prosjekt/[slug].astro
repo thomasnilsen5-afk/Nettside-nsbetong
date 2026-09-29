@@ -1,0 +1,224 @@
+---
+// Prosjektsider på samme adresse som på dagens nettside: /prosjekt/<slug>/
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Ikon from '../../components/Ikon.astro';
+import Tjenestekort from '../../components/Tjenestekort.astro';
+import { referanser, formatM3, formatM2, type Referanse } from '../../data/referanser';
+import { firma } from '../../data/site';
+
+export function getStaticPaths() {
+  return referanser.map((r) => ({ params: { slug: r.slug }, props: { r } }));
+}
+
+interface Props { r: Referanse }
+const { r } = Astro.props;
+const sti = `/prosjekt/${r.slug}/`;
+
+const fakta = [
+  ['Sted', r.sted],
+  ['Byggherre', r.byggherre],
+  ['Oppdragsgiver', r.oppdragsgiver],
+  ['Levert betong', r.betongM3 ? formatM3(r.betongM3) : undefined],
+  ['Totalt areal', r.arealM2 ? formatM2(r.arealM2) : undefined],
+  ['Byggeperiode', r.byggeperiode],
+  ['Kontraktsstørrelse', r.kontrakt],
+  ['Avdeling', r.avdeling],
+].filter((x): x is [string, string] => Boolean(x[1]));
+
+const beskrivelse = `${r.tittel} (${r.sted}): ${r.beskrivelse[0]}`.slice(0, 152).replace(/\s+\S*$/, '') + ' …';
+const tittel = `${r.tittel} | Nilsen & Sture Betong`.length <= 62 ? `${r.tittel} | Nilsen & Sture Betong` : `${r.tittel} – referanse`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: r.undertittel ?? r.tittel,
+    about: r.tittel,
+    description: r.beskrivelse.join(' '),
+    locationCreated: { '@type': 'Place', name: r.sted },
+    creator: { '@id': `${firma.url}/#firma` },
+    url: `${firma.url}${sti}`,
+  },
+];
+const alleBilder = [r.bilde, ...r.bilder];
+---
+<Base
+  tittel={tittel}
+  beskrivelse={beskrivelse}
+  jsonLd={jsonLd}
+  ogBilde={r.bilde.src}
+  smuler={[
+    { navn: 'Forside', sti: '/' },
+    { navn: 'Referanser', sti: '/referanser/' },
+    { navn: r.tittel, sti },
+  ]}
+>
+  <section class="phero">
+    <div class="beholder phero__rad">
+      <div>
+        <p class="overtittel">Referanseprosjekt</p>
+        <h1>{r.tittel}</h1>
+        {r.undertittel && <p class="ingress">{r.undertittel}</p>}
+        <dl class="fakta">
+          {fakta.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+      </div>
+      <Picture
+        src={r.bilde.src}
+        alt={r.bilde.alt}
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 72rem) 34rem, (min-width: 60rem) 45vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="phero__bilde"
+      />
+    </div>
+  </section>
+
+  <div class="seksjon">
+    <div class="beholder to-spalter">
+      <div class="prosa">
+        <h2>Om prosjektet</h2>
+        {r.beskrivelse.map((p) => <p>{p}</p>)}
+        <p><a href="/referanser/"><Ikon navn="pil" klasse="snu" /> Alle referanser</a></p>
+      </div>
+      <aside class="kort sidekort" aria-label="Kontakt">
+        <h2 class="sidekort__tittel">Har du et lignende prosjekt?</h2>
+        <p>Vi tar oppdrag for private, næringsdrivende og offentlige oppdragsgivere. Befaringen er gratis.</p>
+        <a class="knapp sidekort__knapp" href={`tel:${firma.telefonE164}`} data-cta={`ring_prosjekt_${r.slug}`}><Ikon navn="telefon" />{firma.telefon}</a>
+        <a class="knapp knapp--omriss sidekort__knapp" href="/kontakt-oss/#skjema" data-cta={`tilbud_prosjekt_${r.slug}`}>Send forespørsel</a>
+      </aside>
+    </div>
+  </div>
+
+  {alleBilder.length > 1 && (
+    <section class="seksjon seksjon--flate" aria-labelledby="bilder-tittel">
+      <div class="beholder">
+        <h2 id="bilder-tittel">Bilder fra prosjektet</h2>
+        <ul class="galleri">
+          {r.bilder.map((b) => (
+            <li>
+              <figure>
+                <Picture src={b.src} alt={b.alt} formats={['avif', 'webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 23rem, (min-width: 40rem) 48vw, 100vw" loading="lazy" />
+                <figcaption>{b.alt}</figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <section class="seksjon" aria-labelledby="tjenester-tittel">
+    <div class="beholder">
+      <h2 id="tjenester-tittel">Tjenester i prosjektet</h2>
+      <Tjenestekort utvalg={r.tjenester} />
+    </div>
+  </section>
+
+  <CtaBand kilde={`prosjekt_${r.slug}`} tittel="Nytt prosjekt?" tekst="Vi holder til på Askøy og hjelper både privatpersoner og profesjonelle aktører i hele Vestland. Kontakt oss for gratis befaring." />
+</Base>
+
+<style>
+  .phero {
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0) 0, #fff 100%),
+      repeating-linear-gradient(135deg, #eef2f4 0 2px, transparent 2px 14px),
+      var(--farge-flate);
+    padding: 1.5rem 0 2.5rem;
+    border-bottom: 1px solid #e3e8eb;
+  }
+  .phero__rad {
+    display: grid;
+    gap: 1.75rem;
+    align-items: start;
+  }
+  @media (min-width: 60rem) {
+    .phero__rad {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 3rem;
+    }
+  }
+  .phero__rad :global(.phero__bilde) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 30px rgb(35 47 54 / 0.18);
+    border-bottom: 6px solid var(--farge-logo-rod);
+  }
+  .fakta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: 0.6rem;
+    margin: 1.25rem 0 0;
+  }
+  .fakta div {
+    background: #fff;
+    border-left: 4px solid var(--farge-aksent);
+    padding: 0.55rem 0.8rem;
+    box-shadow: var(--skygge);
+  }
+  .fakta dt {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--farge-tekst-dempet);
+  }
+  .fakta dd {
+    margin: 0;
+    font-weight: 600;
+    color: var(--farge-mork);
+  }
+  .sidekort {
+    border-top: 5px solid var(--farge-aksent);
+    align-self: start;
+  }
+  .sidekort__tittel {
+    font-size: 1.35rem;
+  }
+  .sidekort__knapp {
+    width: 100%;
+    margin-top: 0.6rem;
+  }
+  .prosa a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+  }
+  .prosa :global(.snu) {
+    width: 1rem;
+    height: 1rem;
+    transform: rotate(180deg);
+  }
+  .galleri {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+  .galleri figure {
+    margin: 0;
+    background: #fff;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--skygge);
+    height: 100%;
+  }
+  .galleri :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .galleri figcaption {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.95rem;
+    color: var(--farge-tekst-dempet);
+  }
+</style>

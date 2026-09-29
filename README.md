@@ -36,7 +36,7 @@ Krever Node 20 eller nyere.
 | --- | --- |
 | Firmanavn, adresse, telefon, e-post, org.nr., Facebook, tillitsmerker, meny | `src/data/site.ts` |
 | Tekst, FAQ og bilder for de fem tjenestesidene | `src/data/tjenester.ts` |
-| Referanseprosjekter | `src/data/referanser.ts` |
+| Referanseprosjekter og prosjektsidene `/prosjekt/<slug>/` | `src/data/referanser.ts` (tekst og fakta), `src/data/prosjektbilder.ts` (bilder) |
 | Forsiden | `src/pages/index.astro` |
 | Om oss, ledige stillinger, åpenhetsloven, kontakt, personvern | `src/pages/<side>/index.astro` |
 | Farger og typografi (CSS-variabler) | `src/styles/global.css` |
@@ -45,12 +45,13 @@ Endre, lagre, commit og push. Vercel bygger og publiserer automatisk.
 
 ### Logo
 
-Logoen (`NS.svg` fra dagens side) legges i `public/img/NS.svg`. Deretter settes `logoTilgjengelig: true` i
-`src/data/site.ts`. Til da vises firmanavnet som tekst. Logoen skal ikke tegnes på nytt.
+Logoen er bedriftens egen `NS.svg`, hentet uendret fra dagens side. Den ligger i `public/img/NS.svg`.
+Favicons lages fra den med `node scripts/lag-ikoner.mjs`.
 
 ### Bilder
 
-1. Legg originalbilder i `bilder-inn/<side>/`, for eksempel `bilder-inn/betongarbeid/stop-av-grunnmur.jpg`.
+1. Legg originalbilder i `bilder-inn/<mappe>/`, for eksempel `bilder-inn/betongarbeid/stop-av-grunnmur.jpg`.
+   Mappen `bilder-inn/` er ikke i Git, bare de optimaliserte bildene i `src/assets/bilder/` er det.
    Gi filene beskrivende norske navn, for de blir brukt videre.
 2. Kjør `npm run bilder`. Bildene skaleres til maks 2000 px, EXIF/GPS fjernes, og de legges i `src/assets/bilder/<side>/`.
 3. Importer bildet i `src/data/tjenester.ts` (eller `referanser.ts`) med en beskrivende norsk alt-tekst:
@@ -70,7 +71,7 @@ npm run hent-gammel-side
 ```
 
 Skriptet henter tekst, metadata, bilder og logoen fra nsbetong.no til `innhold-gammel/` (ikke i Git) og `public/img/NS.svg`.
-Det krever nettverkstilgang til nsbetong.no.
+`NODE_USE_ENV_PROXY=1 node scripts/hent-prosjekter.mjs` henter prosjektsidene. Begge krever nettverkstilgang til nsbetong.no.
 
 ## Kontaktskjema
 

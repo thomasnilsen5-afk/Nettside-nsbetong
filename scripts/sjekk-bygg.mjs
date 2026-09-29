@@ -28,7 +28,7 @@ for await (const fil of html('dist/client')) {
   const d = avkod(s.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? '');
   const h1 = (s.match(/<h1[\s>]/g) || []).length;
   const kanon = s.match(/<link rel="canonical" href="([^"]*)"/)?.[1];
-  const imgUtenAlt = (s.match(/<img(?![^>]*\balt=)[^>]*>/g) || []).length;
+  const imgUtenAlt = (s.match(/<img(?![^>]*\balt[\s=>])[^>]*>/g) || []).length;
   const imgUtenMal = (s.match(/<img(?![^>]*\bwidth=)[^>]*>/g) || []).length;
   const main = s.match(/<main[\s\S]*<\/main>/)?.[0] ?? '';
   const ord = txt(main).split(' ').filter(Boolean).length;

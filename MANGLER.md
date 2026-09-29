@@ -1,54 +1,65 @@
 # Manglende informasjon og antakelser
 
-## A. Manglende informasjon (må skaffes før lansering)
+Oppdatert etter at innholdet fra dagens nsbetong.no ble hentet. Søk etter `MANGLER` i koden for å finne alle
+plassholdere: `grep -rn "MANGLER" src`
 
-Søk etter `MANGLER` i koden for å finne alle plassholdere: `grep -rn "MANGLER" src`
+## A. Manglende informasjon eller avklaringer (før lansering)
 
-| # | Hva mangler | Hvor det brukes | Kilde |
+| # | Hva | Hvor | Merknad |
 | --- | --- | --- | --- |
-| 1 | **Tekst, bilder og metadata fra dagens 11 sider** | Alle sider | nsbetong.no. Blokkert i byggemiljøet, bruk `npm run hent-gammel-side`. |
-| 2 | **Logo** `NS.svg` | Topp, bunn, JSON-LD `logo` | https://nsbetong.no/wp-content/uploads/2022/06/NS.svg |
-| 3 | **Organisasjonsnummer** | Bunntekst, Om oss, Personvern | Brønnøysundregistrene, eller bekreftelse fra bedriften |
-| 4 | **Referanseprosjekter** (tittel, sted, tjeneste, beskrivelse, bilde) og samtykke fra kundene til å bli nevnt | `/referanser/` | Dagens /referanser/ + bedriften |
-| 5 | **Historikk, antall ansatte, nøkkelpersoner** | `/om-oss/` | Dagens /om-oss/ + bedriften |
-| 6 | **Aktuelle stillingsutlysninger** | `/ledige-stillinger/` | Dagens side + bedriften |
-| 7 | **Redegjørelse etter åpenhetsloven** (tekst eller PDF) | `/apenhetsloven/` | Dagens side |
-| 8 | **Lagringstid for henvendelser** | `/personvern/` | Bedriften |
-| 9 | **Prosjektbilder** til tjenestesidene og OG-bildet | Tjenestesider | Dagens side + bedriften |
-| 10 | **Offisielle merkelogoer** (lærebedrift, våtrom, StartBANK osv.) og om de kan brukes | Tillitsmerker | Dagens side / merkeeierne |
-| 11 | **NAP i Google-bedriftsprofilen**: nøyaktig skrivemåte på navn, adresse og telefon | JSON-LD, bunntekst | Google-bedriftsprofilen |
-| 12 | **Åpningstider** (hvis de finnes i Google-profilen) | JSON-LD `openingHours` (ikke lagt inn) | Google-profilen |
-| 13 | **Hvem eier GTM-KKRWNT4?** Skal den gjenbrukes? | Rapportering | Bedriften / tidligere leverandør |
-| 14 | **Tilgang til Microsoft 365** (app-registrering for skjemaet) | Kontaktskjema | Bedriftens M365-administrator |
-| 15 | **Leverandørens navn** (hvem forslaget kommer fra), hvis det skal stå i demobanneret | Demobanner | Deg |
+| 1 | **Kontaktpersoner.** Dagens `/kontakt-oss/` viser 12 ansatte med portrett, direktenummer og e-post. | `/kontakt-oss/` | **Ikke tatt med i forslaget**, fordi det er personopplysninger om ansatte. Hvis bedriften ønsker det og de ansatte er informert, kan listen legges inn. Portrettene og koblingen navn–bilde er kartlagt i `innhold-gammel/`. |
+| 2 | **Kontaktperson for stillingene** | `/ledige-stillinger/` | Dagens side oppgir en navngitt ansatt med direktenummer. Plassholder står på siden. |
+| 3 | **Lenke til siste redegjørelse etter åpenhetsloven** | `/apenhetsloven/` | Dagens side sier at den publiseres innen 30. juni hvert år, men har ingen lenke. |
+| 4 | **Lagringstid for henvendelser** | `/personvern/` | – |
+| 5 | **NAP i Google-bedriftsprofilen.** Nøyaktig skrivemåte på navn, adresse og telefon. | JSON-LD, bunntekst | Nettsiden bruker «Nilsen & Sture Betong AS, Storebotn 40, 5309 Kleppestø, 56 15 96 70». |
+| 6 | **Åpningstider** (hvis de står i Google-profilen) | JSON-LD `openingHours` | Ikke lagt inn |
+| 7 | **Eierskap til GTM-KKRWNT4.** Skal containeren gjenbrukes? | Rapportering | – |
+| 8 | **Tilgang til Microsoft 365** (app-registrering for skjemaet) | Kontaktskjema | Se OVERLEVERING.md |
+| 9 | **Rettigheter til Sædalen-illustrasjonene.** De ser ut som arkitektens illustrasjoner. | `/prosjekt/saedalen-kirke/` | Bekreft at bedriften kan bruke dem, eller bytt til egne foto. |
+| 10 | **Logoer for godkjent lærebedrift og godkjent våtromsbedrift** | Tillitsmerker | Dagens side har ingen logoer for disse, så de vises som tekstmerker. |
+| 11 | **Leverandørens navn** i demobanneret | Demobanner | Valgfritt |
 
-## B. Antakelser (bør bekreftes av bedriften)
+## B. Hentet fra dagens side (tidligere plassholdere som nå er løst)
 
-**Innhold og tjenester**
-1. Tjenestetekstene er skrevet nye ut fra tjenestenavnene og generell fagkunnskap, siden dagens tekst ikke kunne hentes.
-   Det gjelder særlig **«Typiske oppdrag»** og **«Dette inngår»**. Bedriften må bekrefte at de faktisk utfører for eksempel:
-   - støttemurer, trapper/ramper og rehabilitering av betong (Betongarbeid)
-   - innstøping av varmekabler/vannbåren varme og påstøp på trebjelkelag (Gulvstøp)
-   - profilstøp på stedet, trafikkøyer, rundkjøringer og gang-/sykkelveier (Vei og kantstøp)
-   - rollen som underentreprenør for hovedentreprenører og byggmestere (Nybygg)
-   - riving, membran, pussing av grunnmur og samordning med rørlegger/elektriker (Flis og mur)
-2. Det står at vi «kan erklære ansvarsrett». Dette bygger på tillitsmerket «Ansvarsrett». Omfang og tiltaksklasser er ikke oppgitt.
-3. «Befaring» nevnes som vanlig før tilbud. Det står ingenting om at befaringen er gratis.
-4. Det står at bedriften leverer dokumentasjon på våtromsarbeid. Dette bygger på at de er godkjent våtromsbedrift.
-5. «StartBANK» er skrevet med store bokstaver slik ordningen selv skriver det. I oppdraget står «Startbank».
-6. «Tariffavtale 2026» er gjengitt som på dagens side. Merket bør oppdateres hvert år, eller skrives uten årstall.
-7. Ledige stillinger: Teksten om åpen søknad og læreplass er en antakelse (bygger på «godkjent lærebedrift»).
+- Org.nr. **986 481 729** (fra fakturainformasjonen på `/kontakt-oss/`)
+- Logo `NS.svg` (brukt i toppen, bunnen, favicon og JSON-LD)
+- Stiftet 2004, rundt 50 ansatte, visjonen
+- Avdelingsstørrelser: nybygg 35 + 4 lærlinger, gulv 8 (ca. 60 års samlet erfaring), flis/mur 6, kantstøp 4
+- Kantstøpemaskin for profilkanter 13–30 cm, og formutvalget
+- 9 referanseprosjekter med fakta, beskrivelser og bilder
+- 5 stillingsutlysninger
+- Tekst om åpenhetsloven med svarfrister
+- Fakturainformasjon (EHF og faktura-e-post)
+- Tillitsmerker: DiBK «Godkjent for ansvarsrett», StartBANK, tariffmerket (Fellesforbundet 2024–2026)
+- Facebook-lenken er bekreftet. Den er identisk med lenken på dagens side.
+
+## C. Antakelser og redaksjonelle valg (bør bekreftes)
 
 **Geografi**
-8. Bare «Bergen», «Bergen og omegn», «Vestland» og adressen på Kleppestø er brukt. `areaServed` i JSON-LD er Bergen (by) og Vestland (fylke).
-   **Spørsmål:** Skal andre kommuner nevnes, som Askøy, Øygarden, Bjørnafjorden eller Alver? Det er ikke gjort uten avklaring.
+1. Dagens side nevner selv **Askøy, Bergen, Øygarden, «Bergen og omegn» og «hele Vestland»**. Disse områdene er brukt
+   i tekst og i `areaServed`. Andre kommuner er ikke nevnt.
+
+**Tekst**
+2. Tjenestetekstene bygger på dagens tekst, men er omskrevet, strukturert og utvidet med forklarende tekst og FAQ. Følgende
+   formuleringer er nye og bør godkjennes:
+   - forklaringen av profilstøp («formes på stedet i én sammenhengende lengde»)
+   - «Typiske oppdrag» og «Hvem passer det for?» på hver tjenesteside
+   - FAQ-svarene. De bygger på fakta fra dagens side, blant annet gratis befaring, våtromsnormen og kantstøp 13–30 cm.
+3. «Gratis befaring» brukes i knapper og CTA. Dagens side skriver både «gratis befaring» og «uforpliktende befaring».
+4. Påstandene «en av Bergens ledende aktører» og «en av de ledende betongentreprenørene» er hentet fra dagens side.
+5. Stillingsutlysningene er gjengitt litt forenklet. Kravene til betongarbeider og gulvstøper var ikke tydelig adskilt
+   på dagens side (faner), så noen felleskrav (norsk/engelsk, førerkort B) er lagt på begge. Bør kontrolleres.
+6. Åpenbare skrivefeil fra prosjektsidene er rettet: «Heidelberg Marterials» → «Heidelberg Materials»,
+   «PEAB K. Nordan» → «PEAB K. Nordang», «vert» → «vært» med flere.
+7. NBF14 Nygårdstangen har ingen beskrivelse på dagens side. Den nye siden har en kort tekst basert på prosjektfaktaene.
+8. På dagens referanseside står avdelingen for Øvre Krohnåsen som «Øvre Krohnåsen Bofellesskap», som ser ut som en feil.
+   Avdelingen er derfor utelatt.
 
 **Teknikk og drift**
 9. Skjemaet sender via Microsoft Graph fra bedriftens egen M365-postboks. Det krever en app-registrering, men ingen DNS-endring.
-10. Rate limiting er i minnet per funksjonsinstans. Det er godt nok for et lite nettsted, men gir ikke fullstendig vern.
-11. Consent Mode *basic*: Google-skript lastes bare etter samtykke. GA4 viser derfor bare brukere som samtykker.
-12. Kanonisk domene er `https://nsbetong.no` (uten www), og www videresendes.
-13. `DEMO_MODUS` er på som standard, fordi siden er et forslag og ikke bestilt av bedriften. Den må settes til `0` ved lansering.
-14. Vercel-prosjektet har Vercel Authentication på. Preview-adressen krever innlogging til den deles med en delingslenke,
-    eller til beskyttelsen slås av.
-15. Favicon og OG-bilde er enkle, midlertidige grafiske elementer i firmafargene. De er ikke en ny logo, og byttes ut når logoen er på plass.
+10. Rate limiting ligger i minnet per funksjonsinstans. Det er godt nok for et lite nettsted.
+11. Consent Mode *basic*: Google-skript lastes bare etter samtykke.
+12. Kanonisk domene er `https://nsbetong.no` (uten www).
+13. `DEMO_MODUS` er på som standard, fordi siden er et forslag. Den settes til `0` ved lansering.
+14. Vercel-prosjektet har Vercel Authentication på. Del forslaget med en delingslenke, eller slå av beskyttelsen.
+15. Ansattsidene (`/ansatte/<navn>/`) videreføres ikke, og har 301 til `/kontakt-oss/`.

@@ -1,50 +1,80 @@
 ---
+import { Picture } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Sidetopp from '../../components/Sidetopp.astro';
 import Tillitsmerker from '../../components/Tillitsmerker.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { firma } from '../../data/site';
+import { firma, telLenke, epostLenke } from '../../data/site';
+import kontorBilde from '../../assets/bilder/omoss/kontoret-i-storebotn.jpg';
+import byggeplassBilde from '../../assets/bilder/nybygg/betongarbeidere-pa-byggeplass.jpg';
+
+const avdelinger = [
+  { navn: 'Nybygg', tekst: '35 håndverkere og 4 lærlinger', href: '/nybygg/' },
+  { navn: 'Gulvstøp og flytavretting', tekst: '8 gulvarbeidere med til sammen ca. 60 års erfaring', href: '/gulvstop-og-flytavretting/' },
+  { navn: 'Flis- og murarbeid', tekst: '6 håndverkere, godkjent våtromsbedrift', href: '/flis-og-murarbeid/' },
+  { navn: 'Vei og kantstøp', tekst: '4 arbeidere og egen kantstøpemaskin', href: '/vei-og-kantstop/' },
+];
 ---
 <Base
-  tittel="Om oss – betongentreprenør i Bergen | Nilsen & Sture Betong"
-  beskrivelse="Nilsen & Sture Betong AS er en betongentreprenør på Kleppestø med over 20 års erfaring. Godkjent lærebedrift og våtromsbedrift med ansvarsrett."
+  tittel="Om oss – betongentreprenør på Askøy | Nilsen & Sture Betong"
+  beskrivelse="Nilsen & Sture Betong ble stiftet i 2004 og holder til på Askøy. Rundt 50 ansatte: forskalingssnekkere, gulvstøpere, murere og flisleggere."
   smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Om oss', sti: '/om-oss/' }]}
+  ogBilde={kontorBilde}
 >
-  <Sidetopp overtittel="Om oss" tittel="Om Nilsen & Sture Betong" ingress={`${firma.slagord} – med ${firma.erfaring}.`} />
+  <Sidetopp overtittel="Om oss" tittel="Om Nilsen & Sture Betong" ingress={`Betongentreprenør i Bergen og omegn med ${firma.erfaring}.`} />
   <div class="seksjon">
     <div class="beholder to-spalter">
       <div class="prosa">
         <p>
-          Nilsen &amp; Sture Betong AS er en betongentreprenør med adresse i Storebotn på Kleppestø. Vi utfører betongarbeid,
-          gulvstøp og flytavretting, kantstøp for vei og fortau, betongarbeid i nybygg og flis- og murarbeid i Bergen og omegn.
+          Nilsen &amp; Sture Betong AS ble stiftet i {firma.stiftet} og har etablert seg som en av de ledende
+          betongentreprenørene i Bergen og omegn. I dag er vi {firma.ansatte}, med meget erfarne forskalingssnekkere,
+          gulvstøpere og murere.
         </p>
         <p>
-          Kundene våre er private, næringsdrivende og kommunale og offentlige oppdragsgivere. Uansett størrelse på jobben er
-          målet det samme: riktig utført arbeid, tydelig kommunikasjon og avtaler som holdes.
+          Arbeidsområdene våre omfatter alt fra private boliger til nye industribygg. Vi driver også med betongarbeid
+          innenfor forstøtningsmurer, vei og kai, og har bred erfaring med utbygging.
         </p>
-        <p><span class="plassholder">[MANGLER: historikk, antall ansatte og eventuelle navn/bilder av nøkkelpersoner fra dagens /om-oss/]</span></p>
+        <p>
+          Forskalingssnekkerne våre har stolthet i yrket og holder alltid en god standard og kvalitet i arbeidet. Målet vårt
+          er at Nilsen &amp; Sture Betong skal være kjent for fornøyde kunder og et godt renommé. Derfor prioriterer vi tid
+          og kvalitet høyt, og det er viktig for oss å være punktlige og holde tidsskjemaet fra oppstart til slutt.
+        </p>
+
+        <h2>Visjon</h2>
+        <blockquote class="visjon">{firma.visjon}</blockquote>
+
+        <h2>Avdelingene våre</h2>
+        <ul class="avdelinger">
+          {avdelinger.map((a) => (
+            <li><a href={a.href}><strong>{a.navn}</strong></a><span>{a.tekst}</span></li>
+          ))}
+        </ul>
 
         <h2>Godkjenninger og avtaler</h2>
         <p>
-          Vi er godkjent lærebedrift og tar ansvar for å utdanne nye fagfolk. Som godkjent våtromsbedrift følger vi kravene
-          til våtromsarbeid. Vi har ansvarsrett, tariffavtale og er registrert i StartBANK, som mange offentlige og større
-          oppdragsgivere bruker for å kvalifisere leverandører.
+          Vi er godkjent for ansvarsrett av Direktoratet for byggkvalitet, godkjent lærebedrift og godkjent
+          våtromsbedrift. Vi har tariffavtale og er registrert i StartBANK.
         </p>
         <Tillitsmerker visTekst />
 
         <h2>Jobbe hos oss</h2>
-        <p>Er du fagarbeider eller vil du bli lærling? Se <a href="/ledige-stillinger/">ledige stillinger</a>.</p>
+        <p>Vi er alltid på jakt etter dyktige håndverkere. Se <a href="/ledige-stillinger/">ledige stillinger</a>.</p>
       </div>
-      <aside class="kort" aria-label="Firmaopplysninger">
-        <h2 class="h3">Firmaopplysninger</h2>
-        <dl class="fakta">
-          <dt>Firmanavn</dt><dd>{firma.navn}</dd>
-          <dt>Adresse</dt><dd>{firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}</dd>
-          <dt>Telefon</dt><dd><a href={`tel:${firma.telefonE164}`}>{firma.telefon}</a></dd>
-          <dt>E-post</dt><dd><a href={`mailto:${firma.epost}`}>{firma.epost}</a></dd>
-          <dt>Org.nr.</dt><dd>{firma.orgnr}</dd>
-        </dl>
-        <p><a href="/apenhetsloven/">Åpenhetsloven</a></p>
+      <aside class="sidekol" aria-label="Firmaopplysninger">
+        <Picture src={kontorBilde} alt="Kontoret til Nilsen & Sture Betong i Storebotn på Askøy" formats={['avif', 'webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 26rem, 100vw" loading="eager" />
+        <div class="kort">
+          <h2 class="h3">Firmaopplysninger</h2>
+          <dl class="fakta">
+            <dt>Firmanavn</dt><dd>{firma.navn}</dd>
+            <dt>Stiftet</dt><dd>{firma.stiftet}</dd>
+            <dt>Adresse</dt><dd>{firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}</dd>
+            <dt>Telefon</dt><dd><a href={telLenke}>{firma.telefon}</a></dd>
+            <dt>E-post</dt><dd><a href={epostLenke}>{firma.epost}</a></dd>
+            <dt>Org.nr.</dt><dd>{firma.orgnr}</dd>
+          </dl>
+          <p><a href="/apenhetsloven/">Åpenhetsloven</a></p>
+        </div>
+        <Picture src={byggeplassBilde} alt="Betongarbeidere fra Nilsen & Sture Betong på en byggeplass" formats={['avif', 'webp']} widths={[400, 640, 900]} sizes="(min-width: 60rem) 26rem, 100vw" loading="lazy" />
       </aside>
     </div>
   </div>
@@ -55,5 +85,18 @@ import { firma } from '../../data/site';
   .fakta { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; margin: 0 0 1rem; }
   .fakta dt { font-weight: 600; color: var(--farge-mork); }
   .fakta dd { margin: 0; }
-  aside.kort { align-self: start; }
+  .sidekol { display: grid; gap: 1.25rem; align-content: start; }
+  .sidekol :global(img) { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); }
+  .visjon {
+    margin: 0 0 1.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--farge-flate);
+    border-left: 5px solid var(--farge-logo-rod);
+    font-size: 1.15rem;
+    color: var(--farge-tekst-2);
+  }
+  .avdelinger { list-style: none; padding: 0; display: grid; gap: 0.6rem; }
+  .avdelinger li { display: flex; flex-direction: column; padding: 0.8rem 1rem; border: 1px solid #dfe5e8; border-left: 4px solid var(--farge-aksent); border-radius: var(--radius); }
+  .avdelinger strong { font-family: var(--font-overskrift); font-weight: 500; font-size: 1.15rem; }
+  .avdelinger span { color: var(--farge-tekst-dempet); }
 </style>

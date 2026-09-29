@@ -1,13 +1,17 @@
 ---
+import { Image } from 'astro:assets';
 import { tillitsmerker } from '../data/site';
 interface Props { visTekst?: boolean }
 const { visTekst = false } = Astro.props;
 ---
 <ul class:list={['merker', { 'merker--tekst': visTekst }]}>
   {tillitsmerker.map((m) => (
-    <li>
-      <strong>{m.navn}</strong>
-      {visTekst && <span>{m.tekst}</span>}
+    <li class:list={{ 'med-logo': m.logo }}>
+      {m.logo && <Image src={m.logo} alt={m.logoAlt ?? m.navn} height={56} densities={[1, 2]} loading="lazy" />}
+      <span class="merker__tekst">
+        <strong>{m.navn}</strong>
+        {visTekst && <span>{m.tekst}</span>}
+      </span>
     </li>
   ))}
 </ul>
@@ -22,13 +26,23 @@ const { visTekst = false } = Astro.props;
   }
   .merker li {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
     border: 2px solid var(--farge-lys);
     border-left: 5px solid var(--farge-aksent);
     background: #fff;
-    padding: 0.5rem 0.9rem;
+    padding: 0.45rem 0.9rem;
     border-radius: var(--radius);
     color: var(--farge-mork);
+    min-height: 3.5rem;
+  }
+  .merker img {
+    height: 44px;
+    width: auto;
+  }
+  .merker__tekst {
+    display: flex;
+    flex-direction: column;
   }
   .merker strong {
     font-family: var(--font-overskrift);
@@ -38,9 +52,9 @@ const { visTekst = false } = Astro.props;
   }
   .merker--tekst {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   }
-  .merker--tekst span {
+  .merker--tekst span span {
     font-size: 0.95rem;
     color: var(--farge-tekst-dempet);
   }

@@ -5,24 +5,43 @@ import { firma, epostLenke } from '../../data/site';
 ---
 <Base
   tittel="Åpenhetsloven | Nilsen & Sture Betong AS"
-  beskrivelse="Informasjon om hvordan Nilsen & Sture Betong AS arbeider med åpenhetsloven, og hvordan du kan be om informasjon."
+  beskrivelse="Slik arbeider Nilsen & Sture Betong med åpenhetsloven og aktsomhetsvurderinger av leverandører, og slik ber du om informasjon."
   smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Åpenhetsloven', sti: '/apenhetsloven/' }]}
 >
-  <Sidetopp tittel="Åpenhetsloven" />
+  <Sidetopp
+    tittel="Åpenhetsloven"
+    ingress="Åpenhetslovens hovedformål er å fremme virksomheters respekt for grunnleggende menneskerettigheter og anstendige arbeidsforhold i forbindelse med produksjon av varer og levering av tjenester."
+  />
   <div class="seksjon">
     <div class="beholder prosa">
+      <h2>Vi jobber bevisst med aktsomhetsvurdering av leverandørene våre</h2>
       <p>
-        Åpenhetsloven skal fremme virksomheters respekt for grunnleggende menneskerettigheter og anstendige arbeidsforhold,
-        og sikre allmennheten tilgang til informasjon om hvordan virksomheter håndterer negative konsekvenser for disse.
+        Åpenhetsloven trådte i kraft 1. juli 2022. Formålet er å fremme virksomheters respekt for menneskerettigheter og
+        arbeidsforhold, og å sikre at forbrukere, organisasjoner, fagforeninger, journalister og andre får tilgang til
+        informasjon.
       </p>
-      <h2>Redegjørelse for aktsomhetsvurderinger</h2>
-      <p><span class="plassholder">[MANGLER: bedriftens redegjørelse / PDF fra dagens /apenhetsloven/]</span></p>
-      <h2>Be om informasjon</h2>
+      <h2>Aktsomhetsvurdering som en kontinuerlig prosess</h2>
+      <p>
+        I tråd med åpenhetsloven jobber vi bevisst med å kartlegge og vurdere eventuelle negative påvirkninger og skader i
+        egen virksomhet, i leverandørkjeden og hos forretningsforbindelser – og med å forebygge, redusere eller stanse
+        dem.
+      </p>
+      <h2>Informasjon og innsyn</h2>
+      <p>
+        Den årlige redegjørelsen for aktsomhetsvurderingene publiseres her innen 30. juni hvert år.
+        <span class="plassholder">[MANGLER: lenke til siste redegjørelse]</span>
+      </p>
+      <h2>Henvendelser om åpenhetsloven</h2>
       <p>
         Du kan be om informasjon om hvordan {firma.navn} håndterer faktiske og potensielle negative konsekvenser for
         grunnleggende menneskerettigheter og anstendige arbeidsforhold. Send forespørselen skriftlig til
         <a href={epostLenke}>{firma.epost}</a>.
       </p>
+      <p>Frister for å svare på henvendelser:</p>
+      <ul>
+        <li>3 uker</li>
+        <li>2 måneder hvis opplysningene må hentes inn fra leverandører</li>
+      </ul>
     </div>
   </div>
 </Base>

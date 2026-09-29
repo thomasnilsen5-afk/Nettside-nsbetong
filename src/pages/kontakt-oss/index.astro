@@ -19,7 +19,7 @@ const kontaktLd = {
   jsonLd={[kontaktLd]}
   smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Kontakt oss', sti: '/kontakt-oss/' }]}
 >
-  <Sidetopp overtittel="Kontakt" tittel="Kontakt oss" ingress="Ring oss for en rask prat, eller beskriv oppdraget i skjemaet, så tar vi kontakt." />
+  <Sidetopp overtittel="Kontakt" tittel="Kontakt oss" ingress="Vi vil gjerne høre om ditt neste prosjekt, eller svare på spørsmål om tjenestene våre. Ring oss eller fyll ut skjemaet – befaringen er gratis." />
   <div class="seksjon">
     <div class="beholder to-spalter">
       <section aria-labelledby="skjema-tittel">
@@ -33,7 +33,7 @@ const kontaktLd = {
           <p><a class="stor" href={epostLenke}><Ikon navn="epost" />{firma.epost}</a></p>
         </div>
         <div class="kort">
-          <h2 class="h3">Besøksadresse</h2>
+          <h2 class="h3">Finn oss</h2>
           <address>
             {firma.navn}<br />
             {firma.adresse.gate}<br />
@@ -42,6 +42,13 @@ const kontaktLd = {
           <!-- Kart som lenke: ingen tredjepartskapsler før brukeren selv klikker seg videre. -->
           <p><a href={kartLenke} rel="noopener" target="_blank" data-cta="veibeskrivelse"><Ikon navn="kart" />Vis i Google Maps (åpnes i ny fane)</a></p>
           <p><a href={firma.facebook} rel="noopener" target="_blank"><Ikon navn="facebook" />Følg oss på Facebook</a></p>
+        </div>
+        <div class="kort">
+          <h2 class="h3">Fakturering</h2>
+          <p>
+            Vi ønsker at alle sender faktura som EHF til {firma.navn}, org.nr. {firma.orgnr}. Har du ikke mulighet til å
+            sende EHF, kan fakturaen sendes på e-post til <a href={`mailto:${firma.fakturaEpost}`}>{firma.fakturaEpost}</a>.
+          </p>
         </div>
       </aside>
     </div>
