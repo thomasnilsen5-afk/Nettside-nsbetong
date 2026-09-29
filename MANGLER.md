@@ -15,9 +15,8 @@ plassholdere: `grep -rn "MANGLER" src`
 | 6 | **Åpningstider** (hvis de står i Google-profilen) | JSON-LD `openingHours` | Ikke lagt inn |
 | 7 | **Eierskap til GTM-KKRWNT4.** Skal containeren gjenbrukes? | Rapportering | – |
 | 8 | **Tilgang til Microsoft 365** (app-registrering for skjemaet) | Kontaktskjema | Se OVERLEVERING.md |
-| 9 | **Rettigheter til Sædalen-illustrasjonene.** De ser ut som arkitektens illustrasjoner. | `/prosjekt/saedalen-kirke/` | Bekreft at bedriften kan bruke dem, eller bytt til egne foto. |
-| 10 | **Logoer for godkjent lærebedrift og godkjent våtromsbedrift** | Tillitsmerker | Dagens side har ingen logoer for disse, så de vises som tekstmerker. |
-| 11 | **Leverandørens navn** i demobanneret | Demobanner | Valgfritt |
+| 9 | **Logoer for godkjent lærebedrift og godkjent våtromsbedrift** | Tillitsmerker | Dagens side har ingen logoer for disse, så de vises som tekstmerker. |
+| 10 | **Leverandørens navn** i demobanneret | Demobanner | Valgfritt |
 
 ## B. Hentet fra dagens side (tidligere plassholdere som nå er løst)
 
@@ -32,6 +31,7 @@ plassholdere: `grep -rn "MANGLER" src`
 - Fakturainformasjon (EHF og faktura-e-post)
 - Tillitsmerker: DiBK «Godkjent for ansvarsrett», StartBANK, tariffmerket (Fellesforbundet 2024–2026)
 - Facebook-lenken er bekreftet. Den er identisk med lenken på dagens side.
+- Alle bilder fra dagens side er bekreftet som lov å bruke (29.09.2026).
 
 ## C. Antakelser og redaksjonelle valg (bør bekreftes)
 
