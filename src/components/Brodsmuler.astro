@@ -1,0 +1,36 @@
+---
+export type Smule = { navn: string; sti: string };
+interface Props { smuler: Smule[] }
+const { smuler } = Astro.props;
+---
+<nav class="smuler beholder" aria-label="Brødsmuler">
+  <ol>
+    {smuler.map((s, i) => (
+      <li>
+        {i < smuler.length - 1 ? <a href={s.sti}>{s.navn}</a> : <span aria-current="page">{s.navn}</span>}
+      </li>
+    ))}
+  </ol>
+</nav>
+<style>
+  .smuler ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0;
+    margin: 0;
+    padding: 0.9rem 0 0;
+    font-size: 0.95rem;
+    color: var(--farge-tekst-dempet);
+  }
+  .smuler li:not(:last-child)::after {
+    content: '›';
+    margin: 0 0.5rem;
+  }
+  .smuler a {
+    color: var(--farge-tekst-dempet);
+  }
+  .smuler a:hover {
+    color: var(--farge-aksent);
+  }
+</style>

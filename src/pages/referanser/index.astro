@@ -1,0 +1,48 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sidetopp from '../../components/Sidetopp.astro';
+import Tjenestekort from '../../components/Tjenestekort.astro';
+import CtaBand from '../../components/CtaBand.astro';
+// Referanser legges inn i src/data/referanser.ts. Ikke publiser referanser uten kundens samtykke.
+import { referanser } from '../../data/referanser';
+import { Picture } from 'astro:assets';
+---
+<Base
+  tittel="Referanser – betongarbeid i Bergen | Nilsen & Sture Betong"
+  beskrivelse="Et utvalg oppdrag Nilsen & Sture Betong har utført i Bergen og omegn: betongarbeid, gulvstøp, kantstøp, nybygg og våtrom."
+  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Referanser', sti: '/referanser/' }]}
+>
+  <Sidetopp overtittel="Referanser" tittel="Referanser" ingress="Et utvalg oppdrag vi har utført for private, næringsdrivende og offentlige oppdragsgivere." />
+  <div class="seksjon">
+    <div class="beholder">
+      {referanser.length === 0 ? (
+        <p class="prosa">
+          <span class="plassholder">[MANGLER: referanseprosjekter med tittel, sted, tjeneste, kort beskrivelse og bilder fra dagens side /referanser/]</span>
+        </p>
+      ) : (
+        <ul class="refliste rutenett rutenett--3">
+          {referanser.map((r) => (
+            <li class="kort">
+              {r.bilde && <Picture src={r.bilde.src} alt={r.bilde.alt} formats={['avif', 'webp']} widths={[400, 800]} sizes="(min-width: 60rem) 22rem, 100vw" loading="lazy" />}
+              <h2 class="reftittel">{r.tittel}</h2>
+              <p class="refmeta">{r.sted} · <a href={`/${r.tjeneste}/`}>{r.tjenesteNavn}</a></p>
+              <p>{r.beskrivelse}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </div>
+  <section class="seksjon seksjon--flate" aria-labelledby="ref-tjenester">
+    <div class="beholder">
+      <h2 id="ref-tjenester">Tjenestene våre</h2>
+      <Tjenestekort />
+    </div>
+  </section>
+  <CtaBand kilde="referanser" tittel="Har du et lignende prosjekt?" />
+</Base>
+<style>
+  .refliste { list-style: none; padding: 0; }
+  .reftittel { font-size: 1.3rem; margin-top: 1rem; }
+  .refmeta { color: var(--farge-tekst-dempet); font-size: 0.95rem; }
+</style>

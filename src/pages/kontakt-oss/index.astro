@@ -1,0 +1,57 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sidetopp from '../../components/Sidetopp.astro';
+import Kontaktskjema from '../../components/Kontaktskjema.astro';
+import Ikon from '../../components/Ikon.astro';
+import { firma, telLenke, epostLenke, kartLenke } from '../../data/site';
+import { organisasjonLd } from '../../data/jsonld';
+const kontaktLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  url: `${firma.url}/kontakt-oss/`,
+  name: 'Kontakt oss',
+  about: { '@id': organisasjonLd['@id'] },
+};
+---
+<Base
+  tittel="Kontakt oss – be om tilbud | Nilsen & Sture Betong"
+  beskrivelse="Ring 56 15 96 70 eller send en forespørsel til Nilsen & Sture Betong. Storebotn 40, 5309 Kleppestø. Vi tar oppdrag i Bergen og omegn."
+  jsonLd={[kontaktLd]}
+  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Kontakt oss', sti: '/kontakt-oss/' }]}
+>
+  <Sidetopp overtittel="Kontakt" tittel="Kontakt oss" ingress="Ring oss for en rask prat, eller beskriv oppdraget i skjemaet, så tar vi kontakt." />
+  <div class="seksjon">
+    <div class="beholder to-spalter">
+      <section aria-labelledby="skjema-tittel">
+        <h2 id="skjema-tittel">Be om tilbud</h2>
+        <Kontaktskjema />
+      </section>
+      <aside aria-label="Kontaktinformasjon" class="kontaktinfo">
+        <div class="kort">
+          <h2 class="h3">Ring eller send e-post</h2>
+          <p><a class="stor" href={telLenke}><Ikon navn="telefon" />{firma.telefon}</a></p>
+          <p><a class="stor" href={epostLenke}><Ikon navn="epost" />{firma.epost}</a></p>
+        </div>
+        <div class="kort">
+          <h2 class="h3">Besøksadresse</h2>
+          <address>
+            {firma.navn}<br />
+            {firma.adresse.gate}<br />
+            {firma.adresse.postnr} {firma.adresse.sted}
+          </address>
+          <!-- Kart som lenke: ingen tredjepartskapsler før brukeren selv klikker seg videre. -->
+          <p><a href={kartLenke} rel="noopener" target="_blank" data-cta="veibeskrivelse"><Ikon navn="kart" />Vis i Google Maps (åpnes i ny fane)</a></p>
+          <p><a href={firma.facebook} rel="noopener" target="_blank"><Ikon navn="facebook" />Følg oss på Facebook</a></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Base>
+<style>
+  .kontaktinfo { display: grid; gap: 1.25rem; align-content: start; }
+  .h3 { font-size: 1.35rem; }
+  address { font-style: normal; margin-bottom: 1rem; }
+  .kontaktinfo a { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; }
+  .kontaktinfo :global(svg) { width: 1.2rem; height: 1.2rem; flex: none; }
+  .stor { font-size: 1.2rem; font-weight: 600; }
+</style>

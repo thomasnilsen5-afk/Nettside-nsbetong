@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /takk/
+
+Sitemap: https://nsbetong.no/sitemap-index.xml

@@ -1,0 +1,72 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sidetopp from '../../components/Sidetopp.astro';
+import { firma, epostLenke } from '../../data/site';
+---
+<Base
+  tittel="Personvern og informasjonskapsler | Nilsen & Sture Betong"
+  beskrivelse="Slik behandler Nilsen & Sture Betong AS personopplysninger på nettsiden, i kontaktskjemaet og ved bruk av informasjonskapsler."
+  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Personvern', sti: '/personvern/' }]}
+>
+  <Sidetopp tittel="Personvern og informasjonskapsler" />
+  <div class="seksjon">
+    <div class="beholder prosa">
+      <h2>Behandlingsansvarlig</h2>
+      <p>
+        {firma.navn} (org.nr. {firma.orgnr}), {firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}, er
+        behandlingsansvarlig for personopplysninger som samles inn via denne nettsiden. Spørsmål kan sendes til
+        <a href={epostLenke}>{firma.epost}</a>.
+      </p>
+
+      <h2>Kontaktskjema og henvendelser</h2>
+      <p>
+        Når du sender skjemaet eller kontakter oss på e-post eller telefon, behandler vi navn, telefonnummer, e-post og det
+        du skriver om oppdraget. Formålet er å svare deg og eventuelt gi et tilbud. Behandlingsgrunnlaget er
+        personvernforordningen artikkel 6 nr. 1 bokstav b (tiltak før en eventuell avtale) og f (berettiget interesse i å
+        svare på henvendelser).
+      </p>
+      <p>
+        Skjemaet sendes via en serverfunksjon hos vår driftsleverandør (Vercel) til vår e-post hos Microsoft 365. Vi
+        oppbevarer henvendelsen så lenge det er nødvendig for å følge opp saken.
+        <span class="plassholder">[MANGLER: konkret lagringstid for henvendelser]</span>
+      </p>
+
+      <h2>Informasjonskapsler (cookies)</h2>
+      <p>
+        Nettsiden setter ingen informasjonskapsler fra tredjeparter før du har gitt samtykke. Valget ditt lagres lokalt i
+        nettleseren (localStorage, nøkkel <code>nsb_samtykke</code>) slik at vi ikke spør på hver side.
+      </p>
+      <ul>
+        <li>
+          <strong>Nødvendige:</strong> lagring av samtykkevalget ditt. Krever ikke samtykke.
+        </li>
+        <li>
+          <strong>Analyse (samtykke):</strong> Google Analytics 4 via Google Tag Manager, for å se hvor mange som besøker
+          siden, hvilke sider som brukes og hvor mange som ringer eller sender skjema. Informasjonskapsler: <code>_ga</code>
+          og <code>_ga_*</code> (inntil 2 år). Leverandør: Google Ireland Ltd.
+        </li>
+        <li>
+          <strong>Markedsføring (samtykke):</strong> måling av effekten av eventuelle Google Ads-annonser. Brukes bare hvis
+          vi annonserer.
+        </li>
+      </ul>
+      <p>
+        Vi bruker Googles samtykkemodus (Consent Mode v2). Sier du nei, lastes ikke Googles skript. Du kan når som helst
+        endre valget med lenken «Endre samtykke» nederst på siden.
+      </p>
+
+      <h2>Kart og sosiale medier</h2>
+      <p>
+        Vi bygger ikke inn kart eller Facebook på siden. Lenkene til Google Maps og Facebook åpner tjenestene i en ny fane,
+        og da gjelder deres personvernerklæringer.
+      </p>
+
+      <h2>Dine rettigheter</h2>
+      <p>
+        Du har rett til innsyn, retting, sletting og begrensning av behandlingen, og til å protestere mot behandling basert
+        på berettiget interesse. Kontakt oss på <a href={epostLenke}>{firma.epost}</a>. Du kan også klage til
+        <a href="https://www.datatilsynet.no/" rel="noopener">Datatilsynet</a>.
+      </p>
+    </div>
+  </div>
+</Base>

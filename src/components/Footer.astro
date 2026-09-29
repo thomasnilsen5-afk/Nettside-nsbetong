@@ -1,0 +1,124 @@
+---
+import Logo from './Logo.astro';
+import Ikon from './Ikon.astro';
+import { firma, tjenesteLenker, telLenke, epostLenke, kartLenke } from '../data/site';
+const aar = new Date().getFullYear();
+---
+<footer class="bunn">
+  <div class="beholder bunn__rutenett">
+    <div>
+      <Logo lys />
+      <p class="bunn__slagord">{firma.slagord}.</p>
+      <p class="bunn__adr">
+        {firma.navn}<br />
+        {firma.adresse.gate}<br />
+        {firma.adresse.postnr} {firma.adresse.sted}
+      </p>
+    </div>
+    <div>
+      <h2 class="bunn__tittel">Kontakt</h2>
+      <ul class="bunn__liste">
+        <li><a href={telLenke}><Ikon navn="telefon" />{firma.telefon}</a></li>
+        <li><a href={epostLenke}><Ikon navn="epost" />{firma.epost}</a></li>
+        <li><a href={kartLenke} rel="noopener" target="_blank"><Ikon navn="kart" />Veibeskrivelse (Google Maps)</a></li>
+        <li><a href={firma.facebook} rel="noopener" target="_blank"><Ikon navn="facebook" />Facebook</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="bunn__tittel">Tjenester</h2>
+      <ul class="bunn__liste">
+        {tjenesteLenker.map((t) => <li><a href={t.href}>{t.tekst}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="bunn__tittel">Firma</h2>
+      <ul class="bunn__liste">
+        <li><a href="/om-oss/">Om oss</a></li>
+        <li><a href="/referanser/">Referanser</a></li>
+        <li><a href="/ledige-stillinger/">Ledige stillinger</a></li>
+        <li><a href="/apenhetsloven/">Åpenhetsloven</a></li>
+        <li><a href="/personvern/">Personvern og informasjonskapsler</a></li>
+        <li><button type="button" class="bunn__samtykke" data-apne-samtykke hidden>Endre samtykke</button></li>
+      </ul>
+    </div>
+  </div>
+  <div class="beholder bunn__nederst">
+    <p>© {aar} {firma.navn} · Org.nr. {firma.orgnr}</p>
+  </div>
+</footer>
+
+<style>
+  .bunn {
+    background: var(--farge-mork);
+    color: #dfe6e9;
+    border-top: 6px solid var(--farge-logo-rod);
+    padding-top: 3rem;
+    font-size: 1rem;
+  }
+  .bunn__rutenett {
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 40rem) {
+    .bunn__rutenett {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .bunn__rutenett {
+      grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    }
+  }
+  .bunn__slagord {
+    margin-top: 1rem;
+  }
+  .bunn__tittel {
+    color: #fff;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .bunn__liste {
+    list-style: none;
+    padding: 0;
+  }
+  .bunn__liste li {
+    margin-bottom: 0.35rem;
+  }
+  .bunn a,
+  .bunn__samtykke {
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 32px;
+  }
+  .bunn a:hover,
+  .bunn__samtykke:hover {
+    text-decoration: underline;
+    color: #fff;
+  }
+  .bunn :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--farge-lys);
+  }
+  .bunn__samtykke {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+  .bunn__nederst {
+    border-top: 1px solid rgb(255 255 255 / 0.15);
+    margin-top: 2rem;
+    padding-block: 1.25rem;
+    font-size: 0.9rem;
+    color: #c8d2d7;
+  }
+  .bunn__nederst p {
+    margin: 0;
+  }
+</style>

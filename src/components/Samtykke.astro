@@ -1,0 +1,82 @@
+---
+// Samtykkebanner (Consent Mode v2). Vises bare når GTM_ID eller GA4_ID er satt.
+// Ingen tredjepartsskript lastes før brukeren har gitt samtykke.
+---
+<div class="samtykke" data-samtykke hidden role="dialog" aria-modal="false" aria-labelledby="samtykke-tittel" aria-describedby="samtykke-tekst">
+  <div class="samtykke__boks">
+    <h2 id="samtykke-tittel">Informasjonskapsler</h2>
+    <p id="samtykke-tekst">
+      Vi vil gjerne bruke informasjonskapsler til å måle hvordan nettsiden brukes (analyse) og til å måle effekten av annonser (markedsføring).
+      Dette skjer bare hvis du sier ja. Du kan endre valget når som helst nederst på siden. <a href="/personvern/">Les mer</a>.
+    </p>
+    <form class="samtykke__valg" data-samtykke-detaljer hidden>
+      <label><input type="checkbox" checked disabled /> Nødvendige (alltid på)</label>
+      <label><input type="checkbox" name="analyse" /> Analyse (Google Analytics)</label>
+      <label><input type="checkbox" name="markedsforing" /> Markedsføring (Google Ads)</label>
+    </form>
+    <div class="samtykke__knapper">
+      <button type="button" class="knapp" data-samtykke-godta>Godta alle</button>
+      <button type="button" class="knapp knapp--omriss" data-samtykke-avvis>Bare nødvendige</button>
+      <button type="button" class="samtykke__lenke" data-samtykke-tilpass>Tilpass</button>
+      <button type="button" class="knapp knapp--omriss" data-samtykke-lagre hidden>Lagre valg</button>
+    </div>
+  </div>
+</div>
+<style>
+  .samtykke {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 60;
+    padding: 0.75rem;
+  }
+  .samtykke__boks {
+    max-width: 44rem;
+    margin: 0 auto;
+    background: #fff;
+    color: var(--farge-tekst-2);
+    border-top: 5px solid var(--farge-aksent);
+    box-shadow: 0 -4px 30px rgb(0 0 0 / 0.25);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    max-height: 80vh;
+    overflow: auto;
+  }
+  .samtykke h2 {
+    font-size: 1.3rem;
+  }
+  .samtykke p {
+    font-size: 0.98rem;
+  }
+  .samtykke__valg {
+    display: grid;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .samtykke__valg label {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    min-height: 32px;
+  }
+  .samtykke__valg input {
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: var(--farge-aksent);
+  }
+  .samtykke__knapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+  .samtykke__lenke {
+    background: none;
+    border: 0;
+    color: var(--farge-aksent);
+    text-decoration: underline;
+    font: inherit;
+    cursor: pointer;
+    min-height: 48px;
+    padding: 0 0.5rem;
+  }
+</style>

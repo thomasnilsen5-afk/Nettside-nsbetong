@@ -1,0 +1,166 @@
+---
+import Logo from './Logo.astro';
+import Ikon from './Ikon.astro';
+import MenyListe from './MenyListe.astro';
+import { firma, telLenke } from '../data/site';
+interface Props { sti: string }
+const { sti } = Astro.props;
+---
+<header class="topp">
+  <div class="beholder topp__rad">
+    <Logo />
+    <nav class="hovednav" aria-label="Hovedmeny">
+      <details class="hovednav__mobil">
+        <summary class="hovednav__knapp">
+          <Ikon navn="meny" klasse="ikon-apne" /><Ikon navn="lukk" klasse="ikon-lukk" />
+          <span>Meny</span>
+        </summary>
+        <div class="hovednav__panel">
+          <MenyListe sti={sti} />
+        </div>
+      </details>
+      <div class="hovednav__desktop"><MenyListe sti={sti} /></div>
+    </nav>
+    <a class="knapp topp__ring" href={telLenke} data-cta="ring_header">
+      <Ikon navn="telefon" /><span>{firma.telefon}</span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .topp {
+    background: #fff;
+    border-bottom: 1px solid #e3e8eb;
+    position: relative;
+    z-index: 20;
+  }
+  .topp__rad {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4.5rem;
+  }
+  .topp__ring,
+  .hovednav__desktop {
+    display: none;
+  }
+  .hovednav__knapp {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 48px;
+    padding: 0 0.75rem;
+    cursor: pointer;
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--farge-mork);
+    border: 2px solid var(--farge-lys);
+    border-radius: var(--radius);
+  }
+  .hovednav__knapp::-webkit-details-marker {
+    display: none;
+  }
+  .hovednav__knapp :global(svg) {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+  .hovednav__knapp :global(.ikon-lukk),
+  details[open] .hovednav__knapp :global(.ikon-apne) {
+    display: none;
+  }
+  details[open] .hovednav__knapp :global(.ikon-lukk) {
+    display: block;
+  }
+  .hovednav__panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background: #fff;
+    border-bottom: 4px solid var(--farge-logo-rod);
+    box-shadow: 0 12px 24px rgb(0 0 0 / 0.12);
+    padding: 0.5rem var(--rom) 1.25rem;
+  }
+  .hovednav :global(.menyliste),
+  .hovednav :global(.menyliste ul) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .hovednav :global(.menyliste a) {
+    display: block;
+    padding: 0.7rem 0;
+    color: var(--farge-mork);
+    text-decoration: none;
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid #edf1f3;
+  }
+  .hovednav__panel :global(.menyliste__gruppe ul a) {
+    padding-left: 1rem;
+    text-transform: none;
+    font-family: var(--font-brod);
+    font-size: 1.05rem;
+  }
+  .hovednav :global(.menyliste a:hover),
+  .hovednav :global(.menyliste a[aria-current='page']),
+  .hovednav :global(.menyliste a.aktiv) {
+    color: var(--farge-aksent);
+  }
+
+  @media (min-width: 64rem) {
+    .topp__ring,
+    .hovednav__desktop {
+      display: block;
+    }
+    .topp__ring {
+      display: inline-flex;
+    }
+    .hovednav__mobil {
+      display: none;
+    }
+    .hovednav {
+      margin-left: auto;
+      margin-right: 1rem;
+    }
+    .hovednav__desktop :global(.menyliste) {
+      display: flex;
+      gap: 1.6rem;
+      align-items: center;
+    }
+    .hovednav__desktop :global(.menyliste a) {
+      border: 0;
+      padding: 0.5rem 0;
+      font-size: 1.05rem;
+    }
+    .hovednav__desktop :global(.menyliste__gruppe) {
+      position: relative;
+    }
+    .hovednav__desktop :global(.menyliste__gruppe ul) {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: -1rem;
+      min-width: 17rem;
+      background: #fff;
+      box-shadow: var(--skygge);
+      border-top: 3px solid var(--farge-logo-rod);
+      padding: 0.5rem 0;
+    }
+    .hovednav__desktop :global(.menyliste__gruppe:hover ul),
+    .hovednav__desktop :global(.menyliste__gruppe:focus-within ul) {
+      display: block;
+    }
+    .hovednav__desktop :global(.menyliste__gruppe ul a) {
+      padding: 0.55rem 1rem;
+      text-transform: none;
+      font-family: var(--font-brod);
+    }
+  }
+</style>

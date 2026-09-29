@@ -1,0 +1,48 @@
+---
+import type { Faq } from '../data/tjenester';
+interface Props { sporsmal: Faq[]; tittel?: string }
+const { sporsmal, tittel = 'Ofte stilte spørsmål' } = Astro.props;
+---
+<section class="faq" aria-labelledby="faq-tittel">
+  <h2 id="faq-tittel">{tittel}</h2>
+  {sporsmal.map((f) => (
+    <details class="faq__punkt">
+      <summary><h3>{f.sporsmal}</h3></summary>
+      <p>{f.svar}</p>
+    </details>
+  ))}
+</section>
+<style>
+  .faq__punkt {
+    border-bottom: 1px solid #dfe5e8;
+  }
+  .faq__punkt summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem 2.5rem 1rem 0;
+    position: relative;
+  }
+  .faq__punkt summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__punkt summary::after {
+    content: '+';
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.75rem;
+    color: var(--farge-aksent);
+    line-height: 1;
+  }
+  .faq__punkt[open] summary::after {
+    content: '–';
+  }
+  .faq__punkt h3 {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+  .faq__punkt p {
+    padding-bottom: 0.5rem;
+  }
+</style>

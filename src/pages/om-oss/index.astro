@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sidetopp from '../../components/Sidetopp.astro';
+import Tillitsmerker from '../../components/Tillitsmerker.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { firma } from '../../data/site';
+---
+<Base
+  tittel="Om oss – betongentreprenør i Bergen | Nilsen & Sture Betong"
+  beskrivelse="Nilsen & Sture Betong AS er en betongentreprenør på Kleppestø med over 20 års erfaring. Godkjent lærebedrift og våtromsbedrift med ansvarsrett."
+  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Om oss', sti: '/om-oss/' }]}
+>
+  <Sidetopp overtittel="Om oss" tittel="Om Nilsen & Sture Betong" ingress={`${firma.slagord} – med ${firma.erfaring}.`} />
+  <div class="seksjon">
+    <div class="beholder to-spalter">
+      <div class="prosa">
+        <p>
+          Nilsen &amp; Sture Betong AS er en betongentreprenør med adresse i Storebotn på Kleppestø. Vi utfører betongarbeid,
+          gulvstøp og flytavretting, kantstøp for vei og fortau, betongarbeid i nybygg og flis- og murarbeid i Bergen og omegn.
+        </p>
+        <p>
+          Kundene våre er private, næringsdrivende og kommunale og offentlige oppdragsgivere. Uansett størrelse på jobben er
+          målet det samme: riktig utført arbeid, tydelig kommunikasjon og avtaler som holdes.
+        </p>
+        <p><span class="plassholder">[MANGLER: historikk, antall ansatte og eventuelle navn/bilder av nøkkelpersoner fra dagens /om-oss/]</span></p>
+
+        <h2>Godkjenninger og avtaler</h2>
+        <p>
+          Vi er godkjent lærebedrift og tar ansvar for å utdanne nye fagfolk. Som godkjent våtromsbedrift følger vi kravene
+          til våtromsarbeid. Vi har ansvarsrett, tariffavtale og er registrert i StartBANK, som mange offentlige og større
+          oppdragsgivere bruker for å kvalifisere leverandører.
+        </p>
+        <Tillitsmerker visTekst />
+
+        <h2>Jobbe hos oss</h2>
+        <p>Er du fagarbeider eller vil du bli lærling? Se <a href="/ledige-stillinger/">ledige stillinger</a>.</p>
+      </div>
+      <aside class="kort" aria-label="Firmaopplysninger">
+        <h2 class="h3">Firmaopplysninger</h2>
+        <dl class="fakta">
+          <dt>Firmanavn</dt><dd>{firma.navn}</dd>
+          <dt>Adresse</dt><dd>{firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}</dd>
+          <dt>Telefon</dt><dd><a href={`tel:${firma.telefonE164}`}>{firma.telefon}</a></dd>
+          <dt>E-post</dt><dd><a href={`mailto:${firma.epost}`}>{firma.epost}</a></dd>
+          <dt>Org.nr.</dt><dd>{firma.orgnr}</dd>
+        </dl>
+        <p><a href="/apenhetsloven/">Åpenhetsloven</a></p>
+      </aside>
+    </div>
+  </div>
+  <CtaBand kilde="om_oss" />
+</Base>
+<style>
+  .h3 { font-size: 1.35rem; }
+  .fakta { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; margin: 0 0 1rem; }
+  .fakta dt { font-weight: 600; color: var(--farge-mork); }
+  .fakta dd { margin: 0; }
+  aside.kort { align-self: start; }
+</style>

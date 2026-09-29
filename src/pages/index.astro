@@ -1,0 +1,195 @@
+---
+import Base from '../layouts/Base.astro';
+import Ikon from '../components/Ikon.astro';
+import Tjenestekort from '../components/Tjenestekort.astro';
+import Tillitsmerker from '../components/Tillitsmerker.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { firma, telLenke, epostLenke } from '../data/site';
+import { organisasjonLd } from '../data/jsonld';
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${firma.url}/#nettsted`,
+  url: `${firma.url}/`,
+  name: firma.navn,
+  inLanguage: 'nb-NO',
+  publisher: { '@id': `${firma.url}/#firma` },
+};
+---
+<Base
+  tittel="Betongentreprenør i Bergen | Nilsen & Sture Betong AS"
+  beskrivelse="Nilsen & Sture Betong er din betongentreprenør i Bergen og omegn. Betongarbeid, gulvstøp, kantstøp, nybygg og våtrom. Over 20 års erfaring."
+  jsonLd={[organisasjonLd, websiteLd]}
+>
+  <section class="hero">
+    <div class="beholder hero__innhold">
+      <p class="overtittel">Over 20 års erfaring</p>
+      <h1>Betongentreprenør i Bergen og omegn</h1>
+      <p class="hero__ingress">
+        Nilsen &amp; Sture Betong utfører betongarbeid, gulvstøp, kantstøp, nybygg og flis- og murarbeid for private,
+        næringsdrivende og offentlige oppdragsgivere.
+      </p>
+      <div class="knapperad">
+        <a class="knapp knapp--lys" href={telLenke} data-cta="ring_hero_forside"><Ikon navn="telefon" />Ring {firma.telefon}</a>
+        <a class="knapp knapp--omriss-lys" href="/kontakt-oss/#skjema" data-cta="tilbud_hero_forside">Be om tilbud</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="merkestripe" aria-label="Godkjenninger">
+    <div class="beholder"><Tillitsmerker /></div>
+  </section>
+
+  <section class="seksjon" id="tjenester" aria-labelledby="tjenester-tittel">
+    <div class="beholder">
+      <p class="overtittel">Tjenester</p>
+      <h2 id="tjenester-tittel">Hva vi kan hjelpe deg med</h2>
+      <p class="ingress">
+        Fra fundament og gulv til kantstein og ferdig flislagt bad. Velg tjenesten du trenger for å lese mer.
+      </p>
+      <Tjenestekort />
+    </div>
+  </section>
+
+  <section class="seksjon seksjon--flate" aria-labelledby="hvorfor-tittel">
+    <div class="beholder to-spalter">
+      <div>
+        <p class="overtittel">Hvorfor velge oss</p>
+        <h2 id="hvorfor-tittel">Lokal betongentreprenør med fagfolk i eget firma</h2>
+        <p>
+          Vi har holdt på med betong i over 20 år, og har base på Kleppestø med oppdrag i Bergen og omegn. Vi er en
+          godkjent lærebedrift og godkjent våtromsbedrift, har ansvarsrett og tariffavtale, og er registrert i StartBANK.
+        </p>
+        <p>
+          For deg betyr det at du får en leverandør som kan dokumentere arbeidet, som følger reglene for lønn og
+          arbeidsvilkår, og som tar ansvar for det som blir levert.
+        </p>
+        <p><a href="/om-oss/">Les mer om oss</a> · <a href="/referanser/">Se referanser</a></p>
+      </div>
+      <div>
+        <h3>Vi jobber for</h3>
+        <ul class="kundeliste">
+          <li><strong>Private</strong> – garasje, tilbygg, gulv, bad og mur.</li>
+          <li><strong>Næringsdrivende</strong> – nybygg, lokaler og underentrepriser.</li>
+          <li><strong>Kommuner og offentlige</strong> – vei, fortau, kantstøp og bygg.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="seksjon" aria-labelledby="kontakt-tittel">
+    <div class="beholder kontaktrad">
+      <div>
+        <p class="overtittel">Kontakt</p>
+        <h2 id="kontakt-tittel">Fortell oss hva du skal ha gjort</h2>
+        <p>
+          Den raskeste veien er å ringe. Du kan også sende en e-post eller bruke skjemaet, så tar vi kontakt for å avtale
+          videre.
+        </p>
+      </div>
+      <ul class="kontaktvalg">
+        <li><a href={telLenke} data-cta="ring_kontakt_forside"><Ikon navn="telefon" /><span><strong>Ring</strong>{firma.telefon}</span></a></li>
+        <li><a href={epostLenke} data-cta="epost_kontakt_forside"><Ikon navn="epost" /><span><strong>E-post</strong>{firma.epost}</span></a></li>
+        <li><a href="/kontakt-oss/#skjema" data-cta="skjema_kontakt_forside"><Ikon navn="pil" /><span><strong>Skjema</strong>Be om tilbud</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand kilde="forside" />
+</Base>
+
+<style>
+  .hero {
+    color: #fff;
+    background:
+      linear-gradient(100deg, rgb(35 47 54 / 0.97) 0%, rgb(35 47 54 / 0.9) 55%, rgb(35 47 54 / 0.75) 100%),
+      repeating-linear-gradient(115deg, rgb(255 255 255 / 0.04) 0 2px, transparent 2px 22px),
+      radial-gradient(circle at 85% 30%, #52616b 0, var(--farge-mork) 60%);
+    border-bottom: 6px solid var(--farge-logo-rod);
+    padding: clamp(3rem, 10vw, 7rem) 0;
+  }
+  .hero h1 {
+    color: #fff;
+    font-size: clamp(2.3rem, 7vw, 4rem);
+    max-width: 44rem;
+  }
+  .hero .overtittel {
+    color: var(--farge-lys);
+  }
+  .hero__ingress {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    max-width: 40rem;
+    color: #e3eaed;
+    margin-bottom: 2rem;
+  }
+  .merkestripe {
+    background: var(--farge-flate);
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #e3e8eb;
+  }
+  .kundeliste {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .kundeliste li {
+    background: #fff;
+    padding: 1rem 1.2rem;
+    border-left: 5px solid var(--farge-aksent);
+    box-shadow: var(--skygge);
+  }
+  .kundeliste strong {
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--farge-mork);
+  }
+  .kontaktrad {
+    display: grid;
+    gap: 2rem;
+  }
+  @media (min-width: 60rem) {
+    .kontaktrad {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  .kontaktvalg {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .kontaktvalg a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--farge-lys);
+    border-radius: var(--radius);
+    text-decoration: none;
+    color: var(--farge-tekst-2);
+  }
+  .kontaktvalg a:hover {
+    border-color: var(--farge-aksent);
+  }
+  .kontaktvalg :global(svg) {
+    width: 1.6rem;
+    height: 1.6rem;
+    color: var(--farge-aksent);
+    flex: none;
+  }
+  .kontaktvalg span {
+    display: flex;
+    flex-direction: column;
+  }
+  .kontaktvalg strong {
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--farge-mork);
+  }
+</style>

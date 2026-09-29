@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import Sidetopp from '../../components/Sidetopp.astro';
+import Ikon from '../../components/Ikon.astro';
+import { firma, epostLenke, telLenke } from '../../data/site';
+---
+<Base
+  tittel="Ledige stillinger – betong i Bergen | Nilsen & Sture Betong"
+  beskrivelse="Jobb hos Nilsen & Sture Betong. Vi er godkjent lærebedrift med tariffavtale og ser etter betongarbeidere, fagarbeidere og lærlinger."
+  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Ledige stillinger', sti: '/ledige-stillinger/' }]}
+>
+  <Sidetopp overtittel="Karriere" tittel="Ledige stillinger" ingress="Vil du jobbe med betong i Bergen og omegn? Vi er godkjent lærebedrift og har tariffavtale." />
+  <div class="seksjon">
+    <div class="beholder prosa">
+      <h2>Utlyste stillinger</h2>
+      <p><span class="plassholder">[MANGLER: aktuelle utlysninger fra dagens /ledige-stillinger/ – tittel, beskrivelse, søknadsfrist]</span></p>
+
+      <h2>Åpen søknad og læreplass</h2>
+      <p>
+        Selv om vi ikke har en stilling ute, hører vi gjerne fra deg som er fagarbeider innen betong, mur eller flis – eller
+        som ønsker læreplass. Som godkjent lærebedrift tar vi ansvar for opplæringen, og med tariffavtale har du ordnede
+        lønns- og arbeidsvilkår.
+      </p>
+      <p>Send en kort søknad og CV til oss på e-post, eller ring for en prat.</p>
+      <div class="knapperad">
+        <a class="knapp" href={`${epostLenke}?subject=${encodeURIComponent('Søknad')}`} data-cta="epost_stilling"><Ikon navn="epost" />{firma.epost}</a>
+        <a class="knapp knapp--omriss" href={telLenke} data-cta="ring_stilling"><Ikon navn="telefon" />{firma.telefon}</a>
+      </div>
+    </div>
+  </div>
+</Base>

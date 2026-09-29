@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Sidetopp from '../components/Sidetopp.astro';
+import Tjenestekort from '../components/Tjenestekort.astro';
+import { firma, telLenke } from '../data/site';
+---
+<Base tittel="Siden finnes ikke | Nilsen & Sture Betong" beskrivelse="Siden du lette etter finnes ikke." noindex>
+  <Sidetopp overtittel="Feil 404" tittel="Siden finnes ikke" ingress="Lenken kan være gammel, eller siden er flyttet. Prøv en av tjenestene under, eller ring oss.">
+    <div class="knapperad">
+      <a class="knapp" href="/">Til forsiden</a>
+      <a class="knapp knapp--omriss" href={telLenke} data-cta="ring_404">Ring {firma.telefon}</a>
+    </div>
+  </Sidetopp>
+  <div class="seksjon">
+    <div class="beholder">
+      <h2>Tjenestene våre</h2>
+      <Tjenestekort />
+    </div>
+  </div>
+</Base>

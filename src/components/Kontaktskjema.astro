@@ -1,0 +1,118 @@
+---
+import { tjenester } from '../data/tjenester';
+import { firma, telLenke } from '../data/site';
+// Skjemaet fungerer uten JavaScript: vanlig POST til /api/kontakt, som svarer med 303 til /takk/.
+interface Props { forvalgtTjeneste?: string }
+const { forvalgtTjeneste } = Astro.props;
+---
+<form class="skjema" id="skjema" method="post" action="/api/kontakt/" data-kontaktskjema>
+  <div class="skjema__feil" role="alert" data-skjema-feil hidden>
+    Beklager, meldingen ble ikke sendt. Prøv igjen, eller ring oss på <a href={telLenke}>{firma.telefon}</a>.
+  </div>
+  <div class="skjema__rad">
+    <label for="navn">Navn <span aria-hidden="true">*</span></label>
+    <input id="navn" name="navn" type="text" autocomplete="name" required maxlength="100" />
+  </div>
+  <div class="skjema__to">
+    <div class="skjema__rad">
+      <label for="telefon">Telefon <span aria-hidden="true">*</span></label>
+      <input id="telefon" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required maxlength="30" />
+    </div>
+    <div class="skjema__rad">
+      <label for="epost">E-post</label>
+      <input id="epost" name="epost" type="email" autocomplete="email" maxlength="150" />
+    </div>
+  </div>
+  <div class="skjema__to">
+    <div class="skjema__rad">
+      <label for="tjeneste">Hva gjelder det?</label>
+      <select id="tjeneste" name="tjeneste">
+        <option value="">Velg (valgfritt)</option>
+        {tjenester.map((t) => <option value={t.navn} data-slug={t.slug} selected={t.slug === forvalgtTjeneste}>{t.navn}</option>)}
+        <option value="Annet">Annet</option>
+      </select>
+    </div>
+    <div class="skjema__rad">
+      <label for="sted">Sted for oppdraget</label>
+      <input id="sted" name="sted" type="text" autocomplete="address-level2" maxlength="120" />
+    </div>
+  </div>
+  <div class="skjema__rad">
+    <label for="melding">Beskriv oppdraget <span aria-hidden="true">*</span></label>
+    <textarea id="melding" name="melding" rows="5" required maxlength="4000"></textarea>
+  </div>
+  <!-- Honningkrukke: skjult for mennesker, fylles ut av roboter -->
+  <div class="skjema__honning" aria-hidden="true">
+    <label for="nettside">Ikke fyll ut dette feltet</label>
+    <input id="nettside" name="nettside" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="t" value="" data-skjema-tid />
+  <input type="hidden" name="side" value={Astro.url.pathname} />
+  <p class="skjema__info">
+    Felt merket * må fylles ut. Vi bruker opplysningene bare til å svare på henvendelsen. Se <a href="/personvern/">personvern</a>.
+  </p>
+  <button class="knapp" type="submit" data-cta="skjema_send">Send forespørsel</button>
+</form>
+<style>
+  .skjema {
+    display: grid;
+    gap: 1rem;
+  }
+  .skjema__to {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 40rem) {
+    .skjema__to {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .skjema__rad {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .skjema label {
+    font-weight: 600;
+    color: var(--farge-mork);
+  }
+  .skjema input,
+  .skjema select,
+  .skjema textarea {
+    font: inherit;
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    min-height: 48px;
+    border: 2px solid #9aa7ae;
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--farge-tekst-2);
+  }
+  .skjema input:focus,
+  .skjema select:focus,
+  .skjema textarea:focus {
+    border-color: var(--farge-mork);
+    outline: 3px solid var(--farge-aksent);
+    outline-offset: 1px;
+  }
+  .skjema__honning {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .skjema__info {
+    font-size: 0.95rem;
+    color: var(--farge-tekst-dempet);
+    margin: 0;
+  }
+  .skjema__feil {
+    background: #fdecec;
+    border-left: 5px solid var(--farge-aksent);
+    padding: 0.8rem 1rem;
+    color: var(--farge-tekst-2);
+  }
+  .skjema button {
+    justify-self: start;
+  }
+</style>

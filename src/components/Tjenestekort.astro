@@ -1,0 +1,68 @@
+---
+import Ikon from './Ikon.astro';
+import { tjenester } from '../data/tjenester';
+interface Props { utvalg?: string[]; overskriftNivaa?: 'h2' | 'h3' }
+const { utvalg, overskriftNivaa = 'h3' } = Astro.props;
+const liste = utvalg ? tjenester.filter((t) => utvalg.includes(t.slug)) : tjenester;
+const H = overskriftNivaa;
+---
+<ul class="tkort rutenett rutenett--3">
+  {liste.map((t) => (
+    <li class="tkort__kort">
+      <H class="tkort__tittel"><a href={`/${t.slug}/`}>{t.navn}</a></H>
+      <p>{t.kort}</p>
+      <span class="tkort__mer" aria-hidden="true">Les mer <Ikon navn="pil" /></span>
+    </li>
+  ))}
+</ul>
+<style>
+  .tkort {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .tkort__kort {
+    position: relative;
+    background: #fff;
+    border: 1px solid #dfe5e8;
+    border-top: 4px solid var(--farge-mork);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--skygge);
+    transition: border-color 0.15s, transform 0.15s;
+    display: flex;
+    flex-direction: column;
+  }
+  .tkort__kort:hover,
+  .tkort__kort:focus-within {
+    border-top-color: var(--farge-logo-rod);
+  }
+  .tkort__tittel {
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
+  }
+  .tkort__tittel a {
+    color: var(--farge-mork);
+    text-decoration: none;
+  }
+  /* Hele kortet klikkbart */
+  .tkort__tittel a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .tkort__kort p {
+    flex: 1;
+  }
+  .tkort__mer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--farge-aksent);
+    font-weight: 600;
+  }
+  .tkort__mer :global(svg) {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>

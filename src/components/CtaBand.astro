@@ -1,0 +1,43 @@
+---
+import Ikon from './Ikon.astro';
+import { firma, telLenke } from '../data/site';
+interface Props { tittel?: string; tekst?: string; kilde: string }
+const {
+  tittel = 'Skal du ha gjort betongarbeid?',
+  tekst = 'Ring oss eller send en kort beskrivelse av oppdraget, så tar vi kontakt.',
+  kilde,
+} = Astro.props;
+---
+<section class="cta seksjon seksjon--mork" aria-labelledby={`cta-${kilde}`}>
+  <div class="beholder cta__innhold">
+    <div>
+      <h2 id={`cta-${kilde}`}>{tittel}</h2>
+      <p>{tekst}</p>
+    </div>
+    <div class="knapperad">
+      <a class="knapp knapp--lys" href={telLenke} data-cta={`ring_${kilde}`}><Ikon navn="telefon" />Ring {firma.telefon}</a>
+      <a class="knapp knapp--omriss-lys" href="/kontakt-oss/#skjema" data-cta={`tilbud_${kilde}`}>Be om tilbud</a>
+    </div>
+  </div>
+</section>
+<style>
+  .cta {
+    background:
+      linear-gradient(90deg, var(--farge-logo-rod) 0 6px, transparent 6px),
+      var(--farge-mork);
+  }
+  .cta__innhold {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .cta__innhold {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .cta p {
+    margin: 0;
+    font-size: 1.15rem;
+  }
+</style>

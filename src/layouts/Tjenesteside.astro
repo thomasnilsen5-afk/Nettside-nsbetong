@@ -1,0 +1,144 @@
+---
+import { Picture } from 'astro:assets';
+import Base from './Base.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Faq from '../components/Faq.astro';
+import Ikon from '../components/Ikon.astro';
+import Tjenestekort from '../components/Tjenestekort.astro';
+import Tillitsmerker from '../components/Tillitsmerker.astro';
+import { tjenesteEtterSlug } from '../data/tjenester';
+import { firma, telLenke } from '../data/site';
+
+interface Props { slug: string }
+const t = tjenesteEtterSlug(Astro.props.slug);
+const url = `${firma.url}/${t.slug}/`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${url}#tjeneste`,
+    name: t.navn,
+    serviceType: t.serviceType,
+    description: t.beskrivelse,
+    url,
+    provider: { '@id': `${firma.url}/#firma` },
+    areaServed: [
+      { '@type': 'City', name: 'Bergen' },
+      { '@type': 'AdministrativeArea', name: 'Vestland' },
+    ],
+  },
+];
+---
+<Base
+  tittel={t.tittel}
+  beskrivelse={t.beskrivelse}
+  jsonLd={jsonLd}
+  smuler={[{ navn: 'Forside', sti: '/' }, { navn: t.navn, sti: `/${t.slug}/` }]}
+>
+  <section class="thero">
+    <div class="beholder">
+      <p class="overtittel">Tjeneste</p>
+      <h1>{t.h1}</h1>
+      <p class="ingress">{t.ingress}</p>
+      <div class="knapperad">
+        <a class="knapp" href={telLenke} data-cta={`ring_hero_${t.slug}`}><Ikon navn="telefon" />Ring {firma.telefon}</a>
+        <a class="knapp knapp--omriss" href={`/kontakt-oss/?tjeneste=${t.slug}#skjema`} data-cta={`tilbud_hero_${t.slug}`}>Be om tilbud</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="seksjon">
+    <div class="beholder to-spalter">
+      <div class="prosa">
+        {t.intro.map((p) => <p>{p}</p>)}
+
+        <h2>Dette inngår</h2>
+        <ul class="hakeliste">{t.inngaar.map((x) => <li>{x}</li>)}</ul>
+
+        <h2>Typiske oppdrag</h2>
+        <ul class="hakeliste">{t.oppdrag.map((x) => <li>{x}</li>)}</ul>
+
+        <h2>Hvem passer det for?</h2>
+        <ul class="hakeliste">{t.passerFor.map((x) => <li>{x}</li>)}</ul>
+
+        {t.bilder.length > 0 && (
+          <div class="galleri">
+            {t.bilder.map((b) => (
+              <Picture src={b.src} alt={b.alt} formats={['avif', 'webp']} widths={[480, 800, 1200]} sizes="(min-width: 60rem) 40rem, 100vw" loading="lazy" />
+            ))}
+          </div>
+        )}
+
+        <p>
+          Se også <a href="/referanser/">referanser</a> på arbeid vi har gjort, eller les mer <a href="/om-oss/">om oss</a>.
+        </p>
+
+        <Faq sporsmal={t.faq} />
+      </div>
+
+      <aside class="sidekolonne" aria-label="Kontakt">
+        <div class="kort sidekort">
+          <h2 class="sidekort__tittel">Få et uforpliktende tilbud</h2>
+          <p>Ring oss direkte eller send en kort beskrivelse, så tar vi kontakt.</p>
+          <a class="knapp sidekort__knapp" href={telLenke} data-cta={`ring_side_${t.slug}`}><Ikon navn="telefon" />{firma.telefon}</a>
+          <a class="knapp knapp--omriss sidekort__knapp" href={`/kontakt-oss/?tjeneste=${t.slug}#skjema`} data-cta={`tilbud_side_${t.slug}`}>Send forespørsel</a>
+        </div>
+        <div class="sidekort__merker">
+          <h2 class="sidekort__tittel">Trygg leverandør</h2>
+          <Tillitsmerker />
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <section class="seksjon seksjon--flate" aria-labelledby="andre-tjenester">
+    <div class="beholder">
+      <h2 id="andre-tjenester">Andre tjenester</h2>
+      <Tjenestekort utvalg={t.relaterte} />
+    </div>
+  </section>
+
+  <CtaBand kilde={t.slug} tittel={`Trenger du hjelp med ${t.kortnavn.toLowerCase()}?`} />
+</Base>
+
+<style>
+  .thero {
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0) 0, #fff 100%),
+      repeating-linear-gradient(135deg, #eef2f4 0 2px, transparent 2px 14px),
+      var(--farge-flate);
+    padding: 2rem 0 2.5rem;
+    border-bottom: 1px solid #e3e8eb;
+  }
+  .thero h1 {
+    max-width: 48rem;
+  }
+  .sidekolonne {
+    display: grid;
+    gap: 1.5rem;
+    align-content: start;
+  }
+  @media (min-width: 60rem) {
+    .sidekolonne {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+  .sidekort {
+    border-top: 5px solid var(--farge-aksent);
+  }
+  .sidekort__tittel {
+    font-size: 1.35rem;
+  }
+  .sidekort__knapp {
+    width: 100%;
+    margin-top: 0.6rem;
+  }
+  .galleri {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    margin: 1.5rem 0;
+  }
+</style>
