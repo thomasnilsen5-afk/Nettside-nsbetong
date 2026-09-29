@@ -61,8 +61,8 @@ const tidslinje = [
         </p>
       </div>
       <div class="bildepar" data-vis>
-        <Picture src={kontorBilde} alt="Kontoret til Nilsen & Sture Betong i Storebotn på Askøy" formats={['avif', 'webp']} widths={[480, 720, 960]} sizes="(min-width: 62rem) 35vw, 90vw" loading="lazy" />
-        <Picture src={planBilde} alt="Prosjektmøte der byggetegninger gjennomgås" formats={['avif', 'webp']} widths={[360, 540]} sizes="(min-width: 62rem) 18vw, 45vw" loading="lazy" />
+        <Picture src={kontorBilde} alt="Kontoret til Nilsen & Sture Betong i Storebotn på Askøy" formats={['webp']} fallbackFormat="webp" widths={[480, 720, 960]} sizes="(min-width: 62rem) 35vw, 90vw" loading="lazy" />
+        <Picture src={planBilde} alt="Prosjektmøte der byggetegninger gjennomgås" formats={['webp']} fallbackFormat="webp" widths={[360, 540]} sizes="(min-width: 62rem) 18vw, 45vw" loading="lazy" />
       </div>
     </div>
   </section>

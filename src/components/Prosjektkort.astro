@@ -12,7 +12,7 @@ const H = overskrift;
   <Picture
     src={r.bilde.src}
     alt={r.bilde.alt}
-    formats={['avif', 'webp']}
+    formats={['webp']} fallbackFormat="webp"
     widths={storrelse === 'stor' ? [640, 960, 1400] : [420, 640, 860]}
     sizes={storrelse === 'stor' ? '(min-width: 62rem) 60vw, 100vw' : '(min-width: 62rem) 30vw, (min-width: 40rem) 50vw, 90vw'}
     loading={eager ? 'eager' : 'lazy'}

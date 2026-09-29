@@ -97,7 +97,7 @@ const kontaktLd = {
       <ul class="personer">
         {kontaktpersoner.map((p, i) => (
           <li data-vis style={`--i: ${i % 4}`}>
-            <Picture src={p.bilde} alt={`Portrett av ${p.navn}`} formats={['avif', 'webp']} widths={[300, 450]} sizes="(min-width: 62rem) 18vw, (min-width: 40rem) 30vw, 45vw" loading="lazy" />
+            <Picture src={p.bilde} alt={`Portrett av ${p.navn}`} formats={['webp']} fallbackFormat="webp" widths={[300, 450]} sizes="(min-width: 62rem) 18vw, (min-width: 40rem) 30vw, 45vw" loading="lazy" />
             <div class="personer__tekst">
               <h3>{p.navn}</h3>
               <a href={telTilLenke(p.telefon)}><Ikon navn="telefon" />{p.telefon}</a>

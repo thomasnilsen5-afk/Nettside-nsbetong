@@ -12,7 +12,7 @@ const { tittel = 'Fortell oss om prosjektet', forvalgtTjeneste, id = 'kontakt' }
 <section class="kseksjon" id={id} aria-labelledby={`${id}-tittel`}>
   <div class="beholder kseksjon__rad">
     <div class="kseksjon__info">
-      <Picture src={bakgrunn} alt="" formats={['avif', 'webp']} widths={[600, 900, 1200]} sizes="(min-width: 62rem) 40vw, 100vw" loading="lazy" class="kseksjon__bilde" />
+      <Picture src={bakgrunn} alt="" formats={['webp']} fallbackFormat="webp" widths={[600, 900, 1200]} sizes="(min-width: 62rem) 40vw, 100vw" loading="lazy" class="kseksjon__bilde" />
       <p class="overtittel">Kontakt</p>
       <h2 id={`${id}-tittel`}>{tittel}</h2>
       <p>Vi tilbyr gratis befaring. Ring oss for en rask prat, eller send en forespørsel, så tar vi kontakt.</p>

@@ -58,7 +58,7 @@ Kontrollert med `npm run build && npm run check`, Lighthouse (mobil) og manuell 
 - [x] ✅ Open Graph og Twitter-kort. OG-bildet (1200×630) lages automatisk fra hver sides eget prosjektbilde.
 - [x] ✅ Egen 404-side
 - [x] ✅ HTTPS (Vercel) + HSTS-header
-- [x] ✅ Bilder: AVIF/WebP, width/height, lazy loading under første skjerm, `fetchpriority="high"` på heltebildet, norske filnavn og beskrivende alt-tekst. Illustrasjoner er merket som illustrasjoner.
+- [x] ✅ Bilder: AVIF + WebP for toppbilder (LCP), WebP for resten (raskere bygg), width/height, lazy loading under første skjerm, `fetchpriority="high"` på heltebildet, norske filnavn og beskrivende alt-tekst. Illustrasjoner er merket som illustrasjoner.
 - [x] ✅ Ytelse med alle bilder: LCP 1,6–2,2 s, CLS 0, TBT 0 ms (se lighthouse/RESULTATER.md)
 - [x] ✅ Lighthouse mobil ≥ 95 på Performance, SEO, Accessibility og Best Practices. Resultatet er **99–100** i alle kategorier på 12 sider, målt på den nye designen med bilder og uten demomodus.
 - [ ] ⏳ Måle med PageSpeed Insights på den endelige adressen etter lansering

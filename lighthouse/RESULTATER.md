@@ -28,7 +28,7 @@ Fullstendige rapporter i denne mappen: `mobil_.report.html` (forsiden), `mobil_b
 
 ## Tiltak som ga resultatet
 
-- Alle bilder serveres som AVIF/WebP i flere størrelser (`srcset`), med `width`/`height` og lazy loading under første skjerm.
+- Toppbildene serveres som AVIF med WebP som reserve, øvrige bilder som WebP, alle i flere størrelser (`srcset`) med `width`/`height` og lazy loading under første skjerm. AVIF bare der det teller holder byggetiden nede (ca. 1,5 min lokalt fra kald cache).
 - Toppbildene lastes med `fetchpriority="high"`, egne mobilstørrelser (480/768 px) og kvalitet 45, siden de ligger under et mørkt overlegg.
 - Bildefremvisningen på forsiden laster de tre neste bildene først etter at siden er ferdig lastet (`<template>` + JS).
 - Animasjoner bruker bare `transform`/`opacity` (ingen repaint på hovedtråden). Pulsringen og den løpende byggherre-raden ga tidligere 250 ms TBT.

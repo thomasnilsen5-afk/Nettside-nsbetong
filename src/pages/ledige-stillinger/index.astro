@@ -137,7 +137,7 @@ const smuler = [{ navn: 'Forside', sti: '/' }, { navn: 'Ledige stillinger', sti:
         ))}
       </div>
       <aside class="sidekol">
-        <Picture src={sideBilde} alt="Betongarbeider i arbeidsjakke med Nilsen & Sture Betong-logo på ryggen" formats={['avif', 'webp']} widths={[400, 640]} sizes="(min-width: 62rem) 30vw, 100vw" loading="lazy" />
+        <Picture src={sideBilde} alt="Betongarbeider i arbeidsjakke med Nilsen & Sture Betong-logo på ryggen" formats={['webp']} fallbackFormat="webp" widths={[400, 640]} sizes="(min-width: 62rem) 30vw, 100vw" loading="lazy" />
         <div class="sokekort">
           <p class="sokekort__tittel">Vi tilbyr</p>
           <ul class="hakeliste">{viTilbyr.map((v) => <li>{v}</li>)}</ul>

@@ -17,7 +17,7 @@ const nr = (slug: string) => String(tjenester.findIndex((t) => t.slug === slug) 
       <Picture
         src={t.hero.src}
         alt=""
-        formats={['avif', 'webp']}
+        formats={['webp']} fallbackFormat="webp"
         widths={mosaikk && i === 0 ? [480, 800, 1100] : [400, 640, 860]}
         sizes={mosaikk && i === 0 ? '(min-width: 62rem) 40vw, 100vw' : '(min-width: 62rem) 28vw, (min-width: 40rem) 50vw, 100vw'}
         loading="lazy"

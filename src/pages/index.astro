@@ -77,6 +77,7 @@ const prosess = [
         src={slides[0].src}
         alt=""
         formats={['avif', 'webp']}
+        fallbackFormat="webp"
         widths={[480, 768, 1024, 1440, 1920]}
         sizes="100vw"
         quality={45}
@@ -88,7 +89,7 @@ const prosess = [
     </div>
     <template data-hero-flere>
       {slides.slice(1).map((s) => (
-        <Picture src={s.src} alt="" formats={['avif', 'webp']} widths={[640, 960, 1280, 1920]} sizes="100vw" quality={55} class="hero__bilde" data-sted={s.sted} />
+        <Picture src={s.src} alt="" formats={['webp']} fallbackFormat="webp" widths={[768, 1280, 1920]} sizes="100vw" quality={55} class="hero__bilde" data-sted={s.sted} />
       ))}
     </template>
 
@@ -154,8 +155,8 @@ const prosess = [
         <a class="tekstlenke" href="/om-oss/">Mer om oss <Ikon navn="pil" /></a>
       </div>
       <div class="kollasj" data-vis style="--i: 1">
-        <Picture src={kollasj1} alt="Betongarbeidere fra Nilsen & Sture Betong på en byggeplass" formats={['avif', 'webp']} widths={[480, 720, 960]} sizes="(min-width: 62rem) 40vw, 90vw" loading="lazy" class="kollasj__stor" />
-        <Picture src={kollasj2} alt="Betongarbeider i arbeidsjakke med Nilsen & Sture Betong-logo på ryggen" formats={['avif', 'webp']} widths={[320, 480]} sizes="(min-width: 62rem) 16vw, 40vw" loading="lazy" class="kollasj__liten" />
+        <Picture src={kollasj1} alt="Betongarbeidere fra Nilsen & Sture Betong på en byggeplass" formats={['webp']} fallbackFormat="webp" widths={[480, 720, 960]} sizes="(min-width: 62rem) 40vw, 90vw" loading="lazy" class="kollasj__stor" />
+        <Picture src={kollasj2} alt="Betongarbeider i arbeidsjakke med Nilsen & Sture Betong-logo på ryggen" formats={['webp']} fallbackFormat="webp" widths={[320, 480]} sizes="(min-width: 62rem) 16vw, 40vw" loading="lazy" class="kollasj__liten" />
         <div class="kollasj__merke"><strong>20+</strong><span>års erfaring med betong</span></div>
       </div>
     </div>
@@ -196,7 +197,7 @@ const prosess = [
 
   <!-- ============ AVDELINGER ============ -->
   <section class="avdelinger" aria-labelledby="avdelinger-tittel">
-    <Picture src={avdelingBilde} alt="" formats={['avif', 'webp']} widths={[640, 1280, 1920]} sizes="100vw" loading="lazy" class="avdelinger__bilde" />
+    <Picture src={avdelingBilde} alt="" formats={['webp']} fallbackFormat="webp" widths={[640, 1280, 1920]} sizes="100vw" loading="lazy" class="avdelinger__bilde" />
     <div class="beholder seksjon">
       <div class="seksjonstopp">
         <div>
@@ -244,7 +245,7 @@ const prosess = [
 
   <!-- ============ KARRIERE ============ -->
   <section class="karriere" aria-labelledby="karriere-tittel">
-    <Picture src={karriereBilde} alt="" formats={['avif', 'webp']} widths={[640, 1280, 1920]} sizes="100vw" loading="lazy" class="karriere__bilde" />
+    <Picture src={karriereBilde} alt="" formats={['webp']} fallbackFormat="webp" widths={[640, 1280, 1920]} sizes="100vw" loading="lazy" class="karriere__bilde" />
     <div class="beholder karriere__innhold" data-vis>
       <p class="overtittel">Karriere</p>
       <h2 id="karriere-tittel">Bli en av oss</h2>

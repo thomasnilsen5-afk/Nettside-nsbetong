@@ -11,7 +11,7 @@ const store = await Promise.all(bilder.map((b) => getImage({ src: b.src, width: 
   {bilder.map((b, i) => (
     <li data-vis style={`--i: ${i % 3}`}>
       <a href={store[i].src} data-lysboks aria-label={`Vis større: ${b.alt}`}>
-        <Picture src={b.src} alt={b.alt} formats={['avif', 'webp']} widths={[480, 720, 1000]} sizes="(min-width: 62rem) 33vw, (min-width: 40rem) 50vw, 100vw" loading="lazy" />
+        <Picture src={b.src} alt={b.alt} formats={['webp']} fallbackFormat="webp" widths={[480, 720, 1000]} sizes="(min-width: 62rem) 33vw, (min-width: 40rem) 50vw, 100vw" loading="lazy" />
         <span class="galleri__tekst">{b.alt}</span>
       </a>
     </li>
