@@ -1,22 +1,55 @@
 ---
-import { firma } from '../data/site';
+// Diskret merke som viser at dette er et designforslag (DEMO_MODUS). Kan lukkes.
 ---
-<div class="demo" role="note">
-  <div class="beholder">
-    <strong>Forslag til ny nettside.</strong> Dette er en demo og ikke den offisielle nettsiden til {firma.navn}.
-    Skjemaet sender ingen meldinger. Offisiell side: <a href="https://nsbetong.no/">nsbetong.no</a>.
-  </div>
-</div>
+<aside class="demo" data-demo aria-label="Om denne siden">
+  <span><strong>Designforslag</strong> <span class="demo__lang">– ikke den offisielle nettsiden. Skjemaet sender ingen meldinger.</span><span class="demo__kort">– ikke offisiell side</span></span>
+  <button type="button" data-demo-lukk aria-label="Skjul merknaden">×</button>
+</aside>
 <style>
   .demo {
-    background: #fff4d6;
-    color: #3b2f00;
-    border-bottom: 2px solid #8a6d00;
-    font-size: 0.92rem;
-    padding: 0.5rem 0;
+    position: fixed;
+    left: 1rem;
+    bottom: calc(var(--mobil-cta-hoyde) + 1rem);
+    z-index: 45;
+    max-width: min(24rem, calc(100vw - 2rem));
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgb(26 35 40 / 0.94);
+    color: #e6ecef;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    padding: 0.55rem 0.55rem 0.55rem 0.9rem;
+    border-left: 3px solid #f2c94c;
+    border-radius: var(--radius);
+    box-shadow: var(--skygge-stor);
   }
-  .demo a {
-    color: #3b2f00;
-    font-weight: 600;
+  .demo__kort {
+    display: none;
+  }
+  @media (max-width: 40rem) {
+    .demo {
+      font-size: 0.78rem;
+      padding-block: 0.25rem;
+    }
+    .demo__lang {
+      display: none;
+    }
+    .demo__kort {
+      display: inline;
+    }
+  }
+  .demo strong {
+    color: #f2c94c;
+  }
+  .demo button {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
   }
 </style>

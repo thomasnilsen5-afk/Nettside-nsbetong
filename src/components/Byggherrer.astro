@@ -1,0 +1,111 @@
+---
+// Løpende rad med byggherrer og oppdragsgivere fra referansene (tekst, ikke logoer).
+import { byggherrer } from '../data/referanser';
+---
+<section class="byggherrer" aria-labelledby="byggherrer-tittel">
+  <div class="beholder byggherrer__rad">
+    <h2 id="byggherrer-tittel" class="byggherrer__tittel">Byggherrer og oppdragsgivere i våre prosjekter</h2>
+    <div class="byggherrer__vindu">
+      <ul class="byggherrer__liste">
+        {byggherrer.map((b) => <li>{b}</li>)}
+      </ul>
+      <ul class="byggherrer__liste" aria-hidden="true">
+        {byggherrer.map((b) => <li>{b}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+<style>
+  .byggherrer {
+    background: #fff;
+    border-bottom: 1px solid var(--farge-linje);
+    padding-block: 1.75rem;
+    overflow: hidden;
+  }
+  .byggherrer__rad {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+  }
+  @media (min-width: 62rem) {
+    .byggherrer__rad {
+      grid-template-columns: 13rem 1fr;
+      gap: 2.5rem;
+    }
+  }
+  .byggherrer__tittel {
+    font-family: var(--font-brod);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    line-height: 1.5;
+    color: var(--farge-tekst-dempet);
+    margin: 0;
+  }
+  .byggherrer__vindu {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+  }
+  /* Myke kanter med fargetoning (billigere enn mask-image) */
+  .byggherrer__vindu::before,
+  .byggherrer__vindu::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 3rem;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .byggherrer__vindu::before {
+    left: 0;
+    background: linear-gradient(90deg, #fff, rgb(255 255 255 / 0));
+  }
+  .byggherrer__vindu::after {
+    right: 0;
+    background: linear-gradient(270deg, #fff, rgb(255 255 255 / 0));
+  }
+  .byggherrer__liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex: none;
+    gap: 3rem;
+    padding-right: 3rem;
+  }
+  .byggherrer__liste li {
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #5d6970;
+    white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .byggherrer__liste {
+      animation: rull 55s linear infinite;
+    }
+    .byggherrer__vindu:hover .byggherrer__liste {
+      animation-play-state: paused;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .byggherrer__liste {
+      flex-wrap: wrap;
+      flex: 1;
+      gap: 0.5rem 2rem;
+    }
+    .byggherrer__liste[aria-hidden='true'] {
+      display: none;
+    }
+  }
+  @keyframes rull {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+</style>

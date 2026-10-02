@@ -1,31 +1,274 @@
 ---
+import { Picture } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import Sidetopp from '../../components/Sidetopp.astro';
+import Sidehero from '../../components/Sidehero.astro';
 import Ikon from '../../components/Ikon.astro';
 import { firma, epostLenke, telLenke } from '../../data/site';
+import heroBilde from '../../assets/bilder/felles/nilsen-sture-betong-ansatt-ved-firmabil.jpg';
+import sideBilde from '../../assets/bilder/felles/betongarbeider-i-arbeidsjakke.jpg';
+
+// Stillinger slik de er utlyst på dagens /ledige-stillinger/.
+const stillinger = [
+  {
+    tittel: 'Bas/formann betongarbeider',
+    ingress: 'Vi er i vekst og søker en dyktig og pålitelig bas/formann med stor faglig forståelse, som er motivert og engasjert og vil jobbe med spennende prosjekter.',
+    krav: [
+      'Fagbrev i betongfaget. Dokumentert lang erfaring kan erstatte fagbrev.',
+      'Nøyaktig, faglig dyktig og med høy yrkesstolthet',
+      'Positiv, med godt humør, og kan jobbe selvstendig',
+      'Kan lese tekniske tegninger og lede arbeidslag',
+      'Førerkort klasse B eller BE',
+      'Kurs i HMS, fallsikring, anhuker og varmearbeider er en fordel',
+    ],
+  },
+  {
+    tittel: 'Bas til kantstøpavdelingen',
+    ingress: 'Vi søker en bas til kantstøpavdelingen, som jobber med kantstøp og profilstøp med egen kantstøpemaskin.',
+    krav: [
+      'Erfaring fra kantstøp/profilstøp',
+      'Mekanisk anlagt',
+      'Pålitelig, tar ansvar og samarbeider godt med andre',
+      'Kan kommunisere på norsk og engelsk',
+      'Førerkort klasse B',
+    ],
+  },
+  {
+    tittel: 'Betongarbeider',
+    ingress: 'Vi søker betongarbeidere til prosjekter i Bergen og omegn.',
+    krav: [
+      'Erfaring fra betongarbeid. Dokumentert lang erfaring kan erstatte fagbrev.',
+      'Nøyaktig, selvstendig og pålitelig',
+      'Kan kommunisere på norsk og engelsk',
+      'Førerkort klasse B',
+    ],
+  },
+  {
+    tittel: 'Gulvstøper',
+    ingress: 'Vi søker gulvstøper til gulvavdelingen.',
+    krav: [
+      'Erfaring fra gulvstøp',
+      'Følger retningslinjene våre for HMS og kvalitet',
+      'Kan kommunisere på norsk og engelsk',
+      'Førerkort klasse B',
+    ],
+  },
+  {
+    tittel: 'Flisleggere (2 stillinger)',
+    ingress: 'På grunn av økende arbeidsmengde søker vi 2 flisleggere med minst 5 års erfaring.',
+    krav: [
+      'Fagbrev i murerfaget. Dokumentert lang erfaring kan erstatte fagbrev.',
+      'Minst 5 års erfaring som flislegger',
+      'Kan kommunisere på norsk og engelsk',
+      'Førerkort klasse B',
+    ],
+  },
+];
+const viTilbyr = [
+  'Fast stilling, 100 %',
+  'Konkurransedyktige lønns- og arbeidsbetingelser',
+  'Gode pensjons- og forsikringsordninger',
+  'En solid arbeidsgiver med tariffavtale',
+  'Faglig utvikling i et hyggelig og uformelt miljø',
+];
+const fordeler = [
+  { ikon: 'kontrakt', tittel: 'Tariffavtale', tekst: 'Ordnede lønns- og arbeidsvilkår gjennom Fellesforbundet.' },
+  { ikon: 'kvalitet', tittel: 'Pensjon og forsikring', tekst: 'Gode pensjons- og forsikringsordninger.' },
+  { ikon: 'laerling', tittel: 'Godkjent lærebedrift', tekst: 'Vi utdanner morgendagens betongarbeidere.' },
+  { ikon: 'team', tittel: 'Godt arbeidsmiljø', tekst: 'Hyggelige kolleger og et uformelt miljø med faglig utvikling.' },
+] as const;
+const smuler = [{ navn: 'Forside', sti: '/' }, { navn: 'Ledige stillinger', sti: '/ledige-stillinger/' }];
 ---
 <Base
-  tittel="Ledige stillinger – betong i Bergen | Nilsen & Sture Betong"
-  beskrivelse="Jobb hos Nilsen & Sture Betong. Vi er godkjent lærebedrift med tariffavtale og ser etter betongarbeidere, fagarbeidere og lærlinger."
-  smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Ledige stillinger', sti: '/ledige-stillinger/' }]}
+  tittel="Ledige stillinger | Nilsen & Sture Betong"
+  beskrivelse="Ledige stillinger hos Nilsen & Sture Betong: bas/formann, betongarbeider, gulvstøper, flislegger og bas til kantstøp. Fast stilling og tariffavtale."
+  smuler={smuler}
+  ogBilde={heroBilde}
 >
-  <Sidetopp overtittel="Karriere" tittel="Ledige stillinger" ingress="Vil du jobbe med betong i Bergen og omegn? Vi er godkjent lærebedrift og har tariffavtale." />
-  <div class="seksjon">
-    <div class="beholder prosa">
-      <h2>Utlyste stillinger</h2>
-      <p><span class="plassholder">[MANGLER: aktuelle utlysninger fra dagens /ledige-stillinger/ – tittel, beskrivelse, søknadsfrist]</span></p>
-
-      <h2>Åpen søknad og læreplass</h2>
-      <p>
-        Selv om vi ikke har en stilling ute, hører vi gjerne fra deg som er fagarbeider innen betong, mur eller flis – eller
-        som ønsker læreplass. Som godkjent lærebedrift tar vi ansvar for opplæringen, og med tariffavtale har du ordnede
-        lønns- og arbeidsvilkår.
-      </p>
-      <p>Send en kort søknad og CV til oss på e-post, eller ring for en prat.</p>
-      <div class="knapperad">
-        <a class="knapp" href={`${epostLenke}?subject=${encodeURIComponent('Søknad')}`} data-cta="epost_stilling"><Ikon navn="epost" />{firma.epost}</a>
-        <a class="knapp knapp--omriss" href={telLenke} data-cta="ring_stilling"><Ikon navn="telefon" />{firma.telefon}</a>
-      </div>
+  <Sidehero
+    tittel="Bli en av oss"
+    overtittel="Ledige stillinger"
+    ingress="Vi er i vekst og alltid på jakt etter dyktige håndverkere. Som godkjent lærebedrift utdanner vi også morgendagens betongarbeidere."
+    bilde={heroBilde}
+    smuler={smuler}
+    posisjon="70% center"
+  >
+    <div class="knapperad">
+      <a class="knapp knapp--pil" href="#stillinger">Se {stillinger.length} ledige stillinger<Ikon navn="pil" /></a>
     </div>
-  </div>
+  </Sidehero>
+
+  <section class="seksjon seksjon--tett" aria-labelledby="fordeler-tittel">
+    <div class="beholder">
+      <h2 id="fordeler-tittel" class="visuelt-skjult">Dette får du hos oss</h2>
+      <ul class="fordeler rutenett rutenett--4">
+        {fordeler.map((f, i) => (
+          <li data-vis style={`--i: ${i}`}>
+            <Ikon navn={f.ikon} klasse="fordeler__ikon" />
+            <h3>{f.tittel}</h3>
+            <p>{f.tekst}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="seksjon seksjon--flate" id="stillinger" aria-labelledby="stillinger-tittel">
+    <div class="beholder to-spalter">
+      <div>
+        <p class="overtittel">Utlyste stillinger</p>
+        <h2 id="stillinger-tittel">Ledige stillinger</h2>
+        <p>Alle stillingene er faste 100 %-stillinger med søknadsfrist snarest.</p>
+        {stillinger.map((s, i) => (
+          <details class="stilling" open={i === 0}>
+            <summary>
+              <span>
+                <h3>{s.tittel}</h3>
+                <small><Ikon navn="klokke" /> Fast 100 % · Frist: snarest</small>
+              </span>
+              <span class="stilling__ikon" aria-hidden="true"><Ikon navn="pluss" /></span>
+            </summary>
+            <div class="stilling__innhold">
+              <p>{s.ingress}</p>
+              <h4>Vi forventer at du</h4>
+              <ul class="hakeliste">{s.krav.map((k) => <li>{k}</li>)}</ul>
+              <a class="knapp knapp--pil" href={`${epostLenke}?subject=${encodeURIComponent(`Søknad: ${s.tittel}`)}`} data-cta="epost_stilling">Søk på stillingen<Ikon navn="pil" /></a>
+            </div>
+          </details>
+        ))}
+      </div>
+      <aside class="sidekol">
+        <Picture src={sideBilde} alt="Betongarbeider i arbeidsjakke med Nilsen & Sture Betong-logo på ryggen" formats={['webp']} fallbackFormat="webp" widths={[400, 640]} sizes="(min-width: 62rem) 30vw, 100vw" loading="lazy" />
+        <div class="sokekort">
+          <p class="sokekort__tittel">Vi tilbyr</p>
+          <ul class="hakeliste">{viTilbyr.map((v) => <li>{v}</li>)}</ul>
+          <p class="sokekort__tittel">Send søknad</p>
+          <p>Send en kort søknad og CV på e-post, eller ring oss. Åpne søknader og henvendelser om læreplass er også velkomne.</p>
+          <a class="knapp sokekort__knapp" href={`${epostLenke}?subject=${encodeURIComponent('Søknad')}`} data-cta="epost_stilling_side"><Ikon navn="epost" />{firma.epost}</a>
+          <a class="knapp knapp--omriss-lys sokekort__knapp" href={telLenke} data-cta="ring_stilling"><Ikon navn="telefon" />{firma.telefon}</a>
+          <p class="sokekort__liten">Spørsmål om stillingen som bas/formann: Mathis Nils Eira, <a href="tel:+4797773569">977 73 569</a>, <a href="mailto:mathis@nsbetong.no">mathis@nsbetong.no</a>.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .fordeler {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .fordeler li {
+    border-top: 3px solid var(--farge-aksent);
+    padding-top: 1.25rem;
+  }
+  .fordeler :global(.fordeler__ikon) {
+    width: 2.4rem;
+    height: 2.4rem;
+    color: var(--farge-aksent);
+    margin-bottom: 0.75rem;
+  }
+  .fordeler h3 {
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .fordeler p {
+    margin: 0;
+    color: var(--farge-tekst-dempet);
+  }
+  .stilling {
+    background: #fff;
+    border: 1px solid var(--farge-linje);
+    border-left: 5px solid var(--farge-aksent);
+    margin-bottom: 0.75rem;
+  }
+  .stilling summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.4rem;
+  }
+  .stilling summary::-webkit-details-marker {
+    display: none;
+  }
+  .stilling h3 {
+    margin: 0 0 0.2rem;
+    text-transform: uppercase;
+  }
+  .stilling small {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--farge-tekst-dempet);
+  }
+  .stilling small :global(.ikon) {
+    width: 1rem;
+    height: 1rem;
+  }
+  .stilling__ikon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--farge-linje);
+    color: var(--farge-aksent);
+    transition: transform 0.3s var(--ease);
+  }
+  .stilling[open] .stilling__ikon {
+    transform: rotate(45deg);
+    background: var(--farge-aksent);
+    color: #fff;
+    border-color: var(--farge-aksent);
+  }
+  .stilling__innhold {
+    padding: 0 1.4rem 1.5rem;
+  }
+  .stilling h4 {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    margin: 1rem 0 0.5rem;
+  }
+  .sidekol {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+  }
+  .sidekol :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .sokekort {
+    background: var(--farge-mork);
+    color: var(--farge-tekst-lys);
+    padding: clamp(1.5rem, 3vw, 2rem);
+    border-top: 5px solid var(--farge-logo-rod);
+  }
+  .sokekort__tittel {
+    font-family: var(--font-overskrift);
+    font-size: 1.4rem;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 0.6rem;
+  }
+  .sokekort .hakeliste li::before {
+    background: var(--farge-logo-rod);
+  }
+  .sokekort__knapp {
+    width: 100%;
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+  }
+  .sokekort__liten {
+    margin: 1.25rem 0 0;
+    font-size: 0.9rem;
+  }
+  .sokekort a:not(.knapp) {
+    color: #fff;
+  }
+</style>

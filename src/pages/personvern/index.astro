@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Sidetopp from '../../components/Sidetopp.astro';
+import Sidehero from '../../components/Sidehero.astro';
 import { firma, epostLenke } from '../../data/site';
 ---
 <Base
@@ -8,9 +8,9 @@ import { firma, epostLenke } from '../../data/site';
   beskrivelse="Slik behandler Nilsen & Sture Betong AS personopplysninger på nettsiden, i kontaktskjemaet og ved bruk av informasjonskapsler."
   smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Personvern', sti: '/personvern/' }]}
 >
-  <Sidetopp tittel="Personvern og informasjonskapsler" />
+  <Sidehero smuler={[{ navn: 'Forside', sti: '/' }, { navn: 'Personvern', sti: '/personvern/' }]} storrelse="liten" tittel="Personvern og informasjonskapsler" />
   <div class="seksjon">
-    <div class="beholder prosa">
+    <div class="beholder beholder--smal prosa">
       <h2>Behandlingsansvarlig</h2>
       <p>
         {firma.navn} (org.nr. {firma.orgnr}), {firma.adresse.gate}, {firma.adresse.postnr} {firma.adresse.sted}, er

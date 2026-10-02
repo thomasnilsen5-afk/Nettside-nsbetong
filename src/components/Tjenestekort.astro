@@ -1,68 +1,190 @@
 ---
+// Tjenester som bildefliser. Uten utvalg: mosaikk med én stor flis + fire mindre (forsiden).
+import { Picture } from 'astro:assets';
 import Ikon from './Ikon.astro';
 import { tjenester } from '../data/tjenester';
+
 interface Props { utvalg?: string[]; overskriftNivaa?: 'h2' | 'h3' }
 const { utvalg, overskriftNivaa = 'h3' } = Astro.props;
 const liste = utvalg ? tjenester.filter((t) => utvalg.includes(t.slug)) : tjenester;
+const mosaikk = !utvalg;
 const H = overskriftNivaa;
+const nr = (slug: string) => String(tjenester.findIndex((t) => t.slug === slug) + 1).padStart(2, '0');
 ---
-<ul class="tkort rutenett rutenett--3">
-  {liste.map((t) => (
-    <li class="tkort__kort">
-      <H class="tkort__tittel"><a href={`/${t.slug}/`}>{t.navn}</a></H>
-      <p>{t.kort}</p>
-      <span class="tkort__mer" aria-hidden="true">Les mer <Ikon navn="pil" /></span>
+<ul class:list={['tfliser', { 'tfliser--mosaikk': mosaikk }]}>
+  {liste.map((t, i) => (
+    <li class="tflis" data-vis style={`--i: ${i}`}>
+      <Picture
+        src={t.hero.src}
+        alt=""
+        formats={['webp']} fallbackFormat="webp"
+        widths={mosaikk && i === 0 ? [480, 800, 1100] : [400, 640, 860]}
+        sizes={mosaikk && i === 0 ? '(min-width: 62rem) 40vw, 100vw' : '(min-width: 62rem) 28vw, (min-width: 40rem) 50vw, 100vw'}
+        loading="lazy"
+        class="tflis__bilde"
+      />
+      <div class="tflis__innhold">
+        <span class="tflis__nr" aria-hidden="true">{nr(t.slug)}</span>
+        <H class="tflis__tittel"><a href={`/${t.slug}/`}>{t.navn}</a></H>
+        <p class="tflis__tekst">{t.kort}</p>
+        <span class="tflis__mer" aria-hidden="true">Les mer <Ikon navn="pil" /></span>
+      </div>
     </li>
   ))}
 </ul>
+
 <style>
-  .tkort {
+  .tfliser {
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(0.75rem, 1.5vw, 1.25rem);
+    grid-template-columns: 1fr;
   }
-  .tkort__kort {
+  @media (min-width: 40rem) {
+    .tfliser {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 62rem) {
+    .tfliser {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .tfliser--mosaikk {
+      grid-template-columns: 1.25fr 1fr 1fr;
+      grid-template-rows: repeat(2, minmax(19rem, 1fr));
+    }
+    .tfliser--mosaikk .tflis:first-child {
+      grid-row: span 2;
+    }
+  }
+  @media (min-width: 40rem) and (max-width: 61.99rem) {
+    .tfliser--mosaikk .tflis:first-child {
+      grid-column: span 2;
+    }
+  }
+  .tflis {
     position: relative;
-    background: #fff;
-    border: 1px solid #dfe5e8;
-    border-top: 4px solid var(--farge-mork);
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 19rem;
     border-radius: var(--radius);
-    padding: 1.5rem;
-    box-shadow: var(--skygge);
-    transition: border-color 0.15s, transform 0.15s;
+    background: var(--farge-mork);
     display: flex;
-    flex-direction: column;
+    align-items: flex-end;
   }
-  .tkort__kort:hover,
-  .tkort__kort:focus-within {
-    border-top-color: var(--farge-logo-rod);
+  .tflis :global(.tflis__bilde) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    transition: transform 1s var(--ease);
   }
-  .tkort__tittel {
-    font-size: 1.4rem;
-    margin-bottom: 0.4rem;
-  }
-  .tkort__tittel a {
-    color: var(--farge-mork);
-    text-decoration: none;
-  }
-  /* Hele kortet klikkbart */
-  .tkort__tittel a::after {
+  .tflis::before {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: -1;
+    background: linear-gradient(0deg, rgb(12 17 20 / 0.92) 0%, rgb(12 17 20 / 0.45) 50%, rgb(12 17 20 / 0.1) 100%);
+    transition: background-color 0.4s;
   }
-  .tkort__kort p {
-    flex: 1;
+  .tflis::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 5px;
+    width: 100%;
+    background: var(--farge-logo-rod);
+    transform: scaleX(0.18);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
   }
-  .tkort__mer {
+  .tflis:hover::after,
+  .tflis:focus-within::after {
+    transform: scaleX(1);
+  }
+  .tflis:hover :global(.tflis__bilde) {
+    transform: scale(1.06);
+  }
+  .tflis__innhold {
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    color: #fff;
+  }
+  .tflis__nr {
+    position: absolute;
+    top: 1.1rem;
+    left: clamp(1.25rem, 2.5vw, 2rem);
+    font-family: var(--font-overskrift);
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    color: #fff;
+    padding-top: 0.6rem;
+    border-top: 2px solid var(--farge-logo-rod);
+  }
+  .tflis__tittel {
+    color: #fff;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .tfliser--mosaikk .tflis:first-child .tflis__tittel {
+    font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+  }
+  .tflis__tittel a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .tflis__tittel a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .tflis__tekst {
+    color: #e3e9ec;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    margin-bottom: 0.9rem;
+    max-width: 30rem;
+  }
+  .tflis__mer {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    color: var(--farge-aksent);
-    font-weight: 600;
+    gap: 0.4rem;
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
   }
-  .tkort__mer :global(svg) {
-    width: 1rem;
-    height: 1rem;
+  .tflis__mer :global(.ikon) {
+    width: 1.1rem;
+    height: 1.1rem;
+    transition: transform 0.2s var(--ease);
+  }
+  .tflis:hover .tflis__mer :global(.ikon) {
+    transform: translateX(5px);
+  }
+  @media (hover: hover) and (min-width: 62rem) {
+    .tflis__tekst {
+      max-height: 0;
+      opacity: 0;
+      margin: 0;
+      overflow: hidden;
+      transition:
+        max-height 0.45s var(--ease),
+        opacity 0.3s,
+        margin 0.45s var(--ease);
+    }
+    .tflis:hover .tflis__tekst,
+    .tflis:focus-within .tflis__tekst {
+      max-height: 6rem;
+      opacity: 1;
+      margin-bottom: 0.9rem;
+    }
   }
 </style>

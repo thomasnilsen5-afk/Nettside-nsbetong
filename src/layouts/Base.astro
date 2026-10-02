@@ -5,9 +5,14 @@ import Footer from '../components/Footer.astro';
 import MobilCta from '../components/MobilCta.astro';
 import Samtykke from '../components/Samtykke.astro';
 import DemoBanner from '../components/DemoBanner.astro';
-import Brodsmuler, { type Smule } from '../components/Brodsmuler.astro';
+import Lysboks from '../components/Lysboks.astro';
+import type { Smule } from '../components/Brodsmuler.astro';
 import { firma } from '../data/site';
 import { miljo } from '../data/miljo';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import standardOg from '../assets/bilder/forside/armering-av-betongdekke-bergen.jpg';
+import betongtekstur from '../assets/bilder/felles/betongtekstur.jpg';
 
 interface Props {
   tittel: string;
@@ -15,16 +20,18 @@ interface Props {
   noindex?: boolean;
   jsonLd?: Record<string, unknown>[];
   smuler?: Smule[];
-  ogBilde?: string;
+  ogBilde?: ImageMetadata;
   ogType?: 'website' | 'article';
 }
 
-const { tittel, beskrivelse, noindex = false, jsonLd = [], smuler, ogBilde = '/img/og-nsbetong.jpg', ogType = 'website' } =
+const { tittel, beskrivelse, noindex = false, jsonLd = [], smuler, ogBilde = standardOg, ogType = 'website' } =
   Astro.props;
 
 const sti = Astro.url.pathname;
 const kanonisk = new URL(sti, firma.url).href;
-const ogBildeUrl = new URL(ogBilde, firma.url).href;
+// Open Graph-bilde: beskåret til 1200×630 JPEG fra sidens eget prosjektbilde.
+const og = await getImage({ src: ogBilde, width: 1200, height: 630, format: 'jpg', quality: 80 });
+const ogBildeUrl = new URL(og.src, firma.url).href;
 const robots = noindex || miljo.noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
 const sporing = Boolean(miljo.gtmId || miljo.ga4Id);
 
@@ -44,6 +51,8 @@ if (smuler && smuler.length > 1) {
 }
 
 const konfig = { gtm: miljo.gtmId, ga4: miljo.ga4Id, demo: miljo.demo };
+// Lys betongtekstur fra dagens side, brukt som bakgrunn i .seksjon--betong
+const tekstur = await getImage({ src: betongtekstur, width: 1600, format: 'webp', quality: 60 });
 ---
 <!doctype html>
 <html lang="nb">
@@ -74,13 +83,13 @@ const konfig = { gtm: miljo.gtmId, ga4: miljo.ga4Id, demo: miljo.demo };
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <link rel="preload" href="/fonts/oswald-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/oswald-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/oswald-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/work-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/work-sans-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Consent Mode v2: alt avslått som standard. Ingen tredjepartsskript lastes før samtykke. -->
     <script is:inline define:vars={{ konfig }}>
+      document.documentElement.classList.add('js');
       window.NSB = konfig;
       window.dataLayer = window.dataLayer || [];
       window.gtag = function () { window.dataLayer.push(arguments); };
@@ -99,19 +108,20 @@ const konfig = { gtm: miljo.gtmId, ga4: miljo.ga4Id, demo: miljo.demo };
 
     {ld.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
   </head>
-  <body>
+  <body style={`--betong: url(${tekstur.src})`}>
     <a class="hopp-lenke" href="#hovedinnhold">Hopp til hovedinnhold</a>
-    {miljo.demo && <DemoBanner />}
     <Header sti={sti} />
-    {smuler && smuler.length > 1 && <Brodsmuler smuler={smuler} />}
     <main id="hovedinnhold">
       <slot />
     </main>
     <Footer />
     <MobilCta />
+    {miljo.demo && <DemoBanner />}
     {sporing && <Samtykke />}
+    <Lysboks />
     <script>
       import '../scripts/nsb.ts';
+      import '../scripts/ui.ts';
     </script>
   </body>
 </html>
