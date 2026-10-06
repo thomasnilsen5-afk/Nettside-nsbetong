@@ -1,5 +1,11 @@
 import { firma } from './site';
 
+// Områder bedriften selv oppgir på dagens nettside.
+export const omraaderLd = [
+  ...firma.omraader.map((name) => ({ '@type': name === 'Bergen' ? 'City' : 'AdministrativeArea', name })),
+  { '@type': 'AdministrativeArea', name: 'Vestland' },
+];
+
 // GeneralContractor (undertype av LocalBusiness). NAP må være identisk med Google-bedriftsprofilen.
 export const organisasjonLd = {
   '@context': 'https://schema.org',
@@ -11,7 +17,8 @@ export const organisasjonLd = {
   url: `${firma.url}/`,
   telephone: firma.telefonE164,
   email: firma.epost,
-  image: `${firma.url}/img/og-nsbetong.jpg`,
+  foundingDate: String(firma.stiftet),
+  taxID: firma.orgnr.replace(/\s/g, ''),
   ...(firma.logoTilgjengelig ? { logo: `${firma.url}${firma.logo}` } : {}),
   address: {
     '@type': 'PostalAddress',
@@ -21,10 +28,7 @@ export const organisasjonLd = {
     addressRegion: firma.adresse.region,
     addressCountry: firma.adresse.land,
   },
-  areaServed: [
-    { '@type': 'City', name: 'Bergen' },
-    { '@type': 'AdministrativeArea', name: 'Vestland' },
-  ],
+  areaServed: omraaderLd,
   sameAs: [firma.facebook],
-  knowsAbout: ['Betongarbeid', 'Gulvstøp', 'Flytavretting', 'Kantstøp', 'Profilstøp', 'Nybygg', 'Flislegging', 'Murarbeid', 'Våtrom'],
+  knowsAbout: ['Betongarbeid', 'Gulvstøp', 'Flytavretting', 'Kantstøp', 'Profilstøp', 'Nybygg', 'Flislegging', 'Murarbeid', 'Baderom'],
 };

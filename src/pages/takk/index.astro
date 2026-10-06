@@ -1,18 +1,18 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Sidetopp from '../../components/Sidetopp.astro';
+import Sidehero from '../../components/Sidehero.astro';
 import Ikon from '../../components/Ikon.astro';
 import { firma, telLenke } from '../../data/site';
 import { miljo } from '../../data/miljo';
 // Konverteringshendelsen form_submit utløses av src/scripts/nsb.ts når URL-en har ?ok=1.
 ---
 <Base tittel="Takk for henvendelsen | Nilsen & Sture Betong" beskrivelse="Takk for at du kontaktet Nilsen & Sture Betong." noindex>
-  <Sidetopp tittel="Takk for henvendelsen" ingress="Vi har mottatt meldingen din og tar kontakt så snart vi kan.">
+  <Sidehero storrelse="liten" tittel="Takk for henvendelsen" ingress="Vi har mottatt meldingen din og tar kontakt så snart vi kan.">
     {miljo.demo && <p class="plassholder">Demo: ingen e-post ble sendt.</p>}
     <p>Haster det? Ring oss på <a href={telLenke} data-cta="ring_takk">{firma.telefon}</a>.</p>
     <div class="knapperad">
       <a class="knapp" href="/" data-cta="takk_forside">Til forsiden</a>
-      <a class="knapp knapp--omriss" href="/referanser/" data-cta="takk_referanser"><Ikon navn="pil" />Se referanser</a>
+      <a class="knapp knapp--omriss-lys" href="/referanser/" data-cta="takk_referanser"><Ikon navn="pil" />Se referanser</a>
     </div>
-  </Sidetopp>
+  </Sidehero>
 </Base>

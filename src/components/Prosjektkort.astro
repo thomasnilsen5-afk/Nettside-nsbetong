@@ -1,0 +1,158 @@
+---
+// Prosjektkort: stort bilde med toning, tittel, sted og nøkkeltall. Hele kortet er klikkbart.
+import { Picture } from 'astro:assets';
+import Ikon from './Ikon.astro';
+import { formatM3, type Referanse } from '../data/referanser';
+
+interface Props { r: Referanse; storrelse?: 'normal' | 'stor'; overskrift?: 'h2' | 'h3'; eager?: boolean }
+const { r, storrelse = 'normal', overskrift = 'h3', eager = false } = Astro.props;
+const H = overskrift;
+---
+<article class:list={['pkort', `pkort--${storrelse}`]} data-tjenester={r.tjenester.join(' ')}>
+  <Picture
+    src={r.bilde.src}
+    alt={r.bilde.alt}
+    formats={['webp']} fallbackFormat="webp"
+    widths={storrelse === 'stor' ? [640, 960, 1400] : [420, 640, 860]}
+    sizes={storrelse === 'stor' ? '(min-width: 62rem) 60vw, 100vw' : '(min-width: 62rem) 30vw, (min-width: 40rem) 50vw, 90vw'}
+    loading={eager ? 'eager' : 'lazy'}
+    class="pkort__bilde"
+  />
+  <div class="pkort__innhold">
+    <p class="pkort__sted"><Ikon navn="sted" />{r.sted}</p>
+    <H class="pkort__tittel"><a href={`/prosjekt/${r.slug}/`}>{r.tittel}</a></H>
+    <ul class="pkort__fakta">
+      {r.betongM3 && <li><Ikon navn="betong" />{formatM3(r.betongM3)}</li>}
+      <li><Ikon navn="kalender" />{r.byggeperiode}</li>
+      {storrelse === 'stor' && <li><Ikon navn="kontrakt" />{r.kontrakt}</li>}
+    </ul>
+    {storrelse === 'stor' && r.byggherre && <p class="pkort__byggherre">Byggherre: {r.byggherre}</p>}
+    <span class="pkort__mer" aria-hidden="true">Se prosjektet <Ikon navn="pil" /></span>
+  </div>
+</article>
+
+<style>
+  .pkort {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--farge-mork);
+    color: #fff;
+    min-height: 26rem;
+    display: flex;
+    align-items: flex-end;
+  }
+  .pkort--stor {
+    min-height: clamp(28rem, 55vw, 38rem);
+  }
+  .pkort :global(.pkort__bilde) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    transition: transform 1s var(--ease);
+  }
+  .pkort::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(0deg, rgb(12 17 20 / 0.95) 0%, rgb(12 17 20 / 0.6) 42%, rgb(12 17 20 / 0.05) 75%);
+    transition: background-color 0.4s;
+  }
+  .pkort:hover :global(.pkort__bilde) {
+    transform: scale(1.06);
+  }
+  .pkort__innhold {
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    width: 100%;
+    border-bottom: 4px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .pkort:hover .pkort__innhold,
+  .pkort:focus-within .pkort__innhold {
+    border-bottom-color: var(--farge-logo-rod);
+  }
+  .pkort__sted {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+    color: var(--farge-tekst-lys);
+  }
+  .pkort__sted :global(.ikon) {
+    width: 1rem;
+    height: 1rem;
+    color: var(--farge-logo-rod);
+  }
+  .pkort__tittel {
+    color: #fff;
+    font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .pkort--stor .pkort__tittel {
+    font-size: clamp(1.8rem, 3.4vw, 2.75rem);
+  }
+  .pkort__tittel a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .pkort__tittel a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .pkort__fakta {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    font-size: 0.95rem;
+  }
+  .pkort__fakta li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .pkort__fakta :global(.ikon) {
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--farge-lys);
+  }
+  .pkort__byggherre {
+    color: var(--farge-tekst-lys);
+    margin-bottom: 0.75rem;
+  }
+  .pkort__mer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
+  }
+  .pkort__mer :global(.ikon) {
+    width: 1.1rem;
+    height: 1.1rem;
+    transition: transform 0.2s var(--ease);
+  }
+  .pkort:hover .pkort__mer :global(.ikon) {
+    transform: translateX(5px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pkort :global(.pkort__bilde) {
+      transition: none;
+    }
+  }
+</style>
