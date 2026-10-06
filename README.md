@@ -8,6 +8,26 @@ Det finnes ingen CMS: alt innhold redigeres i noen få filer (se under).
 > et gult banner om at dette ikke er den offisielle siden, og at skjemaet ikke sender e-post.
 > Se [OVERLEVERING.md](OVERLEVERING.md) for hvordan siden settes i drift.
 
+## Finn tilbake til alt (kart over lagringsstedene)
+
+| Hva | Hvor |
+| --- | --- |
+| **Nettsidens kode, tekster og optimaliserte bilder** | GitHub-repoet [`thomasnilsen5-afk/Nettside-nsbetong`](https://github.com/thomasnilsen5-afk/Nettside-nsbetong), gren `claude/nilsen-sture-betong-site-sqnpw8` |
+| **Merkelapp på ferdig designforslag** | Git-tag `v1-designforslag` (viser alltid tilbake til denne ferdige versjonen) |
+| **Rådata fra gamle nsbetong.no** (tekst, originalbilder, prosjektfakta, sitemaps), 70 MB | Gren [`arkiv`](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/tree/arkiv) → `innhold-gammel-nsbetong.zip`. Se `ARKIV.md` der |
+| **Skjermbilder av designen** | Gren `arkiv` → `forhandsvisning/` |
+| **Pull request** | [#1](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/pull/1) |
+| **Forslaget på nett** | Vercel-prosjekt `nsbetong-forslag` (team `thomas11-3d40`) |
+| **Overlevering til ny samtale** | `NY-SAMTALE.md` i roten av repoet |
+
+**Lokal kopi på maskinen din:**
+```bash
+git clone -b claude/nilsen-sture-betong-site-sqnpw8 https://github.com/thomasnilsen5-afk/Nettside-nsbetong.git
+cd Nettside-nsbetong && npm install && npm run dev
+```
+
+---
+
 ## Dokumenter
 
 | Fil | Innhold |
