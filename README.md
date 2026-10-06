@@ -13,7 +13,7 @@ Det finnes ingen CMS: alt innhold redigeres i noen få filer (se under).
 | Hva | Hvor |
 | --- | --- |
 | **Nettsidens kode, tekster og optimaliserte bilder** | GitHub-repoet [`thomasnilsen5-afk/Nettside-nsbetong`](https://github.com/thomasnilsen5-afk/Nettside-nsbetong), gren `claude/nilsen-sture-betong-site-sqnpw8` |
-| **Merkelapp på ferdig designforslag** | Git-tag `v1-designforslag` (viser alltid tilbake til denne ferdige versjonen) |
+| **Siste ferdige versjon av designen** | Commit `2da6615` (`git checkout 2da6615` for å se akkurat den) |
 | **Rådata fra gamle nsbetong.no** (tekst, originalbilder, prosjektfakta, sitemaps), 70 MB | Gren [`arkiv`](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/tree/arkiv) → `innhold-gammel-nsbetong.zip`. Se `ARKIV.md` der |
 | **Skjermbilder av designen** | Gren `arkiv` → `forhandsvisning/` |
 | **Pull request** | [#1](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/pull/1) |
