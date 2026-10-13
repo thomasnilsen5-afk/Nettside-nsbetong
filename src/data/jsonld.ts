@@ -14,6 +14,8 @@ export const organisasjonLd = {
   name: firma.navn,
   alternateName: firma.kortnavn,
   slogan: firma.slagord,
+  description:
+    'Betongentreprenør på Askøy, stiftet i 2004, med rundt 50 ansatte. Betongarbeid, nybygg, gulvstøp og flytavretting, kantstøp og flis/mur for private og profesjonelle kunder i Bergen og Vestland.',
   url: `${firma.url}/`,
   telephone: firma.telefonE164,
   email: firma.epost,
