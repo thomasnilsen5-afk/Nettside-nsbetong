@@ -1,0 +1,220 @@
+---
+// Prosjektsider på samme adresse som på dagens nettside: /prosjekt/<slug>/
+import Base from '../../layouts/Base.astro';
+import Sidehero from '../../components/Sidehero.astro';
+import Faktaband from '../../components/Faktaband.astro';
+import Galleri from '../../components/Galleri.astro';
+import Ikon from '../../components/Ikon.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { referanser, formatM3, formatM2, type Referanse } from '../../data/referanser';
+import { tjenester } from '../../data/tjenester';
+import { firma } from '../../data/site';
+
+export function getStaticPaths() {
+  return referanser.map((r, i) => ({
+    params: { slug: r.slug },
+    props: { r, forrige: referanser[(i - 1 + referanser.length) % referanser.length], neste: referanser[(i + 1) % referanser.length] },
+  }));
+}
+
+interface Props { r: Referanse; forrige: Referanse; neste: Referanse }
+const { r, forrige, neste } = Astro.props;
+const sti = `/prosjekt/${r.slug}/`;
+const smuler = [
+  { navn: 'Forside', sti: '/' },
+  { navn: 'Referanser', sti: '/referanser/' },
+  { navn: r.tittel, sti },
+];
+
+const fakta = [
+  r.betongM3 && { verdi: formatM3(r.betongM3), etikett: 'Levert betong', ikon: 'betong' as const },
+  r.arealM2 && { verdi: formatM2(r.arealM2), etikett: 'Totalt areal', ikon: 'areal' as const },
+  { verdi: r.byggeperiode.replace(/(Q\d) (\d{4}) – (Q\d) \2/, '$1–$3 $2'), etikett: 'Byggeperiode', ikon: 'kalender' as const },
+  { verdi: r.kontrakt, etikett: 'Kontraktsstørrelse', ikon: 'kontrakt' as const },
+].filter(Boolean) as { verdi: string; etikett: string; ikon: 'betong' | 'areal' | 'kalender' | 'kontrakt' }[];
+
+const detaljer = [
+  ['Byggherre', r.byggherre],
+  ['Oppdragsgiver', r.oppdragsgiver],
+  ['Sted', r.sted],
+  ['Avdeling', r.avdeling],
+].filter((x): x is [string, string] => Boolean(x[1]));
+
+const beskrivelse = `${r.tittel} (${r.sted}): ${r.beskrivelse[0]}`.slice(0, 152).replace(/\s+\S*$/, '') + ' …';
+const tittel = `${r.tittel} | Nilsen & Sture Betong`.length <= 62 ? `${r.tittel} | Nilsen & Sture Betong` : `${r.tittel} – referanse`;
+const tjenesteListe = tjenester.filter((t) => r.tjenester.includes(t.slug));
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: r.undertittel ?? r.tittel,
+    about: r.tittel,
+    description: r.beskrivelse.join(' '),
+    locationCreated: { '@type': 'Place', name: r.sted },
+    creator: { '@id': `${firma.url}/#firma` },
+    url: `${firma.url}${sti}`,
+  },
+];
+---
+<Base tittel={tittel} beskrivelse={beskrivelse} jsonLd={jsonLd} ogBilde={r.bilde.src} smuler={smuler}>
+  <Sidehero tittel={r.tittel} overtittel="Referanseprosjekt" ingress={r.undertittel ?? r.sted} bilde={r.bilde.src} smuler={smuler} storrelse="stor" />
+
+  <Faktaband tittel="Prosjektfakta" fakta={fakta} />
+
+  <section class="seksjon">
+    <div class="beholder to-spalter">
+      <div class="prosa">
+        <p class="overtittel">Om prosjektet</p>
+        <p class="stort-utsagn">{r.beskrivelse[0]}</p>
+        {r.beskrivelse.slice(1).map((p) => <p>{p}</p>)}
+      </div>
+      <aside class="detaljer" aria-label="Prosjektdetaljer">
+        <dl>
+          {detaljer.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+        <p class="detaljer__tittel">Tjenester i prosjektet</p>
+        <ul>
+          {tjenesteListe.map((t) => <li><a href={`/${t.slug}/`}>{t.navn}<Ikon navn="pil" /></a></li>)}
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  {r.bilder.length > 0 && (
+    <section class="seksjon seksjon--flate seksjon--tett" aria-labelledby="bilder-tittel">
+      <div class="beholder">
+        <div class="seksjonstopp">
+          <div>
+            <p class="overtittel">Bilder</p>
+            <h2 id="bilder-tittel">Fra prosjektet</h2>
+          </div>
+          <p>Klikk på et bilde for å se det større.</p>
+        </div>
+        <Galleri bilder={r.bilder} id={r.slug} />
+      </div>
+    </section>
+  )}
+
+  <nav class="prosjektnav" aria-label="Flere prosjekter">
+    <a href={`/prosjekt/${forrige.slug}/`} class="prosjektnav__lenke">
+      <Ikon navn="pilVenstre" />
+      <span><small>Forrige prosjekt</small>{forrige.tittel}</span>
+    </a>
+    <a href="/referanser/" class="prosjektnav__alle">Alle referanser</a>
+    <a href={`/prosjekt/${neste.slug}/`} class="prosjektnav__lenke prosjektnav__lenke--neste">
+      <span><small>Neste prosjekt</small>{neste.tittel}</span>
+      <Ikon navn="pil" />
+    </a>
+  </nav>
+
+  <CtaBand kilde={`prosjekt_${r.slug}`} tittel="Har du et lignende prosjekt?" tekst="Vi holder til på Askøy og hjelper private og profesjonelle aktører i hele Vestland. Befaringen er gratis." />
+</Base>
+
+<style>
+  .prosa .stort-utsagn {
+    font-size: clamp(1.35rem, 2.3vw, 1.8rem);
+    margin-bottom: 1.5rem;
+  }
+  .detaljer {
+    align-self: start;
+    background: var(--farge-flate);
+    border-top: 5px solid var(--farge-aksent);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  @media (min-width: 62rem) {
+    .detaljer {
+      position: sticky;
+      top: calc(var(--topp-hoyde) + 1.5rem);
+    }
+  }
+  .detaljer dl {
+    margin: 0 0 1.75rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .detaljer dt {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--farge-tekst-dempet);
+  }
+  .detaljer dd {
+    margin: 0;
+    font-family: var(--font-overskrift);
+    font-size: 1.3rem;
+    color: var(--farge-mork);
+  }
+  .detaljer__tittel {
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--farge-mork);
+    margin-bottom: 0.5rem;
+  }
+  .detaljer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .detaljer li a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--farge-linje);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .prosjektnav {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--farge-linje);
+  }
+  @media (min-width: 48rem) {
+    .prosjektnav {
+      grid-template-columns: 1fr auto 1fr;
+    }
+  }
+  .prosjektnav a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem var(--rom);
+    text-decoration: none;
+    color: var(--farge-mork);
+    transition: background-color 0.2s;
+  }
+  .prosjektnav a:hover {
+    background: var(--farge-flate);
+  }
+  .prosjektnav__lenke span {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-overskrift);
+    font-size: 1.3rem;
+    text-transform: uppercase;
+  }
+  .prosjektnav small {
+    font-family: var(--font-brod);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    color: var(--farge-tekst-dempet);
+  }
+  .prosjektnav :global(.ikon) {
+    width: 1.8rem;
+    height: 1.8rem;
+    color: var(--farge-aksent);
+  }
+  .prosjektnav__lenke--neste {
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .prosjektnav__alle {
+    justify-content: center;
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-inline: 1px solid var(--farge-linje);
+  }
+</style>

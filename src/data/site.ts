@@ -6,6 +6,8 @@ export const firma = {
   kortnavn: 'Nilsen & Sture Betong',
   slagord: 'Din betongentreprenør i Bergen og omegn',
   erfaring: 'over 20 års erfaring',
+  stiftet: 2004,
+  ansatte: 'rundt 50 ansatte',
   url: 'https://nsbetong.no',
   telefon: '56 15 96 70',
   telefonE164: '+4756159670',
@@ -17,22 +19,44 @@ export const firma = {
     region: 'Vestland',
     land: 'NO',
   },
-  orgnr: '[MANGLER: organisasjonsnummer]',
+  orgnr: '986 481 729',
+  fakturaEpost: 'nsbetong@faktura.poweroffice.net',
   facebook: 'https://www.facebook.com/Nilsen-Sture-Betong-AS-200900669937884',
-  // Sett til true når /public/img/NS.svg (logoen fra dagens side) er lagt inn.
-  logoTilgjengelig: false,
+  // Logoen er hentet fra dagens side (wp-content/uploads/2022/06/NS.svg), ikke tegnet på nytt.
+  logoTilgjengelig: true,
   logo: '/img/NS.svg',
   kundegrupper: ['private', 'næringsdrivende', 'kommunale og offentlige oppdragsgivere'],
   omraade: 'Bergen og omegn',
+  // Områder bedriften selv oppgir på dagens nettside (Askøy, Bergen, Øygarden, Vestland).
+  omraader: ['Bergen', 'Askøy', 'Øygarden'],
+  visjon:
+    'Nilsen & Sture Betong skal være en ledende bedrift i Vestland innenfor bygg og anlegg, med trygge arbeidsplasser og ha en sunn økonomi.',
 };
 
 // Tillitsmerker slik de står på dagens side. Ikke legg til flere uten dokumentasjon.
-export const tillitsmerker = [
-  { navn: 'Godkjent lærebedrift', tekst: 'Vi tar inn og lærer opp lærlinger.' },
-  { navn: 'Godkjent våtromsbedrift', tekst: 'Våtromsarbeid etter gjeldende krav.' },
-  { navn: 'Ansvarsrett', tekst: 'Vi kan erklære ansvarsrett i byggesaker.' },
-  { navn: 'Tariffavtale 2026', tekst: 'Ordnede lønns- og arbeidsvilkår.' },
-  { navn: 'StartBANK', tekst: 'Registrert leverandør i StartBANK.' },
+import ansvarsrettLogo from '../assets/bilder/merker/godkjent-for-ansvarsrett.jpg';
+import startbankLogo from '../assets/bilder/merker/startbank.png';
+import tariffLogo from '../assets/bilder/merker/tariffavtale-fellesforbundet.png';
+import type { ImageMetadata } from 'astro';
+
+export type Tillitsmerke = { navn: string; tekst: string; logo?: ImageMetadata; logoAlt?: string };
+
+export const tillitsmerker: Tillitsmerke[] = [
+  {
+    navn: 'Godkjent for ansvarsrett',
+    tekst: 'Godkjent av Direktoratet for byggkvalitet.',
+    logo: ansvarsrettLogo,
+    logoAlt: 'Godkjent for ansvarsrett – Direktoratet for byggkvalitet',
+  },
+  { navn: 'StartBANK', tekst: 'Registrert leverandør i StartBANK.', logo: startbankLogo, logoAlt: 'StartBANK' },
+  {
+    navn: 'Tariffavtale',
+    tekst: 'Tariffavtale gjennom Fellesforbundet.',
+    logo: tariffLogo,
+    logoAlt: 'Her har vi tariffavtale 2024–2026 – Fellesforbundet',
+  },
+  { navn: 'Godkjent lærebedrift', tekst: 'Vi utdanner morgendagens betongarbeidere.' },
+  { navn: 'Godkjent våtromsbedrift', tekst: 'Bad og våtrom etter våtromsnormen.' },
 ];
 
 export type NavLenke = { tekst: string; href: string };

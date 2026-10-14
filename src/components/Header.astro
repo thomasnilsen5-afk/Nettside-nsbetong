@@ -1,166 +1,363 @@
 ---
+import { Image } from 'astro:assets';
 import Logo from './Logo.astro';
 import Ikon from './Ikon.astro';
-import MenyListe from './MenyListe.astro';
 import { firma, telLenke } from '../data/site';
+import { tjenester } from '../data/tjenester';
+
 interface Props { sti: string }
 const { sti } = Astro.props;
+
+const lenker = [
+  { tekst: 'Referanser', href: '/referanser/', aktiv: sti.startsWith('/referanser/') || sti.startsWith('/prosjekt/') },
+  { tekst: 'Om oss', href: '/om-oss/', aktiv: sti.startsWith('/om-oss/') },
+  { tekst: 'Karriere', href: '/ledige-stillinger/', aktiv: sti.startsWith('/ledige-stillinger/') },
+  { tekst: 'Kontakt', href: '/kontakt-oss/', aktiv: sti.startsWith('/kontakt-oss/') },
+];
+const iTjenester = tjenester.some((t) => sti.startsWith(`/${t.slug}/`));
 ---
-<header class="topp">
+<header class="topp" data-topp>
   <div class="beholder topp__rad">
-    <Logo />
+    <Logo lys />
+
     <nav class="hovednav" aria-label="Hovedmeny">
-      <details class="hovednav__mobil">
-        <summary class="hovednav__knapp">
-          <Ikon navn="meny" klasse="ikon-apne" /><Ikon navn="lukk" klasse="ikon-lukk" />
-          <span>Meny</span>
-        </summary>
-        <div class="hovednav__panel">
-          <MenyListe sti={sti} />
-        </div>
-      </details>
-      <div class="hovednav__desktop"><MenyListe sti={sti} /></div>
+      <ul class="hovednav__liste">
+        <li class="hovednav__gruppe">
+          <a href="/#tjenester" class:list={['hovednav__lenke', { aktiv: iTjenester }]} aria-haspopup="true">
+            Tjenester <Ikon navn="ned" klasse="hovednav__pil" />
+          </a>
+          <div class="megameny">
+            <div class="megameny__innhold">
+              <ul class="megameny__liste">
+                {tjenester.map((t) => (
+                  <li>
+                    <a href={`/${t.slug}/`} aria-current={sti === `/${t.slug}/` ? 'page' : undefined}>
+                      <Image src={t.hero.src} alt="" width={112} height={80} loading="lazy" class="megameny__bilde" />
+                      <span>
+                        <strong>{t.navn}</strong>
+                        <small>{t.kort}</small>
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <div class="megameny__cta">
+                <p class="megameny__tittel">Gratis befaring</p>
+                <p>Ring oss eller send en forespørsel, så tar vi kontakt.</p>
+                <a class="knapp" href={telLenke} data-cta="ring_megameny"><Ikon navn="telefon" />{firma.telefon}</a>
+              </div>
+            </div>
+          </div>
+        </li>
+        {lenker.map((l) => (
+          <li><a href={l.href} class:list={['hovednav__lenke', { aktiv: l.aktiv }]} aria-current={sti === l.href ? 'page' : undefined}>{l.tekst}</a></li>
+        ))}
+      </ul>
     </nav>
-    <a class="knapp topp__ring" href={telLenke} data-cta="ring_header">
-      <Ikon navn="telefon" /><span>{firma.telefon}</span>
-    </a>
+
+    <a class="knapp topp__ring" href={telLenke} data-cta="ring_header"><Ikon navn="telefon" /><span>{firma.telefon}</span></a>
+
+    <details class="mobilmeny" data-mobilmeny>
+      <summary class="mobilmeny__knapp" aria-label="Meny">
+        <Ikon navn="meny" klasse="ikon-apne" /><Ikon navn="lukk" klasse="ikon-lukk" />
+      </summary>
+      <div class="mobilmeny__panel">
+        <nav aria-label="Mobilmeny">
+          <p class="mobilmeny__overskrift">Tjenester</p>
+          <ul class="mobilmeny__tjenester">
+            {tjenester.map((t) => (
+              <li><a href={`/${t.slug}/`} aria-current={sti === `/${t.slug}/` ? 'page' : undefined}>{t.navn}<Ikon navn="pil" /></a></li>
+            ))}
+          </ul>
+          <ul class="mobilmeny__hoved">
+            {lenker.map((l) => <li><a href={l.href} aria-current={sti === l.href ? 'page' : undefined}>{l.tekst}</a></li>)}
+          </ul>
+        </nav>
+        <div class="mobilmeny__bunn">
+          <a class="knapp" href={telLenke} data-cta="ring_mobilmeny"><Ikon navn="telefon" />Ring {firma.telefon}</a>
+          <a class="knapp knapp--omriss-lys" href="/kontakt-oss/#skjema" data-cta="tilbud_mobilmeny">Gratis befaring</a>
+        </div>
+      </div>
+    </details>
   </div>
 </header>
 
 <style>
   .topp {
-    background: #fff;
-    border-bottom: 1px solid #e3e8eb;
-    position: relative;
-    z-index: 20;
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: var(--topp-hoyde);
+    background: rgb(26 35 40 / 0.97);
+    transition:
+      background-color 0.3s,
+      box-shadow 0.3s,
+      height 0.3s var(--ease);
+  }
+  /* Med JS: gjennomsiktig over toppbildet, mørk når man har scrollet */
+  :global(.js) .topp:not(.fast) {
+    background: linear-gradient(180deg, rgb(10 14 16 / 0.55) 0%, rgb(10 14 16 / 0) 100%);
+  }
+  :global(.js) .topp:has(.hovednav__gruppe:hover, .hovednav__gruppe:focus-within, .mobilmeny[open]) {
+    background: rgb(26 35 40 / 0.97);
+  }
+  :global(.js) .topp.fast {
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
   }
   .topp__rad {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    min-height: 4.5rem;
+    gap: 1.5rem;
+    height: 100%;
   }
-  .topp__ring,
-  .hovednav__desktop {
+  .topp__rad > :global(.logo) {
+    position: relative;
+    z-index: 2;
+  }
+  .topp__ring {
     display: none;
+    min-height: 46px;
+    padding: 0.55rem 1.1rem;
   }
-  .hovednav__knapp {
-    list-style: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    min-height: 48px;
-    padding: 0 0.75rem;
-    cursor: pointer;
-    font-family: var(--font-overskrift);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--farge-mork);
-    border: 2px solid var(--farge-lys);
-    border-radius: var(--radius);
-  }
-  .hovednav__knapp::-webkit-details-marker {
+
+  /* ---------- Desktop-meny ---------- */
+  .hovednav {
     display: none;
+    margin-left: auto;
   }
-  .hovednav__knapp :global(svg) {
-    width: 1.4rem;
-    height: 1.4rem;
-  }
-  .hovednav__knapp :global(.ikon-lukk),
-  details[open] .hovednav__knapp :global(.ikon-apne) {
-    display: none;
-  }
-  details[open] .hovednav__knapp :global(.ikon-lukk) {
-    display: block;
-  }
-  .hovednav__panel {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    background: #fff;
-    border-bottom: 4px solid var(--farge-logo-rod);
-    box-shadow: 0 12px 24px rgb(0 0 0 / 0.12);
-    padding: 0.5rem var(--rom) 1.25rem;
-  }
-  .hovednav :global(.menyliste),
-  .hovednav :global(.menyliste ul) {
+  .hovednav__liste {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2vw, 2rem);
   }
-  .hovednav :global(.menyliste a) {
-    display: block;
-    padding: 0.7rem 0;
-    color: var(--farge-mork);
+  .hovednav__lenke {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1.75rem 0;
+    color: #fff;
     text-decoration: none;
     font-family: var(--font-overskrift);
     font-weight: 500;
-    font-size: 1.15rem;
+    font-size: 1.02rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
-    border-bottom: 1px solid #edf1f3;
   }
-  .hovednav__panel :global(.menyliste__gruppe ul a) {
-    padding-left: 1rem;
-    text-transform: none;
-    font-family: var(--font-brod);
-    font-size: 1.05rem;
+  .hovednav__lenke::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1.35rem;
+    height: 2px;
+    background: var(--farge-logo-rod);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s var(--ease);
   }
-  .hovednav :global(.menyliste a:hover),
-  .hovednav :global(.menyliste a[aria-current='page']),
-  .hovednav :global(.menyliste a.aktiv) {
-    color: var(--farge-aksent);
+  .hovednav__lenke:hover,
+  .hovednav__lenke.aktiv {
+    color: #fff;
+  }
+  .hovednav__lenke:hover::after,
+  .hovednav__lenke.aktiv::after,
+  .hovednav__gruppe:focus-within > .hovednav__lenke::after {
+    transform: scaleX(1);
+  }
+  .hovednav__lenke :global(.hovednav__pil) {
+    width: 1.1rem;
+    height: 1.1rem;
+    transition: transform 0.2s;
+  }
+  .hovednav__gruppe:hover :global(.hovednav__pil) {
+    transform: rotate(180deg);
   }
 
-  @media (min-width: 64rem) {
-    .topp__ring,
-    .hovednav__desktop {
-      display: block;
-    }
+  .megameny {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--topp-hoyde);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.2s,
+      transform 0.2s var(--ease),
+      visibility 0.2s;
+    background: #fff;
+    border-top: 3px solid var(--farge-logo-rod);
+    box-shadow: var(--skygge-stor);
+  }
+  .hovednav__gruppe:hover .megameny,
+  .hovednav__gruppe:focus-within .megameny {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+  .megameny__innhold {
+    max-width: var(--maks-bredde);
+    margin: 0 auto;
+    padding: 2rem var(--rom);
+    display: grid;
+    grid-template-columns: 1fr 18rem;
+    gap: 2.5rem;
+  }
+  .megameny__liste {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem 1.5rem;
+  }
+  .megameny__liste a {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.6rem;
+    text-decoration: none;
+    color: var(--farge-tekst);
+    border-radius: var(--radius);
+    transition: background-color 0.15s;
+  }
+  .megameny__liste a:hover,
+  .megameny__liste a[aria-current='page'] {
+    background: var(--farge-flate);
+  }
+  .megameny__liste :global(.megameny__bilde) {
+    width: 5.5rem;
+    height: 4rem;
+    object-fit: cover;
+    flex: none;
+    border-radius: var(--radius);
+  }
+  .megameny__liste strong {
+    display: block;
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--farge-mork);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .megameny__liste small {
+    display: block;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--farge-tekst-dempet);
+  }
+  .megameny__cta {
+    background: var(--farge-mork);
+    color: var(--farge-tekst-lys);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+  }
+  .megameny__tittel {
+    font-family: var(--font-overskrift);
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ---------- Mobilmeny (virker uten JS) ---------- */
+  .mobilmeny {
+    margin-left: auto;
+  }
+  .mobilmeny__knapp {
+    list-style: none;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid rgb(255 255 255 / 0.4);
+    border-radius: var(--radius);
+    position: relative;
+    z-index: 2;
+  }
+  .mobilmeny__knapp::-webkit-details-marker {
+    display: none;
+  }
+  .mobilmeny__knapp :global(.ikon) {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  .mobilmeny__knapp :global(.ikon-lukk),
+  .mobilmeny[open] .mobilmeny__knapp :global(.ikon-apne) {
+    display: none;
+  }
+  .mobilmeny[open] .mobilmeny__knapp :global(.ikon-lukk) {
+    display: block;
+  }
+  .mobilmeny__panel {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: var(--farge-mork-2);
+    padding: calc(var(--topp-hoyde) + 1rem) var(--rom) 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .mobilmeny__overskrift {
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.85rem;
+    color: var(--farge-tekst-lys);
+    margin-bottom: 0.5rem;
+  }
+  .mobilmeny ul {
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+  }
+  .mobilmeny__tjenester a,
+  .mobilmeny__hoved a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--farge-mork-3);
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-overskrift);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .mobilmeny__tjenester a {
+    font-size: 1.2rem;
+  }
+  .mobilmeny__tjenester :global(.ikon) {
+    color: var(--farge-logo-rod);
+  }
+  .mobilmeny__hoved a {
+    font-size: 1.6rem;
+  }
+  .mobilmeny a[aria-current='page'] {
+    color: var(--farge-lys);
+  }
+  .mobilmeny__bunn {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 68rem) {
+    .hovednav,
     .topp__ring {
-      display: inline-flex;
-    }
-    .hovednav__mobil {
-      display: none;
-    }
-    .hovednav {
-      margin-left: auto;
-      margin-right: 1rem;
-    }
-    .hovednav__desktop :global(.menyliste) {
       display: flex;
-      gap: 1.6rem;
-      align-items: center;
     }
-    .hovednav__desktop :global(.menyliste a) {
-      border: 0;
-      padding: 0.5rem 0;
-      font-size: 1.05rem;
-    }
-    .hovednav__desktop :global(.menyliste__gruppe) {
-      position: relative;
-    }
-    .hovednav__desktop :global(.menyliste__gruppe ul) {
+    .mobilmeny {
       display: none;
-      position: absolute;
-      top: 100%;
-      left: -1rem;
-      min-width: 17rem;
-      background: #fff;
-      box-shadow: var(--skygge);
-      border-top: 3px solid var(--farge-logo-rod);
-      padding: 0.5rem 0;
-    }
-    .hovednav__desktop :global(.menyliste__gruppe:hover ul),
-    .hovednav__desktop :global(.menyliste__gruppe:focus-within ul) {
-      display: block;
-    }
-    .hovednav__desktop :global(.menyliste__gruppe ul a) {
-      padding: 0.55rem 1rem;
-      text-transform: none;
-      font-family: var(--font-brod);
     }
   }
 </style>

@@ -20,10 +20,12 @@ for (const mappe of await readdir(INN, { withFileTypes: true }).catch(() => []))
   for (const fil of await readdir(join(INN, mappe.name))) {
     if (!/\.(jpe?g|png|webp|tiff?|heic)$/i.test(fil)) continue;
     const navn = slugify(parse(fil).name);
-    const ut = join(UT, mappe.name, `${navn}.jpg`);
-    const info = await sharp(join(INN, mappe.name, fil)).rotate()
-      .resize({ width: 2000, withoutEnlargement: true })
-      .jpeg({ quality: 82, mozjpeg: true }).toFile(ut); // rotate() + ingen withMetadata() = EXIF/GPS fjernes
+    // PNG (tegninger, logoer med gjennomsiktighet) forblir PNG, alt annet blir JPEG.
+    const erPng = /\.png$/i.test(fil);
+    const ut = join(UT, mappe.name, `${navn}.${erPng ? 'png' : 'jpg'}`);
+    const bilde = sharp(join(INN, mappe.name, fil)).rotate().resize({ width: 2000, withoutEnlargement: true });
+    // rotate() + ingen withMetadata() = EXIF/GPS fjernes
+    const info = await (erPng ? bilde.png({ compressionLevel: 9, palette: true }) : bilde.jpeg({ quality: 82, mozjpeg: true })).toFile(ut);
     console.log(`✓ ${ut} (${info.width}×${info.height}, ${Math.round(info.size / 1024)} KB)`);
     antall++;
   }

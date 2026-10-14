@@ -1,7 +1,8 @@
 ---
+import Ikon from './Ikon.astro';
 import { tjenester } from '../data/tjenester';
 import { firma, telLenke } from '../data/site';
-// Skjemaet fungerer uten JavaScript: vanlig POST til /api/kontakt, som svarer med 303 til /takk/.
+// Skjemaet fungerer uten JavaScript: vanlig POST til /api/kontakt/, som svarer med 303 til /takk/.
 interface Props { forvalgtTjeneste?: string }
 const { forvalgtTjeneste } = Astro.props;
 ---
@@ -9,37 +10,37 @@ const { forvalgtTjeneste } = Astro.props;
   <div class="skjema__feil" role="alert" data-skjema-feil hidden>
     Beklager, meldingen ble ikke sendt. Prøv igjen, eller ring oss på <a href={telLenke}>{firma.telefon}</a>.
   </div>
-  <div class="skjema__rad">
-    <label for="navn">Navn <span aria-hidden="true">*</span></label>
-    <input id="navn" name="navn" type="text" autocomplete="name" required maxlength="100" />
-  </div>
   <div class="skjema__to">
-    <div class="skjema__rad">
+    <div class="felt">
+      <label for="navn">Navn <span aria-hidden="true">*</span></label>
+      <input id="navn" name="navn" type="text" autocomplete="name" required maxlength="100" />
+    </div>
+    <div class="felt">
       <label for="telefon">Telefon <span aria-hidden="true">*</span></label>
       <input id="telefon" name="telefon" type="tel" autocomplete="tel" inputmode="tel" required maxlength="30" />
     </div>
-    <div class="skjema__rad">
+  </div>
+  <div class="skjema__to">
+    <div class="felt">
       <label for="epost">E-post</label>
       <input id="epost" name="epost" type="email" autocomplete="email" maxlength="150" />
     </div>
-  </div>
-  <div class="skjema__to">
-    <div class="skjema__rad">
-      <label for="tjeneste">Hva gjelder det?</label>
-      <select id="tjeneste" name="tjeneste">
-        <option value="">Velg (valgfritt)</option>
-        {tjenester.map((t) => <option value={t.navn} data-slug={t.slug} selected={t.slug === forvalgtTjeneste}>{t.navn}</option>)}
-        <option value="Annet">Annet</option>
-      </select>
-    </div>
-    <div class="skjema__rad">
+    <div class="felt">
       <label for="sted">Sted for oppdraget</label>
       <input id="sted" name="sted" type="text" autocomplete="address-level2" maxlength="120" />
     </div>
   </div>
-  <div class="skjema__rad">
+  <div class="felt">
+    <label for="tjeneste">Hva gjelder det?</label>
+    <select id="tjeneste" name="tjeneste">
+      <option value="">Velg tjeneste (valgfritt)</option>
+      {tjenester.map((t) => <option value={t.navn} data-slug={t.slug} selected={t.slug === forvalgtTjeneste}>{t.navn}</option>)}
+      <option value="Annet">Annet</option>
+    </select>
+  </div>
+  <div class="felt">
     <label for="melding">Beskriv oppdraget <span aria-hidden="true">*</span></label>
-    <textarea id="melding" name="melding" rows="5" required maxlength="4000"></textarea>
+    <textarea id="melding" name="melding" rows="5" required maxlength="4000" placeholder="Hva skal gjøres, omtrentlig omfang og når?"></textarea>
   </div>
   <!-- Honningkrukke: skjult for mennesker, fylles ut av roboter -->
   <div class="skjema__honning" aria-hidden="true">
@@ -48,31 +49,37 @@ const { forvalgtTjeneste } = Astro.props;
   </div>
   <input type="hidden" name="t" value="" data-skjema-tid />
   <input type="hidden" name="side" value={Astro.url.pathname} />
-  <p class="skjema__info">
-    Felt merket * må fylles ut. Vi bruker opplysningene bare til å svare på henvendelsen. Se <a href="/personvern/">personvern</a>.
-  </p>
-  <button class="knapp" type="submit" data-cta="skjema_send">Send forespørsel</button>
+  <div class="skjema__bunn">
+    <button class="knapp knapp--pil" type="submit" data-cta="skjema_send">Send forespørsel<Ikon navn="pil" /></button>
+    <p class="skjema__info">
+      Felt merket * må fylles ut. Vi bruker opplysningene bare til å svare deg. <a href="/personvern/">Personvern</a>.
+    </p>
+  </div>
 </form>
 <style>
   .skjema {
     display: grid;
-    gap: 1rem;
+    gap: 1.1rem;
   }
   .skjema__to {
     display: grid;
-    gap: 1rem;
+    gap: 1.1rem;
   }
   @media (min-width: 40rem) {
     .skjema__to {
       grid-template-columns: 1fr 1fr;
     }
   }
-  .skjema__rad {
+  .felt {
     display: grid;
-    gap: 0.35rem;
+    gap: 0.4rem;
   }
   .skjema label {
-    font-weight: 600;
+    font-family: var(--font-overskrift);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.9rem;
     color: var(--farge-mork);
   }
   .skjema input,
@@ -80,19 +87,25 @@ const { forvalgtTjeneste } = Astro.props;
   .skjema textarea {
     font: inherit;
     width: 100%;
-    padding: 0.7rem 0.8rem;
-    min-height: 48px;
-    border: 2px solid #9aa7ae;
+    padding: 0.85rem 1rem;
+    min-height: 52px;
+    border: 1px solid #8f9ca3;
     border-radius: var(--radius);
     background: #fff;
     color: var(--farge-tekst-2);
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .skjema textarea {
+    resize: vertical;
   }
   .skjema input:focus,
   .skjema select:focus,
   .skjema textarea:focus {
-    border-color: var(--farge-mork);
-    outline: 3px solid var(--farge-aksent);
-    outline-offset: 1px;
+    outline: none;
+    border-color: var(--farge-aksent);
+    box-shadow: 0 0 0 3px rgb(178 36 36 / 0.25);
   }
   .skjema__honning {
     position: absolute;
@@ -101,8 +114,15 @@ const { forvalgtTjeneste } = Astro.props;
     height: 1px;
     overflow: hidden;
   }
+  .skjema__bunn {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
   .skjema__info {
-    font-size: 0.95rem;
+    flex: 1 1 16rem;
+    font-size: 0.9rem;
     color: var(--farge-tekst-dempet);
     margin: 0;
   }
@@ -111,8 +131,5 @@ const { forvalgtTjeneste } = Astro.props;
     border-left: 5px solid var(--farge-aksent);
     padding: 0.8rem 1rem;
     color: var(--farge-tekst-2);
-  }
-  .skjema button {
-    justify-self: start;
   }
 </style>
