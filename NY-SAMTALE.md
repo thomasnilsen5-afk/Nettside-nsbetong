@@ -12,7 +12,7 @@ Lim gjerne inn: *«Les NY-SAMTALE.md og fortsett der vi slapp.»*
 | **Rådata fra gamle nsbetong.no** (tekst, originalbilder, prosjektfakta, sitemaps), 70 MB | Gren [`arkiv`](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/tree/arkiv) → `innhold-gammel-nsbetong.zip`. Se `ARKIV.md` der |
 | **Skjermbilder av designen** | Gren `arkiv` → `forhandsvisning/` |
 | **Pull request** | [#1](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/pull/1) |
-| **Forslaget på nett** | Vercel-prosjekt `nsbetong-forslag` (team `thomas11-3d40`) |
+| **Forslaget på nett (delbar lenke, åpen uten innlogging)** | https://forslag-nettside.vercel.app – alias i Vercel-prosjektet `nsbetong-forslag` (team `thomas11-3d40`) |
 | **Overlevering til ny samtale** | `NY-SAMTALE.md` i roten av repoet |
 
 **Lokal kopi på maskinen din:**
@@ -45,7 +45,7 @@ profesjonell og søkeoptimalisert side, i håp om at de bytter leverandør.
 | Grener | `main` = første grunnversjon. `claude/nilsen-sture-betong-site-sqnpw8` = alt arbeid |
 | PR | [#1](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/pull/1), åpen, ikke flettet |
 | Vercel | Prosjekt `nsbetong-forslag` (id `prj_osc0KUFvj4AEzuRjpTjWW5hXMafm`), team `team_J6ccoH784I4Rxpoyo3sYmGlY`. **Ikke** koblet til Git. Deployes manuelt til målet `staging`. |
-| Lenke | https://nsbetong-forslag-git-claude-nilsen-sture-b-52a744-thomas11-3d40.vercel.app (krever Vercel-innlogging, se under) |
+| Lenke | https://forslag-nettside.vercel.app (delbar, åpen uten innlogging; Vercel Authentication er slått av). Aliaset må flyttes til ny deploy med `assign_alias` etter hver ny deploy |
 | DNS / domene | **Ikke rørt.** Ingen custom domain er koblet til. |
 
 ### Gjenstår (gjøres av eieren av kontoene)
@@ -53,8 +53,7 @@ profesjonell og søkeoptimalisert side, i håp om at de bytter leverandør.
 1. **GitHub:** Settings → General → Default branch → `main`.
 2. **Vercel:** Koble prosjektet til repoet (Settings → Git → Connect) og sett produksjonsgren til `main`.
    Gjør dette *etter* punkt 1. Ellers blir arbeidsgrenen produksjon.
-3. **Deling:** Lag en delingslenke (Share i Vercel-verktøylinjen), eller slå av Vercel Authentication
-   (Settings → Deployment Protection), så bedriften kan se forslaget.
+3. ~~**Deling:**~~ Ferdig: https://forslag-nettside.vercel.app er åpen uten innlogging.
 4. Avklaringer med bedriften står i `MANGLER.md` (8 punkter: åpenhetsloven-redegjørelse, lagringstid,
    Google-profil, GTM-eierskap, M365-tilgang, logoer, osv.).
 5. Ved ja fra bedriften følger du `OVERLEVERING.md` (miljøvariabler, e-post via Microsoft Graph, DNS-plan og rollback).

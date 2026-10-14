@@ -17,7 +17,7 @@ Det finnes ingen CMS: alt innhold redigeres i noen få filer (se under).
 | **Rådata fra gamle nsbetong.no** (tekst, originalbilder, prosjektfakta, sitemaps), 70 MB | Gren [`arkiv`](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/tree/arkiv) → `innhold-gammel-nsbetong.zip`. Se `ARKIV.md` der |
 | **Skjermbilder av designen** | Gren `arkiv` → `forhandsvisning/` |
 | **Pull request** | [#1](https://github.com/thomasnilsen5-afk/Nettside-nsbetong/pull/1) |
-| **Forslaget på nett** | Vercel-prosjekt `nsbetong-forslag` (team `thomas11-3d40`) |
+| **Forslaget på nett (delbar lenke, åpen uten innlogging)** | https://forslag-nettside.vercel.app – alias i Vercel-prosjektet `nsbetong-forslag` (team `thomas11-3d40`) |
 | **Overlevering til ny samtale** | `NY-SAMTALE.md` i roten av repoet |
 
 **Lokal kopi på maskinen din:**
